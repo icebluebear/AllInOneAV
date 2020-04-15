@@ -26,6 +26,11 @@ namespace BatchJavScanerAndMacthMagUrl
 
             if (args[0] == "full")
             {
+                JavLibraryHelper.DoFullScan(true);
+            }
+
+            if (args[0] == "single")
+            {
                 JavLibraryHelper.DoFullScanSingleThread(true);
             }
 

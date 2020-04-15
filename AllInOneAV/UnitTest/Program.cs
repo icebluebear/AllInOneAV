@@ -47,7 +47,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            Console.ReadKey();
+            TestJavService();
         }
 
         private static void CleanrImg(string path)
@@ -90,13 +90,7 @@ namespace UnitTest
 
         private static void TestJavService()
         {
-            //Dictionary<string, string> dic = new Dictionary<string, string>();
-
-            //dic.Add("http://www.javlibrary.com/cn/vl_star.php?s=aeqfy", "涼森れむ");
-
-            //JavLibraryHelper.DoCertainCategory(lockModel, dic);
-
-            JavLibraryHelper.DoFullScanSingleThread();
+            JavLibraryHelper.DoFullScan();
         }
 
         private static void TestBtsow()

@@ -51,14 +51,11 @@ namespace Service
             {
                 driver.Navigate().GoToUrl("http://www.javlibrary.com/cn/");
 
-                var cf = driver.Manage().Cookies.AllCookies.Where(x => x.Domain == ".javlibrary.com").FirstOrDefault(x => x.Name == "cf_clearance");
-
-                if (cf == null)
-                {
-                    Thread.Sleep(12 * 1000);
-                }
+                Thread.Sleep(12 * 1000);
 
                 ret = driver.Manage().Cookies.AllCookies.Where(x => x.Domain == ".javlibrary.com").ToList();
+
+                Console.WriteLine("((((((((((((((((((((((((((更新Cookie)))))))))))))))))))))))))))");
             }
             catch (Exception ee)
             {
@@ -355,7 +352,6 @@ namespace Service
                 }
             }
         }
-
 
         private static void ScanCategoryPageUrlSingleThread(Dictionary<string, string> urls, CookieContainer cc)
         {
@@ -757,44 +753,43 @@ namespace Service
 
         private static Utils.HtmlResponse JavCookieContanierHelper(CookieContainer cc, string url)
         {
-            var htmlRes = new Utils.HtmlResponse();
-
-            while (true)
-            {
-                htmlRes = HtmlManager.GetHtmlWebClientWithRenewCC("http://www.javlibrary.com/cn/", url, cc);
-
-                if (htmlRes.IsExpire)
-                {
-                    lockModel.CanRun = false;
-
-                    lock (lockModel)
-                    {
-                        if (lockModel.CanRun == false)
-                        {
-                            cc = GetJavCookie();
-                        }
-                    }
-                }
-                else
-                {
-                    if (lockModel.CanRun == false)
-                    {
-                        lock (lockModel)
-                        {
-                            lockModel.CanRun = true;
-                        }
-                    }
-                    break;
-                }
-            }
+            var htmlRes = HtmlManager.GetHtmlWebClientWithRenewCC("http://www.javlibrary.com/cn/", url, cc);
 
             return htmlRes;
         }
+
+        private static void RefreshCookie(int mintutes, CookieContainer cc)
+        {
+            CookieContainer ret = null;
+
+            while (true)
+            {
+                Thread.Sleep(1000 * 60 * (mintutes - 5));
+
+                while (ret == null)
+                {
+                    ret = GetJavCookie(true);
+                }
+
+                cc = ret;
+
+                Console.WriteLine("*********************更新Cookie*********************");
+
+                ret = null;
+            }
+        }
+
 
         public static void DoFullScan(bool showConsole = true)
         {
             //获取Cookie
             var cc = GetJavCookie(showConsole);
+
+            if (cc != null)
+            {
+                Task.Run(() => RefreshCookie(60, cc));
+            }
+
             //获取分类
             var genres = GetJavCategory(cc);
             //获取所谓分类下面的所有页数,以便达到全站扫描
