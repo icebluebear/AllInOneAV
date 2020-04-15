@@ -1,0 +1,1867 @@
+﻿using DataBaseManager.JavDataBaseHelper;
+using Model.Common;
+using Model.JavModels;
+using Service;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Utils;
+
+namespace CombineEpisode
+{
+    public partial class Main : Form
+    {
+        #region GlobalVar
+        private static List<string> formats = JavINIClass.IniReadValue("Scan", "Format").Split(',').ToList();
+        private static List<string> excludes = JavINIClass.IniReadValue("Scan", "Exclude").Split(',').ToList();
+        private static readonly string imageFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
+        private static readonly string ffmpeg = "c:\\setting\\ffmpeg.exe";
+        private static readonly string combineFilePath = "c:\\setting\\combinefile\\";
+        private Process p;
+        private bool OkToStart = true;
+        private string[] ImportedFiles = null;
+        private Font font = new Font("微软雅黑", 10);
+
+        public delegate void ProcessPb(ProgressBar pb, int value);
+        #endregion
+
+        #region 行为
+        public Main()
+        {
+            Control.CheckForIllegalCrossThreadCalls = false;
+            InitializeComponent();
+        }
+
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            Reset();
+            ImportedFiles = ImportFile();
+
+            if (ImportedFiles != null && ImportedFiles.Length > 0)
+            { 
+                ShowList();
+
+                txtSave.Text = new FileInfo(ImportedFiles[0]).DirectoryName;
+            }
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            Reset();
+            Init();
+        }
+
+        private void Main_DragDrop(object sender, DragEventArgs e)
+        {
+            ImportedFiles = null;
+
+            Array file = (Array)e.Data.GetData(DataFormats.FileDrop);
+
+            foreach (object I in file)
+            {
+                string str = I.ToString();
+
+                FileInfo info = new System.IO.FileInfo(str);
+            }
+        }
+
+        private void Main_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SetSave();
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            var basicCheck = Check();
+
+            if (!string.IsNullOrEmpty(basicCheck))
+            {
+                MessageBox.Show(basicCheck);
+                return;
+            }
+
+            FileInfo first = new FileInfo(listView1.Items[0].Tag.ToString());
+            var targetFile = first.Name.Replace(first.Extension, "") + ".mp4";
+            var fileName = txtSave.Text + "\\" + targetFile;
+
+            if (!string.IsNullOrEmpty(txtHopeName.Text))
+            {
+                fileName = txtSave.Text + "\\" + txtHopeName.Text + ".mp4";
+            }
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            var combineFile = GenerateCombineFile();
+
+            StartCombine(combineFile, fileName);
+        }
+
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (p != null)
+            {
+                p.Kill();
+                p.Close();
+                p.Dispose();
+            }
+        }
+
+        private void btnLook_Click(object sender, EventArgs e)
+        {
+            RestAutoCombineFile();
+
+            GetFilesToGenerateCombineFile();
+        }
+
+        private void btnGenerate_Click(object sender, EventArgs e)
+        {
+            InitAutoCombineFile();
+
+            GenerateAutoCombineFile();
+        }
+
+        private void btnPreview_Click(object sender, EventArgs e)
+        {
+            Preview();
+        }
+
+        private void btnAuto_Click(object sender, EventArgs e)
+        {
+            AutoCombie();
+        }
+
+        private void btnAutoSave_Click(object sender, EventArgs e)
+        {
+            AutoSave();
+        }
+
+        private void btnConvertImport_Click(object sender, EventArgs e)
+        {
+            GetFilesForAutoConvert();
+        }
+
+        private void btnConvertStart_Click(object sender, EventArgs e)
+        {
+            GetFilesForAutoConvertSave();
+        }
+
+        private void btStartConvert_Click(object sender, EventArgs e)
+        {
+            Convert();
+        }
+
+        private void btnCheckISO_Click(object sender, EventArgs e)
+        {
+            treeView3.Nodes.Clear();
+            ImportISO();
+        }
+
+        private void treeView3_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            ClickTree(e.Node);
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            DeleteMultiple();
+            treeView1.Nodes.Clear();
+        }
+
+        private void btnScanRedundant_Click(object sender, EventArgs e)
+        {
+            ScanRedundantClick();
+        }
+
+        private void treeView4_BeforeCheck(object sender, TreeViewCancelEventArgs e)
+        {
+
+        }
+
+        private void treeView4_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Action == TreeViewAction.ByMouse && e.Node.Parent == null)
+            {
+                foreach (TreeNode n in e.Node.Nodes)
+                {
+                    n.Checked = false;
+                }
+            }
+        }
+
+        private void btnScanDelete_Click(object sender, EventArgs e)
+        {
+            ScanDeleteClick();
+        }
+
+        private void btnScanClear_Click(object sender, EventArgs e)
+        {
+            ClearCheck();
+        }
+
+        private void btnScanUnmathced_Click(object sender, EventArgs e)
+        {
+            ScanUnmatchedClick();
+        }
+
+        private void treeView5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void treeView5_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (e.Button == MouseButtons.Right)
+            {
+                if (e.Node.Parent == null)
+                {
+                    foreach (TreeNode tn in e.Node.Nodes)
+                    {
+                        sb.AppendLine((string)tn.Tag);
+                    }
+
+                    e.Node.Collapse();
+                }
+                else
+                {
+                    sb.AppendLine((string)e.Node.Tag);
+
+                    e.Node.Parent.Collapse();
+                }
+
+                Clipboard.SetDataObject(sb.ToString());
+
+                Message ms = new Message();;
+                ms.ShowDialog();
+            }
+        }
+
+        private void btnRemoveFolderScan_Click(object sender, EventArgs e)
+        {
+            InitRemoveFolder();
+            RemovceFolderScanClick();
+        }
+
+        private void btnRemoveFolderStart_Click(object sender, EventArgs e)
+        {
+            RemoveFolderStartClick();
+        }
+
+        private void btnRenameStart_Click(object sender, EventArgs e)
+        {
+            RenameStartClick();
+        }
+
+        private void btnRenameScan_Click(object sender, EventArgs e)
+        {
+            RenameScanClick();
+        }
+
+        private void btnSearchSeed_Click(object sender, EventArgs e)
+        {
+            listView3.Items.Clear();
+            SearchSeedClick();
+        }
+
+        private void listView3_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && listView3.SelectedItems.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                foreach (ListViewItem lvi in listView3.SelectedItems)
+                {
+                    sb.AppendLine((string)lvi.Tag);
+                }
+
+                Clipboard.SetDataObject(sb.ToString());
+
+                Message ms = new Message();
+                ms.ShowDialog();
+            }
+        }
+
+        private void rbCate_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowJavScanPreset("Category");
+        }
+
+        private void rbActress_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowJavScanPreset("Actress");
+        }
+
+        private void rbCom_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowJavScanPreset("Company");
+        }
+
+        private void rbDir_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowJavScanPreset("Director");
+        }
+
+        private void btnJavScanDaily_Click(object sender, EventArgs e)
+        {
+            JavScanAsync("daily");
+        }
+
+        private void btnJavScan_Click(object sender, EventArgs e)
+        {
+            JavScanAsync("certain");
+        }
+
+        private void richTextBox3_ContentsResized(object sender, ContentsResizedEventArgs e)
+        {
+            richTextBox3.SelectionStart = richTextBox3.Text.Length;
+            richTextBox3.ScrollToCaret();
+        }
+
+        private void btnManualRename_Click(object sender, EventArgs e)
+        {
+            var exeFile = "G:\\AllInOneAV\\AvReName\\bin\\Debug\\AvRename.exe";
+            if (File.Exists(exeFile))
+            {
+                Process.Start(exeFile);
+            }
+        }
+        #endregion
+
+        #region 方法
+
+        private void Reset()
+        {
+            txtSave.Text = "";
+            cbDelete.Checked = false;
+            cbMove.Checked = false;
+            pb.Value = 0;
+            pb.Minimum = 0;
+            pb.Maximum = 100;
+            listView1.Items.Clear();
+            ImportedFiles = null;
+        }
+
+        private void Init()
+        {
+            if (!Directory.Exists(combineFilePath))
+            {
+                Directory.CreateDirectory(combineFilePath);
+            }
+        }
+
+        private void SetSave()
+        {
+            this.folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtSave.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
+
+        private string[] ImportFile()
+        {
+            openFileDialog1.Multiselect = true;
+            var rs = openFileDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                var files = openFileDialog1.FileNames;
+
+                return files;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private void ShowList()
+        {
+            listView1.BeginUpdate();
+            foreach (var file in ImportedFiles)
+            {
+                var fi = new FileInfo(file);
+
+                if (formats.Contains(fi.Extension.ToLowerInvariant()))
+                {
+                    listView1.Items.Add(GenerateListViewItem(fi));
+                }
+            }
+            listView1.EndUpdate();
+        }
+
+        private ListViewItem GenerateListViewItem(FileInfo fi)
+        {
+            ListViewItem lvi = new ListViewItem(fi.Name);
+
+            string length = FileUtility.GetDuration(fi.FullName, ffmpeg);
+            string size = FileSize.GetAutoSizeString(fi.Length, 1);
+            lvi.SubItems.Add(length);
+            lvi.SubItems.Add(size);
+            lvi.Tag = fi.FullName;
+
+            return lvi;
+        }
+
+        private string Check()
+        {
+            if (listView1.Items.Count <= 0)
+            {
+                return "没有需要合并的视频文件";
+            }
+
+            if (string.IsNullOrEmpty(txtSave.Text))
+            {
+                return "没有选择目的地";
+            }
+
+            return "";
+        }
+
+        private string GenerateCombineFile()
+        {
+            var fileName = combineFilePath + "combine" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".txt";
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            File.Create(fileName).Close();
+
+            StringBuilder sb = new StringBuilder();
+            StreamWriter sw = new StreamWriter(fileName);
+
+            foreach (ListViewItem lvi in listView1.Items)
+            {
+                sb.AppendLine(string.Format("file '{0}'", lvi.Tag.ToString()));
+            }
+
+            sw.WriteLine(sb.ToString());
+            sw.Close();
+
+            return fileName;
+        }
+
+        private int CalculateTotalTime()
+        {
+            int ret = 0;
+
+            foreach (ListViewItem lvi in listView1.Items)
+            {
+                ret += FileUtility.ConvertDurationToInt(lvi.SubItems[1].Text);
+            }
+
+            return ret;
+        }
+
+        private void Output(object sendProcess, DataReceivedEventArgs output)
+        {
+            if (!String.IsNullOrEmpty(output.Data))
+            {
+                if (output.Data.StartsWith("frame"))
+                {
+                    var time = output.Data.Substring(output.Data.IndexOf("time="), 16).Replace("time=", "");
+                    var process = FileUtility.ConvertDurationToInt(time);
+
+                    JDuBar(pb, process);
+                }
+                else if (output.Data.StartsWith("video:"))
+                {
+                    MessageBox.Show("finish");
+                }
+            }
+        }
+
+        private void StartCombine(string combineFile, string fileName)
+        {
+            pb.Maximum = CalculateTotalTime();
+            pb.Minimum = 0;
+
+            p = new Process();//建立外部调用线程
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.FileName = ffmpeg;//要调用外部程序的绝对路径
+            p.StartInfo.Arguments = string.Format("-f concat -safe 0 -i {0} -c:v hevc_nvenc -preset:v fast \"{1}\"", combineFile, fileName);
+            p.StartInfo.UseShellExecute = false;//不使用操作系统外壳程序启动线程(一定为FALSE,详细的请看MSDN)
+            p.StartInfo.RedirectStandardError = true;//把外部程序错误输出写到StandardError流中(这个一定要注意,FFMPEG的所有输出信息,都为错误输出流,用StandardOutput是捕获不到任何消息的...这是我耗费了2个多月得出来的经验...mencoder就是用standardOutput来捕获的)
+            p.ErrorDataReceived += Output;//外部程序(这里是FFMPEG)输出流时候产生的事件,这里是把流的处理过程转移到下面的方法中,详细请查阅MSDN
+
+            Task.Run(() => FfmpegHelper.ConvertVideo(Output, p));
+        }
+
+        private void JDuBar(ProgressBar jd, int v)
+        {
+            if (jd.InvokeRequired)
+            {
+                jd.Invoke(new ProcessPb(JDuBar), jd, v);
+            }
+            else
+            {
+                if (v < jd.Maximum && v >= 0)
+                {
+                    jd.Value = v;
+                }
+                else
+                {
+                    jd.Value = jd.Maximum;
+                }
+            }
+        }
+
+        private void DeleteOriFile()
+        {
+            foreach (ListViewItem lvi in listView1.Items)
+            {
+                try
+                {
+                    File.Delete(lvi.Tag.ToString());
+                }
+                catch (Exception ee)
+                {
+                    MessageBox.Show(ee.ToString());
+                }
+            }
+        }
+
+        private void MoveNew()
+        {
+
+        }
+
+        private void GetFilesToGenerateCombineFile()
+        {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtLook.Text = folderBrowserDialog1.SelectedPath;
+
+                ShowTree(txtLook.Text);
+            }
+        }
+
+        private void ShowTree(string path)
+        {
+            var files = FileUtility.GetVideoHasMultipleEpisode(path);
+
+            treeView1.BeginUpdate();
+            foreach (var f in files)
+            {
+                TreeNode tn = new TreeNode(f.Key);
+
+                foreach (var s in f.Value)
+                {
+                    TreeNode stn = new TreeNode(s)
+                    {
+                        Tag = new FileInfo(s)
+                    };
+                    tn.Nodes.Add(stn);
+                }
+
+                treeView1.Nodes.Add(tn);
+            }
+
+            treeView1.ExpandAll();
+            treeView1.EndUpdate();
+        }
+
+        private void InitAutoCombineFile()
+        {
+            var path = "c:\\setting\\autocombine\\";
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            else
+            {
+                Directory.GetFiles(path).ToList().ForEach(x => File.Delete(x));
+            }
+        }
+
+        private string CheckAutoCombine()
+        {
+            if (treeView1.Nodes.Count <= 0)
+            {
+                return "没有文件";
+            }
+
+            return "";
+        }
+
+        private void GenerateAutoCombineFile()
+        {
+            var check = CheckAutoCombine();
+
+            if (!string.IsNullOrEmpty(check))
+            {
+                MessageBox.Show(check);
+                return;
+            }
+
+            pb2.Maximum = treeView1.Nodes.Count;
+            pb2.Minimum = 0;
+            int index = 0;
+
+            foreach (TreeNode node in treeView1.Nodes)
+            {
+                RealGenerateAutoCombineFile(node);
+
+                index++;
+
+                JDuBar(pb2, index);
+            }
+        }
+
+        private void DeleteMultiple()
+        {
+            double size = 0;
+            int totalCount = 0;
+            List<string> files = new List<string>();
+
+            foreach(TreeNode tn in treeView1.Nodes)
+            {
+                foreach (TreeNode stn in tn.Nodes)
+                {
+                    totalCount++;
+                    size += new FileInfo(stn.Text).Length;
+                    files.Add(stn.Text);
+                }
+            }
+
+            var rs = MessageBox.Show(string.Format("一共有 {0} 部影片, {1} 个文件, 总大小 {2}", treeView1.Nodes.Count, totalCount, FileSize.GetAutoSizeString(size, 1)) + " 确定要删除? ", "警告", MessageBoxButtons.YesNo);
+
+            if (rs == DialogResult.Yes)
+            {
+                foreach (var file in files)
+                {
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch (Exception ee)
+                    {
+                        MessageBox.Show(ee.ToString());
+                    }
+                }
+            }
+        }
+
+        private void RealGenerateAutoCombineFile(TreeNode node)
+        {
+            var file = "c:\\setting\\autocombine\\" + node.Text.Substring(node.Text.LastIndexOf("\\") + 1) + DateTime.Now.ToString("yyyyMMddhhmmss") + ".txt";
+
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+
+            File.CreateText(file).Close();
+
+            StreamWriter sw = new StreamWriter(file);
+            StringBuilder sb = new StringBuilder();
+
+            foreach (TreeNode sn in node.Nodes)
+            {
+                sb.AppendLine(string.Format("file '{0}'", sn.Text));
+            }
+
+            sw.WriteLine(sb.ToString());
+            sw.Close();
+        }
+
+        private void RestAutoCombineFile()
+        {
+            txtLook.Text = "";
+            treeView1.Nodes.Clear();
+            pb2.Value = 0;
+        }
+
+        private void Preview()
+        {
+            var path = "c:\\setting\\autocombine\\";
+
+            if (Directory.Exists(path))
+            {
+                var files = Directory.GetFiles(path);
+
+                ShowPreviewTree(files);
+            }
+        }
+
+        private void ShowPreviewTree(string[] files)
+        {
+            treeView2.BeginUpdate();
+            foreach (var file in files)
+            {
+                TreeNode tn = new TreeNode(file);
+                StreamReader sr = new StreamReader(file);
+                while (!sr.EndOfStream)
+                {
+                    var line = sr.ReadLine();
+                    if (!string.IsNullOrEmpty(line))
+                    {
+                        TreeNode stn = new TreeNode(line);
+                        tn.Nodes.Add(stn);
+                    }
+                }
+                sr.Close();
+
+                treeView2.Nodes.Add(tn);
+            }
+            treeView2.ExpandAll();
+            treeView2.EndUpdate();
+        }
+
+        private async void AutoCombie()
+        {
+            if (treeView2.Nodes.Count <= 0)
+            {
+                MessageBox.Show("没有需要合并的文件");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(txtAutoSave.Text))
+            {
+                MessageBox.Show("没有选择保存地址");
+                return;
+            }
+
+            pbTotal.Maximum = treeView2.Nodes.Count;
+            pbTotal.Minimum = 0;
+            int index = 0;
+
+            Dictionary<string, TreeNode> fileList = new Dictionary<string, TreeNode>();
+
+            foreach (TreeNode tn in treeView2.Nodes)
+            {
+                OkToStart = false;
+
+                await CombineEach(tn.Text, tn);
+
+                index++;
+
+                if (OkToStart)
+                {
+                    tn.BackColor = Color.Green;
+                }
+                else
+                {
+                    tn.BackColor = Color.Red;
+                }
+
+                JDuBar(pbTotal, index);
+                tn.EnsureVisible();
+            }
+        }
+
+        private async Task CombineEach(string file, TreeNode node)
+        {
+            var current = CalculateTotalTimeForAuto(file);
+            pbCurrent.Maximum = current;
+            pbCurrent.Minimum = 0;
+            pbCurrent.Value = 0;
+
+            List<string> sourceFiles = new List<string>();
+
+            foreach (TreeNode stn in node.Nodes)
+            {
+                sourceFiles.Add(stn.Text.Replace("file '", "").Replace("'", ""));
+            }
+
+            FileInfo first = new FileInfo(sourceFiles.FirstOrDefault());
+            var targetFile = first.Name.Substring(0, first.Name.LastIndexOf("-")) + ".mp4";
+
+            var fileName = txtAutoSave.Text + targetFile;
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            await StartCombineAuto(node.Text, fileName);
+
+            if (OkToStart)
+            {
+                File.Delete(file);
+            }
+            else
+            {
+                foreach (var dFile in sourceFiles)
+                {
+                    FileInfo fi = new FileInfo(dFile);
+                    var reName = fi.FullName.Replace(fi.Extension, "-NoMerge" + fi.Extension);
+
+                    File.Move(dFile, reName);
+
+                    Thread.Sleep(1000);
+
+                    File.Delete(file);
+                }
+            }
+        }
+
+        private void OutputAuto(object sendProcess, DataReceivedEventArgs output)
+        {
+            if (!String.IsNullOrEmpty(output.Data))
+            {
+                if (output.Data.StartsWith("frame"))
+                {
+                    var time = output.Data.Substring(output.Data.IndexOf("time="), 16).Replace("time=", "");
+                    var process = FileUtility.ConvertDurationToInt(time);
+
+                    JDuBar(pbCurrent, process);
+                }
+                else if (output.Data.StartsWith("video:"))
+                {
+                    OkToStart = true;
+                }
+            }
+        }
+
+        private async Task StartCombineAuto(string combineFile, string fileName)
+        {
+            p = new Process();//建立外部调用线程
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.FileName = ffmpeg;//要调用外部程序的绝对路径
+            p.StartInfo.Arguments = string.Format("-f concat -safe 0 -i \"{0}\" -c:v hevc_nvenc -preset:v fast \"{1}\"", combineFile, fileName);
+            p.StartInfo.UseShellExecute = false;//不使用操作系统外壳程序启动线程(一定为FALSE,详细的请看MSDN)
+            p.StartInfo.RedirectStandardError = true;//把外部程序错误输出写到StandardError流中(这个一定要注意,FFMPEG的所有输出信息,都为错误输出流,用StandardOutput是捕获不到任何消息的...这是我耗费了2个多月得出来的经验...mencoder就是用standardOutput来捕获的)
+            p.ErrorDataReceived += OutputAuto;//外部程序(这里是FFMPEG)输出流时候产生的事件,这里是把流的处理过程转移到下面的方法中,详细请查阅MSDN
+            p.Start();//启动线程
+            p.BeginErrorReadLine();//开始异步读取
+            await p.WaitForExitAsync();
+            p.Close();
+            p.Dispose();
+            p = null;
+        }
+
+        private void AutoSave()
+        {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtAutoSave.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
+
+        private int CalculateTotalTimeForAuto(string file)
+        {
+            int ret = 0;
+
+            StreamReader sr = new StreamReader(file);
+
+            var content = sr.ReadToEnd();
+            var contentArray = content.Split(new char[] { '\r', '\n' });
+
+            foreach (var c in contentArray.Where(x => !string.IsNullOrEmpty(x)))
+            {
+                var line = c;
+                line = line.Replace("file '", "").Replace("'", "");
+                var fi = new FileInfo(line);
+                var duration = FileUtility.GetDuration(fi.FullName, ffmpeg);
+
+                ret += FileUtility.ConvertDurationToInt(duration);
+            }
+            sr.Close();
+
+            return ret;
+        }
+
+        private void GetFilesForAutoConvert()
+        {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtConvertImport.Text = folderBrowserDialog1.SelectedPath;
+
+                ShowConvertFiles(txtConvertImport.Text);
+
+                txtConvertSave.Text = folderBrowserDialog1.SelectedPath + "\\convert\\";
+            }
+        }
+
+        private void GetFilesForAutoConvertSave()
+        {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtConvertSave.Text = folderBrowserDialog1.SelectedPath + "\\convert\\";
+            }
+        }
+
+        private void GenerateSaveConvertFolder(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+        }
+
+        private void ShowConvertFiles(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                listView2.BeginUpdate();
+                var files = Directory.GetFiles(path);
+
+                foreach (var file in files)
+                {
+                    if (!file.Contains("[Code="))
+                    {
+                        FileInfo fi = new FileInfo(file);
+
+                        ListViewItem lvi = new ListViewItem(fi.FullName);
+                        lvi.SubItems.Add("--");
+                        lvi.SubItems.Add(FileSize.GetAutoSizeString(fi.Length, 1));
+
+                        listView2.Items.Add(lvi);
+                    }
+                }
+
+                listView2.EndUpdate();
+            }
+        }
+
+        private async void Convert()
+        {
+            if (string.IsNullOrEmpty(txtConvertSave.Text))
+            {
+                MessageBox.Show("没有保存地址");
+                return;
+            }
+
+            GenerateSaveConvertFolder(txtConvertSave.Text);
+
+            if (listView2.Items.Count > 0)
+            {
+                pbConvertTotal.Maximum = listView2.Items.Count;
+                pbConvertTotal.Minimum = 0;
+
+                int index = 0;
+
+                foreach (ListViewItem item in listView2.Items)
+                {
+                    await GetDurationAndCheck(item, txtConvertSave.Text, cbDeleteConvert.Checked);
+
+                    index++;
+
+                    JDuBar(pbConvertTotal, index);
+                }
+            }
+        }
+
+        private async Task GetDurationAndCheck(ListViewItem lvi, string folder, bool isCheck)
+        {
+            string info = await FileUtility.GetFfmpegInfo(lvi.Text, ffmpeg);
+
+            var duration = info;
+            duration = duration.Substring(duration.IndexOf("Duration") + 10);
+            duration = duration.Substring(0, duration.IndexOf(","));
+
+            listView2.BeginUpdate();
+            lvi.SubItems[1].Text = duration;
+            listView2.EndUpdate();
+
+            if (!info.Contains("Video: hevc"))
+            {
+                pb.Value = 0;
+                pbConvertCurrent.Maximum = FileUtility.ConvertDurationToInt(duration);
+                pbConvertCurrent.Minimum = 0;
+
+                FileInfo fi = new FileInfo(lvi.Text);
+                var targetFile = folder + fi.Name.Replace(fi.Extension, "") + "[]Format=H265[].mp4";
+
+                await StartConvert(lvi.Text, targetFile);
+
+                if (isCheck)
+                {
+                    try
+                    {
+                        File.Delete(lvi.Text);
+                    }
+                    catch (Exception ee)
+                    {
+                        
+                    }
+                }
+            }
+            else
+            {
+                FileInfo fi = new FileInfo(lvi.Text);
+                var newFi = fi.FullName.Replace(fi.Extension, "") + "[]Format=H265[]" + fi.Extension;
+                try
+                {
+                    File.Move(fi.FullName, newFi);
+                }
+                catch (Exception ee)
+                {
+                    
+                }
+            }
+
+            listView2.BeginUpdate();
+            lvi.BackColor = Color.Green;
+            lvi.EnsureVisible();
+            listView2.EndUpdate();
+        }
+
+        private void OutputConvert(object sendProcess, DataReceivedEventArgs output)
+        {
+            if (!String.IsNullOrEmpty(output.Data))
+            {
+                if (output.Data.StartsWith("frame"))
+                {
+                    var time = output.Data.Substring(output.Data.IndexOf("time="), 16).Replace("time=", "");
+                    var process = FileUtility.ConvertDurationToInt(time);
+
+                    JDuBar(pbConvertCurrent, process);
+                }
+                else if (output.Data.StartsWith("video:"))
+                {
+
+                }
+            }
+        }
+
+        private async Task StartConvert(string from, string to)
+        {
+            p = new Process();//建立外部调用线程
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.FileName = ffmpeg;//要调用外部程序的绝对路径
+            p.StartInfo.Arguments = string.Format("-i \"{0}\" -c:v hevc_nvenc -preset:v fast \"{1}\"", from, to);
+            p.StartInfo.UseShellExecute = false;//不使用操作系统外壳程序启动线程(一定为FALSE,详细的请看MSDN)
+            p.StartInfo.RedirectStandardError = true;//把外部程序错误输出写到StandardError流中(这个一定要注意,FFMPEG的所有输出信息,都为错误输出流,用StandardOutput是捕获不到任何消息的...这是我耗费了2个多月得出来的经验...mencoder就是用standardOutput来捕获的)
+            p.ErrorDataReceived += OutputConvert;//外部程序(这里是FFMPEG)输出流时候产生的事件,这里是把流的处理过程转移到下面的方法中,详细请查阅MSDN
+            p.Start();//启动线程
+            p.BeginErrorReadLine();//开始异步读取
+            await p.WaitForExitAsync();
+            p.Close();
+            p.Dispose();
+            p = null;
+        }
+
+        private void ImportISO()
+        {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                var path = folderBrowserDialog1.SelectedPath;
+
+                List<FileInfo> fis = new List<FileInfo>();
+                var files = Directory.GetFiles(path);
+
+                foreach (var file in files)
+                {
+                    FileInfo fi = new FileInfo(file);
+
+                    if (fi.Extension == ".iso")
+                    {
+                        fis.Add(fi);
+                    }
+                }
+
+                ShowIsoTree(fis);
+            }
+        }
+
+        private void ShowIsoTree(List<FileInfo> files)
+        {
+            treeView3.BeginUpdate();
+
+            foreach (var fi in files)
+            {
+                var nameArr = fi.Name.Split('-');
+                var searchContent = nameArr[0] + "-" + nameArr[1];
+
+                var rets = SearchSeedHelper.SearchSukebei(searchContent);
+
+                TreeNode tn = new TreeNode(fi.FullName);
+                foreach (var ret in rets)
+                {
+                    TreeNode stn = new TreeNode(FileSize.GetAutoSizeString(ret.Size, 2) + " -> " + ret.MagUrl);
+
+                    tn.Nodes.Add(stn);
+                }
+
+                treeView3.Nodes.Add(tn);
+            }
+
+            treeView3.ExpandAll();
+            treeView3.EndUpdate();
+        }
+
+        private void ClickTree(TreeNode tn)
+        {
+            if (tn.Parent != null)
+            {
+                var str = tn.Text.Split(' ')[2];
+
+                Clipboard.SetDataObject(str, true);
+            }
+        }
+
+        private void ScanRedundantClick()
+        {
+            treeView4.Nodes.Clear();
+            var dic = FileUtility.GetAllPossibleRedundant();
+
+            treeView4.BeginUpdate();
+
+            foreach (var d in dic)
+            {
+                TreeNode tn = new TreeNode(d.Key);
+                double largest = d.Value.Max(x => x.Length);
+
+                foreach (var sd in d.Value)
+                {
+                    var stn = new TreeNode(sd.FullName + " 大小: " + FileSize.GetAutoSizeString(sd.Length, 1));
+                    stn.Tag = sd;
+
+                    if (sd.Extension.ToLower() == ".iso")
+                    {
+                        stn.BackColor = Color.Yellow;
+                        stn.Checked = true;
+                    }
+                    else
+                    {
+                        if (sd.Length < largest)
+                        {
+                            stn.Checked = true;
+                            stn.BackColor = Color.Red;
+                        }
+                    }
+
+                    tn.Nodes.Add(stn);
+                }
+
+                treeView4.Nodes.Add(tn);
+            }
+
+            treeView4.ExpandAll();
+            treeView4.EndUpdate();
+        }
+
+        private void ScanDeleteClick()
+        {
+            int count = 0;
+            double totalSize = 0;
+            List<string> files = new List<string>();
+
+            foreach (TreeNode tn in treeView4.Nodes)
+            {
+                foreach (TreeNode stn in tn.Nodes)
+                {
+                    if (stn.Checked)
+                    {
+                        FileInfo fi = ((FileInfo)stn.Tag);
+                        count++;
+                        totalSize += fi.Length;
+                        files.Add(fi.FullName);
+                    }
+                }
+            }
+
+            var rs = MessageBox.Show(string.Format("确定要删除 {0} 个文件, 总大小 {1} ?", count, FileSize.GetAutoSizeString(totalSize, 1)), "警告", MessageBoxButtons.YesNo);
+
+            if (rs == DialogResult.Yes)
+            {
+                foreach (var file in files)
+                {
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch (Exception ee)
+                    {
+
+                    }
+                }
+
+                ScanRedundantClick();
+            }
+        }
+
+        private void ClearCheck()
+        {
+            foreach (TreeNode tn in treeView4.Nodes)
+            {
+                foreach (TreeNode stn in tn.Nodes)
+                {
+                    stn.Checked = false;
+                }
+            }
+        }
+
+        private void ScanUnmatchedClick()
+        {
+            Dictionary<string, List<SeedMagnetSearchModel>> ret = new Dictionary<string, List<SeedMagnetSearchModel>>();
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtUnmatched.Text = folderBrowserDialog1.SelectedPath;
+
+                var res = FileUtility.GetMagUrlOfUnmatchedFile(txtUnmatched.Text);
+                var isos = res.Item1;
+                var multi = res.Item2;
+
+                CookieContainer cc = null;
+                var c = HtmlManager.GetCookies("https://sukebei.nyaa.si/");
+                cc = new CookieContainer();
+                cc.Add(c);
+
+                treeView5.BeginUpdate();
+
+                Parallel.ForEach(isos, new ParallelOptions { MaxDegreeOfParallelism = 5 }, key =>
+                {
+                    var result = SearchSeedHelper.SearchSukebei(key.Value, cc);
+
+                    if (result != null && result.Count > 0)
+                    {
+                        ret.Add(key.Key, result);
+                    }
+                    else
+                    {
+                        ret.Add(key.Key, new List<SeedMagnetSearchModel>());
+                    }
+                });
+
+                Parallel.ForEach(multi, new ParallelOptions { MaxDegreeOfParallelism = 5 }, file =>
+                {
+                    var result = SearchSeedHelper.SearchSukebei(file.Key.Substring(file.Key.LastIndexOf("\\") + 1), cc);
+
+                    if (result != null && result.Count > 0)
+                    {
+                        ret.Add(file.Value.FirstOrDefault(), result);
+                    }
+                    else
+                    {
+                        ret.Add(file.Value.FirstOrDefault(), new List<SeedMagnetSearchModel>());
+                    }
+                });
+
+                foreach (var d in ret)
+                {
+                    TreeNode tn = new TreeNode(d.Key);
+                    tn.BackColor = Color.Green;
+
+                    int index = 1;
+
+                    foreach (var sd in d.Value)
+                    {
+                        TreeNode stn = new TreeNode(sd.Title + " 大小: " + FileSize.GetAutoSizeString(sd.Size, 1));
+                        stn.Tag = sd.MagUrl;
+
+                        if (index % 2 == 0)
+                        {
+                            stn.BackColor = Color.Gray;
+                        }
+
+                        tn.Nodes.Add(stn);
+                        index++;
+                    }
+
+                    treeView5.Nodes.Add(tn);
+                }
+
+                treeView5.ExpandAll();
+                treeView5.EndUpdate();
+            }
+        }
+
+        private void InitRemoveFolder()
+        {
+            richTextBox1.Text = "";
+            excludes = JavINIClass.IniReadValue("Scan", "Exclude").Split(',').ToList();
+        }
+
+        private void RemovceFolderScanClick()
+        {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtRemoveFolderTxt.Text = folderBrowserDialog1.SelectedPath;
+
+                richTextBox1.AppendText("设置需要去除子文件夹的目录为 -> " + txtRemoveFolderTxt.Text, Color.Green, font, true);
+            }
+        }
+
+        private string InitRemove(string folder)
+        {           
+            var moveFolder = folder + "/movefiles/";
+            excludes.Add(moveFolder);
+
+            if (!Directory.Exists(moveFolder))
+            {
+                Directory.CreateDirectory(moveFolder);
+            }
+
+            richTextBox1.AppendText("初始化移动到的文件夹为 -> " + moveFolder, Color.Green, font, true);
+            richTextBox1.AppendText("把 " + moveFolder + " 添加到忽略列表", Color.Green, font, true);
+
+            return moveFolder;
+        }
+
+        private List<FileInfo> GetMoveFiles(string folder)
+        {
+            int limitSize = 200;
+            List<FileInfo> fis = new List<FileInfo>();
+
+            richTextBox1.AppendText("获取所有 >= " + limitSize + "mb 的在子文件夹内的文件", Color.Green, font, true);
+
+            var status = FileUtility.GetFilesRecursive(folder, formats, excludes, fis, limitSize);
+
+            if (string.IsNullOrEmpty(status))
+            {
+                richTextBox1.AppendText("一共获取了 >= " + fis.Count + " 个文件", Color.Green, font, true);
+            }
+            else
+            {
+                richTextBox1.AppendText("异常 >= " + status, Color.Red, font, true);
+            }
+
+            return fis;
+        }
+
+        private void RemoveFolderStartClick()
+        {
+            if (!string.IsNullOrEmpty(txtRemoveFolderTxt.Text))
+            {
+                Dictionary<string, string> remainSize = new Dictionary<string, string>();
+                Dictionary<string, int> moveRecord = new Dictionary<string, int>();
+
+                var moveFolder = InitRemove(txtRemoveFolderTxt.Text);
+                var fis = GetMoveFiles(txtRemoveFolderTxt.Text);
+
+                foreach (var fi in fis)
+                {
+                    richTextBox1.AppendText("开始移动 " + fi.FullName, Color.Green, font, true);
+
+                    var n = fi.Name.Replace(fi.Extension, "");
+                    var e = fi.Extension;
+
+                    richTextBox1.AppendText("\t文件名 >= " + n + " 扩展名 => " + e, Color.Black, font, true);
+
+                    if (moveRecord.ContainsKey(fi.Name))
+                    {
+                        moveRecord[fi.Name]++;
+                        richTextBox1.AppendText("\t存在移动记录,添加后缀 >= " + moveRecord[fi.Name], Color.Red, font, true);
+                    }
+                    else
+                    {
+                        moveRecord.Add(fi.Name, 1);
+                    }
+
+                    if (File.Exists(moveFolder + n + e))
+                    {
+                        var oldN = n;
+
+                        n += "_" + moveRecord[fi.Name];
+
+                        richTextBox1.AppendText("\t存在重名文件,修改文件名 >= " + (n + "_" + moveRecord[fi.Name]), Color.Red, font, true);
+
+                        if (moveRecord[fi.Name] == 2)
+                        {
+                            File.Move(moveFolder + oldN + e, moveFolder + oldN + "_1" + e);
+                        }
+                    }                   
+
+                    richTextBox1.AppendText("\t移动文件 >= " + fi.FullName + " 到 => " + moveFolder + n + e, Color.Green, font, true);
+                    File.Move(fi.FullName, moveFolder + n + e);
+                }
+
+                richTextBox1.AppendText("开始计算剩余各子文件夹大小", Color.Green, font, true);
+
+                var subFolders = Directory.GetDirectories(txtRemoveFolderTxt.Text);
+
+                foreach (var sub in subFolders)
+                {
+                    richTextBox1.AppendText("\t开始计算子文件夹 " + sub + " 的大小", Color.Black, font, true);
+
+                    List<FileInfo> tempFi = new List<FileInfo>();
+                    formats.Add(".!qB");
+                    string tempStatus = FileUtility.GetFilesRecursive(sub, formats, excludes, tempFi);
+                    double tempSize = 0D;
+
+                    if (string.IsNullOrEmpty(tempStatus))
+                    {
+                        foreach (var fi in tempFi)
+                        {
+                            tempSize += fi.Length;
+                        }
+
+                        remainSize.Add(sub, FileSize.GetAutoSizeString(tempSize, 2));
+
+                        if (tempSize >= 500 * 1024 * 1024)
+                        {
+                            richTextBox1.AppendText("\t" + sub + "的大小为 = > " + FileSize.GetAutoSizeString(tempSize, 2), Color.Red, font, true);
+                        }
+                        else
+                        {
+                            richTextBox1.AppendText("\t" + sub + "的大小为 = > " + FileSize.GetAutoSizeString(tempSize, 2), Color.Black, font, true);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void RenameScanClick()
+        {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtRenameTxt.Text = folderBrowserDialog1.SelectedPath;
+
+                richTextBox2.AppendText("设置需要去除子文件夹的目录为 -> " + txtRenameTxt.Text, Color.Green, font, true);
+            }
+        }
+
+        private void RenameStartClick()
+        {
+            if (!string.IsNullOrEmpty(txtRenameTxt.Text))
+            {
+                InitRenameFolder(txtRenameTxt.Text);
+            }
+        }
+
+        private void InitRenameFolder(string folder)
+        {
+            List<string> allPrefix = new List<string>();
+            Dictionary<FileInfo, List<AV>> ret = new Dictionary<FileInfo, List<AV>>();
+            Dictionary<string, int> moveReocrd = new Dictionary<string, int>();
+            var moveFolder = folder + "/tempFin/";
+            int found = 0;
+            int notFound = 0;
+
+            richTextBox2.AppendText("初始化移动目录 -> " + moveFolder, Color.Green, font, true);
+
+            if (!Directory.Exists(moveFolder))
+            {
+                Directory.CreateDirectory(moveFolder);
+            }
+
+            richTextBox2.AppendText("开始加载缓存", Color.Green, font, true);
+
+            var avs = JavDataBaseManager.GetAllAV();
+
+            richTextBox2.AppendText("共加载 " + avs.Count + " 条缓存", Color.Black, font, true);
+
+            richTextBox2.AppendText("开始处理前缀", Color.Green, font, true);
+
+            foreach (var name in avs.Select(x => x.ID).ToList())
+            {
+                if (!allPrefix.Contains(name.Split('-')[0]))
+                {
+                    allPrefix.Add(name.Split('-')[0]);
+                }
+            }
+
+            allPrefix = allPrefix.OrderByDescending(x => x.Length).ToList();
+
+            richTextBox2.AppendText("共加载 " + allPrefix.Count + " 条前缀", Color.Black, font, true);
+
+            richTextBox2.AppendText("开始获取目录 " + folder + " 下的文件", Color.Green, font, true);
+
+            var files = Directory.GetFiles(folder);
+
+            richTextBox2.AppendText("共获取 " + files.Length + " 个文件", Color.Black, font, true);
+
+            foreach (var f in files)
+            {
+                richTextBox2.AppendText("开始处理文件 " + f, Color.Green, font, true);
+
+                bool findMatch = false;
+                string pi = "";
+                FileInfo fi = new FileInfo(f);
+                List<AV> fiMatchList = new List<AV>();
+                var fiNameUpper = fi.Name.ToUpper();
+                var fileNameWithoutFormat = fiNameUpper.Replace(fi.Extension.ToUpper(), "");
+
+                ret.Add(fi, fiMatchList);
+
+                foreach (var prefix in allPrefix)
+                {
+                    if (fileNameWithoutFormat.Contains(prefix))
+                    {
+                        richTextBox2.AppendText("\t找到匹配前缀 " + prefix, Color.Black, font, true);
+
+                        var pattern = prefix + "{1}-?\\d{1,5}";
+                        var possibleId = Regex.Match(fileNameWithoutFormat, pattern).Value;
+
+                        if (possibleId.Contains("-"))
+                        {
+                            pi = possibleId;
+                        }
+                        else
+                        {
+                            bool isFirst = true;
+                            StringBuilder sb = new StringBuilder();
+
+                            foreach (var c in possibleId)
+                            {
+                                if (c >= '0' && c <= '9')
+                                {
+                                    if (isFirst)
+                                    {
+                                        sb.Append("-");
+                                        isFirst = false;
+                                    }
+                                }
+                                sb.Append(c);
+                            }
+
+                            pi = sb.ToString();
+                        }
+
+                        if (!string.IsNullOrEmpty(pi))
+                        {
+                            richTextBox2.AppendText("\t找到适配的番号 " + pi, Color.Black, font, true);
+
+                            var possibleAv = avs.Where(x => x.ID == pi).ToList();
+                            findMatch = true;
+                            foreach (var av in possibleAv)
+                            {
+                                fiMatchList.AddRange(possibleAv);
+                            }
+
+                            richTextBox2.AppendText("\t找到适配的AV " + fiMatchList.Count + " 条", Color.Black, font, true);
+
+                            break;
+                        }
+                    }
+                }
+
+                if (findMatch)
+                {
+                    found++;
+                }
+                else
+                {
+                    notFound++;
+                }
+            }
+
+            foreach (var item in ret)
+            {
+                if (item.Value.Count == 0)
+                {
+                    richTextBox2.AppendText("文件 " + item.Key.Name + " 没有找到匹配", Color.Black, font, true);
+                }
+                else if (item.Value.Count > 1)
+                {
+                    foreach (var subItem in item.Value)
+                    {
+                        richTextBox2.AppendText("文件 " + item.Key.Name + " 找到多条匹配,暂不处理", Color.Black, font, true);
+                    }
+                }
+                else if (item.Value.Count == 1)
+                {
+                    richTextBox2.AppendText("文件 " + item.Key.Name + " 找到1条匹配,开始处理", Color.Green, font, true);
+
+                    var tempFileName = item.Value.FirstOrDefault().ID + "-" + item.Value.FirstOrDefault().Name + item.Key.Extension;
+
+                    if (moveReocrd.ContainsKey(tempFileName))
+                    {
+                        moveReocrd[tempFileName]++;
+                        richTextBox2.AppendText("\t存在移动记录,文件名后缀+1 -> " + moveReocrd[tempFileName], Color.Green, font, true);
+                    }
+                    else
+                    {
+                        moveReocrd.Add(tempFileName, 1);
+                    }
+
+                    if (File.Exists(moveFolder + tempFileName))
+                    {
+                        if (moveReocrd[tempFileName] == 2)
+                        {
+                            var oldFileMove = item.Value.FirstOrDefault().ID + "-" + item.Value.FirstOrDefault().Name + "-1" + item.Key.Extension;
+                            File.Move(moveFolder + tempFileName, moveFolder + oldFileMove);
+                        }
+
+                        tempFileName = item.Value.FirstOrDefault().ID + "-" + item.Value.FirstOrDefault().Name + "-" + moveReocrd[tempFileName] + item.Key.Extension;
+
+                        richTextBox2.AppendText("\t存在重名文件,生成新的移动后文件 -> " + tempFileName, Color.Green, font, true);
+                    }
+
+                    try
+                    {
+                        File.Move(item.Key.FullName, moveFolder + tempFileName);
+
+                        richTextBox2.AppendText("\t移动文件 -> " + item.Key.FullName + " 到 -> " + moveFolder + tempFileName, Color.Green, font, true);
+                    }
+                    catch (Exception ee)
+                    {
+                        richTextBox2.AppendText(ee.ToString(), Color.Red, font, true);
+                    }
+                }
+            }
+
+            richTextBox2.AppendText("找到匹配 --> " + found + " 未找到匹配 --> " + notFound, Color.Green, font, true);
+        }
+
+        private void SearchSeedClick()
+        {
+            if (!string.IsNullOrEmpty(txtSeedSearchContent.Text))
+            {
+                List<SearchSeedSiteEnum> sources = new List<SearchSeedSiteEnum>();
+
+                if (cbBtsow.Checked)
+                {
+                    sources.Add(SearchSeedSiteEnum.Btsow);
+                }
+
+                if (cbSukebei.Checked)
+                {
+                    sources.Add(SearchSeedSiteEnum.Sukebei);
+                }
+
+                var resList = SearchSeed(txtSeedSearchContent.Text, sources);
+                ListSeedSearch(resList);
+
+                Message ms = new Message();
+                ms.ShowDialog();
+            }
+        }
+
+        private List<SeedMagnetSearchModel> SearchSeed(string content, List<SearchSeedSiteEnum> sources)
+        {
+            List<SeedMagnetSearchModel> ret = new List<SeedMagnetSearchModel>();
+
+            foreach (var source in sources)
+            {
+                switch (source)
+                {
+                    case SearchSeedSiteEnum.Btsow:
+                        ret = BtsowClubHelper.SearchBtsow(content);
+                        break;
+                    case SearchSeedSiteEnum.Sukebei:
+                        ret = SearchSeedHelper.SearchSukebei(content);
+                        break;
+                }
+            }
+
+            return ret;
+        }
+
+        private void ListSeedSearch(List<SeedMagnetSearchModel> data)
+        {
+            listView3.BeginUpdate();
+
+            int index = 1;
+            foreach (var d in data)
+            {
+                ListViewItem lvi = new ListViewItem(d.Title);
+                lvi.SubItems.Add(FileSize.GetAutoSizeString(d.Size, 1));
+                lvi.SubItems.Add(d.Date.ToString("yyyy-MM-dd"));
+                lvi.SubItems.Add(d.CompleteCount + "");
+                lvi.SubItems.Add(d.Source.ToString());
+                lvi.Tag = d.MagUrl;
+
+                listView3.Items.Add(lvi);
+
+                if (index % 2 == 0)
+                {
+                    lvi.BackColor = Color.LightGray;
+                }
+
+                index++;
+            }
+
+            listView3.EndUpdate();
+        }
+
+        private void ShowJavScanPreset(string table)
+        {
+            listView4.Items.Clear();
+
+            var data = JavDataBaseManager.GetAllValidMap(table);
+
+            listView4.BeginUpdate();
+
+            int index = 1;
+
+            foreach (var d in data)
+            {
+                ListViewItem lvi = new ListViewItem(d.Name);
+                lvi.SubItems.Add(d.URL);
+
+                if (index % 2 == 0)
+                {
+                    lvi.BackColor = Color.LightGray;
+                }
+
+                listView4.Items.Add(lvi);
+            }
+
+            listView4.EndUpdate();
+        }
+
+        private Dictionary<string, string> GenerateDicToUpdate(bool fromText)
+        {
+            Dictionary<string, string> ret = new Dictionary<string, string>();
+
+            if (fromText)
+            {
+                ret.Add(txtJavScanUrl.Text, txtJavScanTitle.Text);
+            }
+            else
+            {
+                foreach (ListViewItem lvi in listView4.SelectedItems)
+                {
+                    ret.Add(lvi.SubItems[1].Text, lvi.SubItems[0].Text);
+                }
+            }
+
+            return ret;
+        }
+
+        private async void JavScanAsync(string command)
+        {
+            richTextBox3.Text = "";
+            LockModel lockModel = new LockModel();
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(txtJavScanTitle.Text) && !string.IsNullOrEmpty(txtJavScanUrl.Text))
+            {
+                dic = GenerateDicToUpdate(true);
+            }
+            else if (listView4.SelectedItems.Count > 0)
+            {
+                dic = GenerateDicToUpdate(false);
+            }
+
+            var titleStr = string.Join(",", dic.Select(x => x.Value));
+            var urlStr = string.Join(",", dic.Select(x => x.Key));
+
+            if (command == "daily")
+            {
+                await StartJavScan("", " " + command, OutputJavScan);
+            }
+            else
+            {
+                await StartJavScan("", " " + command + " " + titleStr + " " + urlStr, OutputJavScan);
+            }
+        }
+
+        private async Task StartJavScan(string exe, string arg, DataReceivedEventHandler output)
+        {
+            exe = "G:\\Github\\AllInOneAV\\AllInOneAV\\BatchJavScanerAndMacthMagUrl\\bin\\Debug\\BatchJavScanerAndMacthMagUrl.exe";
+
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = exe;
+                p.StartInfo.Arguments = arg;
+
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.RedirectStandardOutput = true;
+
+                p.OutputDataReceived += OutputJavScan;
+
+                p.Start();
+                p.BeginOutputReadLine();
+                await p.WaitForExitAsync();
+            }
+        }
+
+        private void OutputJavScan(object sendProcess, DataReceivedEventArgs output)
+        {
+            if (!String.IsNullOrEmpty(output.Data))
+            {
+                richTextBox3.AppendText(output.Data);
+            }
+        }
+        #endregion
+    }
+
+    #region 扩展方法
+    public static class ProcessExtensions
+    {
+        public static Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var tcs = new TaskCompletionSource<object>();
+            process.EnableRaisingEvents = true;
+            process.Exited += (sender, args) => tcs.TrySetResult(null);
+            if (cancellationToken != default(CancellationToken))
+            {
+                cancellationToken.Register(tcs.SetCanceled);
+            }
+
+            return tcs.Task;
+        }
+    }
+
+    public static class RichTextBoxColorExtensions
+    {
+        public static void AppendText(this RichTextBox rtb, string text, Color color, Font font, bool isNewLine = false)
+        {
+            rtb.SuspendLayout();
+            rtb.SelectionStart = rtb.TextLength;
+            rtb.SelectionLength = 0;
+
+            rtb.SelectionColor = color;
+            rtb.SelectionFont = font;
+            rtb.AppendText(isNewLine ? $"{text}{ Environment.NewLine}" : text);
+            rtb.SelectionColor = rtb.ForeColor;
+            rtb.ScrollToCaret();
+            rtb.ResumeLayout();
+        }
+    }
+    #endregion
+}

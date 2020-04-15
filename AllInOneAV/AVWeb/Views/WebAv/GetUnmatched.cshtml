@@ -1,0 +1,69 @@
+﻿@using Model.ScanModels
+@{
+    var list = (List<UnmatchVW>)ViewData["list"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebAV-未匹配</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+            <a class="navbar-brand" href="http://www.cainqs.com:8087/webav/index">WebAV</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://www.cainqs.com:8087/webav/actress">女优</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://www.cainqs.com:8087/webav/category">类型</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://www.cainqs.com:8087/webav/uploadSeeds">上传种子</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div>
+        <ul class="list-group center-block">
+            @foreach (var item in list)
+            {
+                if (item.HasPlayed)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success" data-path="@item.FilePath">
+                        @item.FileName
+                        <span class="badge badge-primary badge-pill">@item.FileExts</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger" data-path="@item.FilePath">
+                        @item.FileName
+                        <span class="badge badge-primary badge-pill">@item.FileExts</span>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    <script>
+        $(".list-group-item").click(function () {
+            window.open("/WebAv/PlayAv?filePath=" + $(this).data("path"));
+        });
+    </script>
+</body>
+</html>

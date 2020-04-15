@@ -1,0 +1,185 @@
+﻿@using Model.JavModels;
+
+@{ 
+    var avs = (List<AV>)ViewData["avs"];
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebAV-搜索</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdn.bootcss.com/paginationjs/2.1.4/pagination.css" rel="stylesheet">
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/paginationjs/2.1.4/pagination.js"></script>
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+            <a class="navbar-brand" href="http://www.cainqs.com:8087/webav/index">WebAV</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://www.cainqs.com:8087/webav/actress">女优</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://www.cainqs.com:8087/webav/category">类型</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://www.cainqs.com:8087/webav/uploadSeeds">上传种子</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container-fluid" style="width:30%">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class=" btn btn-outline-secondary dropdown-toggle btn-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="by" data-type="byId">番号</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#" data-type="byId">番号</a>
+                    <a class="dropdown-item" href="#" data-type="byActress">女优名</a>
+                    <a class="dropdown-item" href="#" data-type="byType">类型</a>
+                </div>
+            </div>
+            <input type="text" class="form-control" aria-label="Text input to search" id="searchContent" onkeydown="onKeyDown(event)">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="searchBtn">搜索</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2">
+        @foreach (var av in avs)
+        {
+            <div class="col mb-4">
+                <div class="card" style="width:400px;cursor:pointer" data-url="http://www.cainqs.com:8087/webav/av?avid=@(av.AvId)">
+                    <img src="@av.PictureURL" class="card-img-top" alt="..." style="width:100%">
+                    <div class="card-body">
+                        <h5 class="card-title">@av.Name</h5>
+                        <p class="card-text">@(av.ID + "--" + av.Actress)</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="paginationjs">
+    </div>
+
+    <script>
+        $(".dropdown-item").click(function () {
+            var type = $(this).attr("data-type");
+            var name = $(this).text();
+            $("#by").attr("data-type", type);
+            $("#by").text(name);
+        });
+
+        $("#searchBtn").click(function () {
+            search();
+        });
+
+        function search() {
+            var by = $("#by").attr("data-type");
+            var value = $("#searchContent").val();
+            var param = "";
+
+            if (value != "") {
+                if (by == "byId") {
+                    param += "id=" + value;
+                } else if (by == "byActress") {
+                    param += "actress=" + value;
+                } else if (by == "byType") {
+                    param += "category=" + value;
+                }
+
+                return "http://www.cainqs.com:8087/webav/getav?" + param;
+            }
+
+            return "";
+        }
+
+        function onKeyDown(event) {
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            if (e && e.keyCode == 27) { // 按 Esc 
+
+            }
+            if (e && e.keyCode == 113) { // 按 F2 
+
+            }
+            if (e && e.keyCode == 13) { // enter 键
+                search();
+            }
+        }
+
+        $(".card").click(function () {
+            var url = $(this).attr("data-url");
+
+            window.location.href = url;
+        });
+
+        $('#paginationjs').pagination({
+            dataSource: 'DetailImage?handler=Search',
+            locator: 'rows',
+            totalNumberLocator: function (response) {
+                return response.total;
+            },
+            pageSize: 20,
+            alias: {
+                pageNumber: "page",
+                pageSize: "pagesize"
+            },
+            ajax: {
+                //beforeSend: function () {
+                //    dataContainer.html('Loading data from flickr.com ...');
+                //}
+                type: "POST",
+                //url: "DetailImage?handler=Search",
+                data: req,
+                dataType: 'json',
+                //contentType: "application/json",
+                headers: {
+                    "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+            },
+            callback: function (data, pagination) {
+                // template method of yourself
+                var temp = pagination;
+                //var html = template(data);
+                //dataContainer.html(html);
+
+                var html = "";
+                $.each(data, function (index, item) {
+                    html += '<div class="col-sm-6 col-md-3"> '
+                    html += '<div class="thumbnail"> '
+                    html += '   <img src="/api/image/' + item.ImageId + '" alt="..." width=600, height=600>'
+                    html += '        <div class="caption">'
+                    html += '            <h3>' + item.CreateDateTime + '</h3>'
+                    //html +=            '<p>...</p>'
+                    //html +='            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>'
+                    html += '        </div>'
+                    html += '</div>'
+                    html += '</div>'
+                });
+
+                $("#data-container").html(html);
+                //dataContainer.html(html);
+            },
+            formatResult: function (data) {
+                //return html;
+            }
+        });
+    </script>
+</body>
+</html>
