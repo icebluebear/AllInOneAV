@@ -22,11 +22,10 @@ namespace Service
     public class JavLibraryHelper
     {
         private static LockModel lockModel = new LockModel();
+        private static readonly string ImgFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
+        private static readonly string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
 
-        private static string imgFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
-        private static string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
-
-        public static CookieContainer GetJavCookie(bool showConsole = true)
+        private static CookieContainer GetJavCookie(bool showConsole = true)
         {
             CookieContainer cc = new CookieContainer();
             ChromeOptions options = new ChromeOptions();
@@ -85,7 +84,7 @@ namespace Service
             }
         }
 
-        public static Dictionary<string, string> GetJavCategory(CookieContainer cc)
+        private static Dictionary<string, string> GetJavCategory(CookieContainer cc)
         {
             Dictionary<string, string> genreDic = new Dictionary<string, string>();
 
@@ -145,7 +144,7 @@ namespace Service
             return genreDic;
         }
 
-        public static Dictionary<string, List<string>> FillInCategory(Dictionary<string, string> category, CookieContainer cc)
+        private static Dictionary<string, List<string>> FillInCategory(Dictionary<string, string> category, CookieContainer cc)
         {
             Dictionary<string, List<string>> ret = new Dictionary<string, List<string>>();
 
@@ -220,7 +219,7 @@ namespace Service
             return ret;
         }
 
-        public static Dictionary<string, string> GetAllListUrl(Dictionary<string, List<string>> allScan)
+        private static Dictionary<string, string> GetAllListUrl(Dictionary<string, List<string>> allScan)
         {
             Dictionary<string, string> allListUrl = new Dictionary<string, string>();
 
@@ -238,7 +237,7 @@ namespace Service
             return allListUrl;
         }
 
-        public static void ScanAllUrl(Dictionary<string, string> allListUrl, CookieContainer cc)
+        private static void ScanAllUrl(Dictionary<string, string> allListUrl, CookieContainer cc)
         {
             int index = 0;
             Parallel.ForEach(allListUrl, new ParallelOptions { MaxDegreeOfParallelism = 20 }, url =>
@@ -250,7 +249,63 @@ namespace Service
             //WriteScanFile(allUrl);
         }
 
-        public static void ScanCategoryPageUrl(string url, string cate, CookieContainer cc, int current, int total)
+        private static void ScanCategoryPageUrl(string url, string cate, CookieContainer cc, int current, int total, List<string> scans = null)
+        {
+            var htmlRes = JavCookieContanierHelper(cc, url);
+
+            if (htmlRes.Success)
+            {
+                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                htmlDocument.LoadHtml(htmlRes.Content);
+
+                var videoPath = "//div[@class='video']";
+
+                var videoNodes = htmlDocument.DocumentNode.SelectNodes(videoPath);
+
+                if (videoNodes != null)
+                {
+                    int unScanCount = 0;
+
+                    foreach (var node in videoNodes)
+                    {
+                        var urlAndTitle = node.ChildNodes[0];
+                        if (urlAndTitle != null && urlAndTitle.ChildNodes.Count >= 3)
+                        {
+                            var id = urlAndTitle.ChildNodes[0].InnerText.Trim();
+                            var name = FileUtility.ReplaceInvalidChar(urlAndTitle.ChildNodes[2].InnerText.Trim());
+                            var avUrl = urlAndTitle.Attributes["href"].Value.Trim().Replace("./", "http://www.javlibrary.com/cn/");
+
+                            if (!string.IsNullOrEmpty(avUrl) && !string.IsNullOrEmpty(name) && !string.IsNullOrWhiteSpace(id))
+                            {
+                                ScanURL scan = new ScanURL
+                                {
+                                    Category = url,
+                                    ID = id,
+                                    IsDownload = false,
+                                    Title = name,
+                                    URL = avUrl
+                                };
+
+                                if (!JavDataBaseManager.HasScan(scan))
+                                {
+                                    unScanCount++;
+                                    JavDataBaseManager.InsertScanURL(scan);
+                                }
+
+                                if (scans != null)
+                                {
+                                    scans.Add(avUrl);
+                                }
+                            }
+                        }
+                    }
+
+                    Console.WriteLine(cate + " " + url + " 扫描了 " + unScanCount + " 未扫描, 进度" + current + " / " + total);
+                }
+            }
+        }
+
+        private static void ScanDailyCategoryPageUrl(string url, string cate, CookieContainer cc, int current, int total)
         {
             var htmlRes = JavCookieContanierHelper(cc, url);
 
@@ -300,9 +355,9 @@ namespace Service
                 }
             }
         }
-        
-        //按照类型处理每一个列表页
-        public static void ScanCategoryPageUrlSingleThread(Dictionary<string, string> urls, CookieContainer cc)
+
+
+        private static void ScanCategoryPageUrlSingleThread(Dictionary<string, string> urls, CookieContainer cc)
         {
             int index = 1;
 
@@ -380,7 +435,7 @@ namespace Service
             }
         }
 
-        public static void ScanAvList(CookieContainer cc)
+        private static void ScanAvList(CookieContainer cc)
         {
             List<ScanURL> avs = JavDataBaseManager.GetScanURL().Where(x => x.IsDownload == false).ToList();
 
@@ -390,7 +445,17 @@ namespace Service
             });
         }
 
-        public static void ScanEachAv(ScanURL url, CookieContainer cc, string status)
+        private static void ScanDailyAvList(CookieContainer cc, List<string> urls)
+        {
+            List<string> ret = new List<string>();
+
+            Parallel.ForEach(urls, new ParallelOptions { MaxDegreeOfParallelism = 100 }, url =>
+            {
+                ScanEachAv(new ScanURL { URL = url }, cc, string.Format("进度 {0}/{1}", urls.IndexOf(url) + 1, urls.Count));
+            });
+        }
+
+        private static void ScanEachAv(ScanURL url, CookieContainer cc, string status)
         {
             AV av = new AV();
 
@@ -410,9 +475,9 @@ namespace Service
                     JavDataBaseManager.UpdateScanURL(url.URL);
 
                     string result = "";
-                    if (!File.Exists(imgFolder + av.ID + av.Name + ".jpg"))
+                    if (!File.Exists(ImgFolder + av.ID + av.Name + ".jpg"))
                     {
-                        result = DownloadHelper.DownloadHttps(av.PictureURL, imgFolder + av.ID + av.Name + ".jpg", "");
+                        result = DownloadHelper.DownloadHttps(av.PictureURL, ImgFolder + av.ID + av.Name + ".jpg", "");
 
                         if (string.IsNullOrEmpty(result))
                         {
@@ -431,12 +496,12 @@ namespace Service
             }
             else
             {
-                Console.WriteLine("已存在 => " + url + " " + status);
+                Console.WriteLine("已存在 => " + url.URL + " " + status);
                 JavDataBaseManager.UpdateScanURL(url.URL);
             }
         }
 
-        public static void ScanEachAvSingleThread(CookieContainer cc)
+        private static void ScanEachAvSingleThread(CookieContainer cc)
         {
             List<ScanURL> urls = JavDataBaseManager.GetScanURL().Where(x => x.IsDownload == false).ToList();
             int index = 0;
@@ -479,9 +544,9 @@ namespace Service
                         JavDataBaseManager.UpdateScanURL(url.URL);
 
                         string result = "";
-                        if (!File.Exists(imgFolder + av.ID + av.Name + ".jpg"))
+                        if (!File.Exists(ImgFolder + av.ID + av.Name + ".jpg"))
                         {
-                            result = DownloadHelper.DownloadHttps(av.PictureURL, imgFolder + av.ID + av.Name + ".jpg", "");
+                            result = DownloadHelper.DownloadHttps(av.PictureURL, ImgFolder + av.ID + av.Name + ".jpg", "");
 
                             if (string.IsNullOrEmpty(result))
                             {
@@ -508,7 +573,7 @@ namespace Service
             }
         }
 
-        public static AV GenerateAVModel(string html, string avUrl)
+        private static AV GenerateAVModel(string html, string avUrl)
         {
             AV av = new AV();
 
@@ -666,7 +731,7 @@ namespace Service
             return av;
         }
 
-        public static void WriteScanFile(List<string> allUrl)
+        private static void WriteScanFile(List<string> allUrl)
         {
             var jsonStr = JsonConvert.SerializeObject(allUrl.Distinct());
 
@@ -678,7 +743,7 @@ namespace Service
             sw.Close();
         }
 
-        public static void WriteDownloadFile(List<AV> allAv)
+        private static void WriteDownloadFile(List<AV> allAv)
         {
             var jsonStr = JsonConvert.SerializeObject(allAv);
 
@@ -690,7 +755,7 @@ namespace Service
             sw.Close();
         }
 
-        public static Utils.HtmlResponse JavCookieContanierHelper(CookieContainer cc, string url)
+        private static Utils.HtmlResponse JavCookieContanierHelper(CookieContainer cc, string url)
         {
             var htmlRes = new Utils.HtmlResponse();
 
@@ -745,6 +810,7 @@ namespace Service
         public static void DoDailyUpdate(bool showConsole = true)
         {
             Dictionary<string, string> updatePages = new Dictionary<string, string>();
+            List<string> urls = new List<string>();
 
             var cc = GetJavCookie(showConsole);
 
@@ -757,10 +823,10 @@ namespace Service
             Parallel.ForEach(updatePages, new ParallelOptions { MaxDegreeOfParallelism = 100 }, url =>
             {
                 index++;
-                ScanCategoryPageUrl(url.Key, url.Value, cc, index, 200);
+                ScanCategoryPageUrl(url.Key, url.Value, cc, index, 200, urls);
             });
 
-            ScanAvList(cc);
+            ScanDailyAvList(cc, urls);
         }
 
         public static void DoCertainCategory(Dictionary<string, string> dic, bool showConsole = true)
@@ -783,7 +849,7 @@ namespace Service
             //重新组装所有列表页的去重url
             var allListUrl = GetAllListUrl(allScan);
             //完成全列表页扫描,并且写入扫描记录
-            ScanAllUrl(allListUrl, cc);
+            ScanCategoryPageUrlSingleThread(allListUrl, cc);
             //下载所有未完成的下载
             ScanEachAvSingleThread(cc);
         }
@@ -791,7 +857,7 @@ namespace Service
 
     public class BtsowClubHelper
     {
-        private static string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
+        private static readonly string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
 
         public static CookieContainer GetBtsowCookie()
         {
