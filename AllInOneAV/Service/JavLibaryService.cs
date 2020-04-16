@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using DataBaseManager.JavDataBaseHelper;
 using HtmlAgilityPack;
 using Model.Common;
 using Model.JavModels;
-using Model.ScanModels;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -287,11 +284,11 @@ namespace Service
                                 {
                                     unScanCount++;
                                     JavDataBaseManager.InsertScanURL(scan);
-                                }
 
-                                if (scans != null)
-                                {
-                                    scans.Add(avUrl);
+                                    if (scans != null)
+                                    {
+                                        scans.Add(avUrl);
+                                    }
                                 }
                             }
                         }

@@ -141,8 +141,8 @@ namespace AVWeb.Controllers
             try
             {
                 files = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\ComicDownload\\").GetFiles();
-                files = files.Skip((page - 1) * pageSize).Take(pageSize).ToArray();
                 totalCount = files.Count();
+                files = files.Skip((page - 1) * pageSize).Take(pageSize).ToArray();
                 currentCount = files.Count();
                 success = true;
             }
