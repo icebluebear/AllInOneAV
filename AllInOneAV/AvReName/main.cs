@@ -207,7 +207,7 @@ namespace AvReName
         {
             if (!string.IsNullOrEmpty(targetText.Text) && javBusCC != null)
             {
-                var list = JavBusDownload.JavBusDownloadHelper.GetJavBusSearchListModel(targetText.Text, javBusCC);
+                var list = Service.JavBusDownloadHelper.GetJavBusSearchListModel(targetText.Text, javBusCC);
 
                 if (list != null && list.Count > 0)
                 {
@@ -632,8 +632,8 @@ namespace AvReName
 
         private void RefreshJabBusCache()
         {
-            javBusCC = JavBusDownload.JavBusDownloadHelper.GetJavBusCookie();
-            JavBusDownload.JavBusDownloadHelper.UpdateJavBusCategory(javBusCC);
+            javBusCC = Service.JavBusDownloadHelper.GetJavBusCookie();
+            Service.JavBusDownloadHelper.UpdateJavBusCategory(javBusCC);
             mapping = JavDataBaseManager.GetJavBusCategoryMapping();
         }
 

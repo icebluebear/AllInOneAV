@@ -8,9 +8,10 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>AvReName</RootNamespace>
     <AssemblyName>AvReName</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -91,6 +92,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -110,13 +112,13 @@
       <Project>{4C6184D9-D4AE-42EE-8270-3401ADB22FE0}</Project>
       <Name>DataBaseManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JavBusDownload\JavBusDownload.csproj">
-      <Project>{5346db7f-c0f6-40a2-b9b7-ca97caa84cea}</Project>
-      <Name>JavBusDownload</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{144C6554-CF3B-49AF-9A8C-926A99E633BE}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Service\Service.csproj">
+      <Project>{53bd1489-f098-4796-9ec6-8d8c1a623fc7}</Project>
+      <Name>Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{85E3D89D-603E-4992-B266-E2CD3C8B4209}</Project>

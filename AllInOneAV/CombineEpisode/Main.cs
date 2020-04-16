@@ -1,17 +1,17 @@
 ﻿using DataBaseManager.JavDataBaseHelper;
+using DataBaseManager.ScanDataBaseHelper;
 using Model.Common;
 using Model.JavModels;
+using Model.ScanModels;
 using Service;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -29,6 +29,8 @@ namespace CombineEpisode
         private static readonly string imageFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
         private static readonly string ffmpeg = "c:\\setting\\ffmpeg.exe";
         private static readonly string combineFilePath = "c:\\setting\\combinefile\\";
+        private static List<Model.ScanModels.Match> matchesAV = new List<Model.ScanModels.Match>();
+        private static List<FileInfo> recentFi = new List<FileInfo>();
         private Process p;
         private bool OkToStart = true;
         private string[] ImportedFiles = null;
@@ -352,6 +354,178 @@ namespace CombineEpisode
             {
                 Process.Start(exeFile);
             }
+        }
+
+        private void btnMatch_Click(object sender, EventArgs e)
+        {
+            StartScanAndMatch();
+        }
+
+        private void btnFind_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtFind.Text))
+            {
+                DoFindMovie();
+            }
+        }
+
+        private void txtFind_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (!string.IsNullOrEmpty(txtFind.Text))
+                {
+                    DoFindMovie();
+                }
+            }
+        }
+
+        private void lvwFind_Validated(object sender, EventArgs e)
+        {
+            if (lvwFind.FocusedItem != null)
+            {
+                lvwFind.FocusedItem.BackColor = SystemColors.Highlight;
+                lvwFind.FocusedItem.ForeColor = Color.White;
+            }
+        }
+
+        private void lvwFind_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ListViewHitTestInfo info = lvwFind.HitTest(e.X, e.Y);
+            if (info.Item != null)
+            {
+                Process.Start(@"" + info.Item.SubItems[2].Text);
+            }
+        }
+
+        private void lvwFind_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var current = lvwRecnet.GetItemAt(e.X, e.Y);
+
+                Delete(current);
+            }
+        }
+
+        private void lvwFind_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            e.Item.ForeColor = Color.Black;
+            e.Item.BackColor = SystemColors.Window;
+
+            if (lvwFind.FocusedItem != null)
+            {
+                lvwFind.FocusedItem.Selected = true;
+            }
+        }
+
+        private void Main_KeyDown(object sender, KeyEventArgs e)
+        {
+            //空格播放事件
+            if (e.KeyCode == Keys.Space && tabControl1.SelectedTab.Name == "tabPage14")
+            {
+                //找视频选中
+                if (lvwFind.Focused)
+                {
+                    if (lvwFind.SelectedItems != null && lvwFind.SelectedItems.Count > 0)
+                    {
+                        if (lvwFind.SelectedItems.Count == 1)
+                        {
+                            Play(lvwFind.SelectedItems[0]);
+                        }
+                        else
+                        {
+                            List<string> list = new List<string>();
+
+                            foreach (ListViewItem item in lvwFind.SelectedItems)
+                            {
+                                list.Add(item.Tag.ToString());
+
+                                item.BackColor = Color.Green;
+                                ScanDataBaseManager.InsertViewHistory(FileUtility.ReplaceInvalidChar(item.Tag + ""));
+                            }
+
+                            PlayPlist(PlayerHelper.GeneratePotPlayerPlayList(list));
+                        }
+                    }
+                }
+                //播放最近选中
+                else
+                {
+                    if (lvwRecnet.SelectedItems != null && lvwRecnet.SelectedItems.Count > 0)
+                    {
+                        if (lvwRecnet.SelectedItems.Count == 1)
+                        {
+                            Play(lvwRecnet.SelectedItems[0]);
+                        }
+                        else
+                        {
+                            List<string> list = new List<string>();
+
+                            foreach (ListViewItem item in lvwRecnet.SelectedItems)
+                            {
+                                list.Add(item.Tag.ToString());
+
+                                item.BackColor = Color.Green;
+                                ScanDataBaseManager.InsertViewHistory(FileUtility.ReplaceInvalidChar(item.Tag + ""));
+                            }
+
+                            PlayPlist(PlayerHelper.GeneratePotPlayerPlayList(list));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnRecent_Click(object sender, EventArgs e)
+        {
+            ListRecentItems();
+        }
+
+        private void txtRecent_MouseClick(object sender, MouseEventArgs e)
+        {
+            ChooseRecentFolder();
+        }
+
+        private void rbDateA_CheckedChanged(object sender, EventArgs e)
+        {
+            WhenClickRb();
+            ShowContent();
+        }
+
+        private void rbDateD_CheckedChanged(object sender, EventArgs e)
+        {
+            WhenClickRb();
+            ShowContent();
+        }
+
+        private void rbSizeA_CheckedChanged(object sender, EventArgs e)
+        {
+            WhenClickRb();
+            ShowContent();
+        }
+
+        private void rbSizeD_CheckedChanged(object sender, EventArgs e)
+        {
+            WhenClickRb();
+            ShowContent();
+        }
+
+        private void lvwRecnet_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var current = lvwRecnet.GetItemAt(e.X, e.Y);
+
+                Delete(current);
+            }
+        }
+
+        private void lvwRecnet_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var current = lvwRecnet.GetItemAt(e.X, e.Y);
+
+            Play(current);
         }
         #endregion
 
@@ -1825,6 +1999,200 @@ namespace CombineEpisode
             if (!String.IsNullOrEmpty(output.Data))
             {
                 richTextBox3.AppendText(output.Data);
+            }
+        }
+
+        private async void StartScanAndMatch()
+        {
+            await StartScanAndMatchTask(OutputStartScanAndMatch);
+
+            matchesAV = ScanDataBaseManager.GetAllMatch();
+
+            MessageBox.Show("扫描完成");
+        }
+
+        private async Task StartScanAndMatchTask(DataReceivedEventHandler output)
+        {
+            var exe = "G:\\Github\\AllInOneAV\\AllInOneAV\\ScanAllAndMatch\\bin\\Debug\\ScanAllAndMatch.exe";
+            var arg = "";
+
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = exe;
+                p.StartInfo.Arguments = arg;
+
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.RedirectStandardOutput = true;
+
+                p.OutputDataReceived += OutputStartScanAndMatch;
+
+                p.Start();
+                p.BeginOutputReadLine();
+                await p.WaitForExitAsync();
+            }
+        }
+
+        private void OutputStartScanAndMatch(object sendProcess, DataReceivedEventArgs output)
+        {
+            if (!String.IsNullOrEmpty(output.Data))
+            {
+                rtbMatch.AppendText(output.Data + Environment.NewLine);
+            }
+        }
+
+        private void DoFindMovie()
+        {
+            if (matchesAV == null || matchesAV.Count <= 0)
+            {
+                matchesAV = GetAllMatched();
+            }
+
+            ShowMatch(txtFind.Text.Split(','));
+        }
+
+        private List<Model.ScanModels.Match> GetAllMatched()
+        {
+            return ScanDataBaseManager.GetAllMatch();
+        }
+
+        private void ShowMatch(string[] inputs)
+        {
+            lvwFind.BeginUpdate();
+
+            foreach (var keyword in inputs)
+            {
+                var tempKeyword = keyword.Trim().ToUpper();
+
+                foreach (var movie in matchesAV)
+                {
+                    if (movie.AvID.Trim().ToUpper().Contains(tempKeyword) || movie.AvID.Trim().ToUpper() == tempKeyword)
+                    {
+                        ListViewItem lvi = new ListViewItem(movie.AvID.Trim().ToUpper());
+
+                        if (movie.Location.Length > 2 && movie.Location[1] != ':')
+                        {
+                            movie.Location = movie.Location.Substring(0, 1) + ":" + movie.Location.Substring(1);
+                        }
+
+                        if (File.Exists(movie.Location.Trim() + "\\" + movie.Name.Trim()))
+                        {
+                            var tempFi = new FileInfo(movie.Location.Trim() + "\\" + movie.Name.Trim());
+
+                            lvi.SubItems.Add(FileSize.GetAutoSizeString(tempFi.Length, 2));
+                            lvi.SubItems.Add(movie.Location.Trim() + "\\" + movie.Name.Trim());
+
+                            lvi.Tag = movie.Location.Trim() + "\\" + movie.Name.Trim();
+
+                            lvwFind.Items.Add(lvi);
+                        }
+                    }
+                }
+            }
+
+            lvwFind.EndUpdate();
+        }
+
+        private void Play(ListViewItem current)
+        {
+            if (current != null)
+            {
+                Process.Start(@"" + current.Tag);
+                current.BackColor = Color.Green;
+                ScanDataBaseManager.InsertViewHistory(FileUtility.ReplaceInvalidChar(current.Tag + ""));
+            }
+        }
+
+        private void PlayPlist(string files)
+        {
+            Process.Start(@"" + files);
+        }
+
+        private void ChooseRecentFolder()
+        {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            var rs = folderBrowserDialog1.ShowDialog();
+
+            if (rs == DialogResult.Yes || rs == DialogResult.OK)
+            {
+                txtRecent.Text = folderBrowserDialog1.SelectedPath;           
+            }
+        }
+
+        private void ListRecentItems()
+        {
+            if (!string.IsNullOrEmpty(txtRecent.Text))
+            {
+                recentFi = new List<FileInfo>();
+                lvwRecnet.Items.Clear();
+
+                FileUtility.GetFilesRecursive(txtRecent.Text, formats, excludes, recentFi, 100);
+
+                WhenClickRb();
+                ShowContent();
+            }
+        }
+
+        private void ShowContent()
+        {
+            lvwRecnet.Items.Clear();
+
+            lvwRecnet.BeginUpdate();
+
+            foreach (var file in recentFi)
+            {
+                ListViewItem lvi = new ListViewItem(file.DirectoryName);
+                lvi.SubItems.Add(file.Name);
+                lvi.SubItems.Add(FileSize.GetAutoSizeString(file.Length, 1));
+                lvi.Tag = file.FullName;
+
+                if (ScanDataBaseManager.ViewedFile(FileUtility.ReplaceInvalidChar(file.FullName)))
+                {
+                    lvi.BackColor = Color.Green;
+                }
+
+                lvwRecnet.Items.Add(lvi);
+            }
+
+            lvwRecnet.EndUpdate();
+        }
+
+        private void WhenClickRb()
+        {
+            if (recentFi != null && recentFi.Count > 0)
+            {
+                if (rbDateA.Checked)
+                {
+                    recentFi = recentFi.OrderBy(x => x.LastWriteTime).ToList();
+                }
+
+                if (rbDateD.Checked)
+                {
+                    recentFi = recentFi.OrderByDescending(x => x.LastWriteTime).ToList();
+                }
+
+                if (rbSizeA.Checked)
+                {
+                    recentFi = recentFi.OrderBy(x => x.Length).ToList();
+                }
+
+                if (rbSizeD.Checked)
+                {
+                    recentFi = recentFi.OrderByDescending(x => x.Length).ToList();
+                }
+            }
+        }
+
+        private void Delete(ListViewItem current)
+        {
+            var res = MessageBox.Show(string.Format("Do you want to delete {0}", current.Tag), "Warrning", MessageBoxButtons.YesNo);
+
+            if (res == DialogResult.Yes)
+            {
+                File.Delete(current.Tag + "");
+
+                listView1.Items.Remove(current);
             }
         }
         #endregion

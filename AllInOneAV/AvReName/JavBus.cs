@@ -81,15 +81,15 @@ namespace AvReName
 
                 JavBusSearchListModel model = (JavBusSearchListModel)item.Tag;
 
-                var av = JavBusDownload.JavBusDownloadHelper.GetJavBusSearchDetail(model.Url, cc, mapping);
+                var av = Service.JavBusDownloadHelper.GetJavBusSearchDetail(model.Url, cc, mapping);
 
                 if (av != null)
                 {
-                    var avs = JavBusDownload.JavBusDownloadHelper.GetMatchJavDetail(av);
+                    var avs = Service.JavBusDownloadHelper.GetMatchJavDetail(av);
 
                     if (avs.IsMatch == false)
                     {
-                        var show = JavBusDownload.JavBusDownloadHelper.GetCloseLibAVModel(avs.Matches.FirstOrDefault(), mapping);
+                        var show = Service.JavBusDownloadHelper.GetCloseLibAVModel(avs.Matches.FirstOrDefault(), mapping);
 
                         pictureBox1.Image = Image.FromStream(WebRequest.Create(show.PictureURL).GetResponse().GetResponseStream());
                         txtTitle.Text = show.Name;
