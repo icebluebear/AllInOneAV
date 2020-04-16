@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JavBusDownloadHelper.cs" />
     <Compile Include="JavLibaryService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

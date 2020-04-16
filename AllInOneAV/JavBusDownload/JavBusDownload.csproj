@@ -51,7 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JavBusDownloadHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,6 +66,10 @@
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{144C6554-CF3B-49AF-9A8C-926A99E633BE}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Service\Service.csproj">
+      <Project>{53bd1489-f098-4796-9ec6-8d8c1a623fc7}</Project>
+      <Name>Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{85E3D89D-603E-4992-B266-E2CD3C8B4209}</Project>

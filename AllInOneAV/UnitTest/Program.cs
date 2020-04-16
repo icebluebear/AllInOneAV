@@ -47,7 +47,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            ClearJav();
+            //ClearJav();
         }
 
         private static void CleanrImg(string path)

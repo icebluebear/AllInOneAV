@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Utils;
 
-namespace JavBusDownload
+namespace Service
 {
     public class JavBusDownloadHelper
     {
@@ -48,11 +48,11 @@ namespace JavBusDownload
 
                 foreach (var node in nodes)
                 {
-                    busCategory.Add(node.InnerText.Trim()); 
+                    busCategory.Add(node.InnerText.Trim());
                 }
             }
 
-            for(int i = 0; i < busCategory.Count; i++)
+            for (int i = 0; i < busCategory.Count; i++)
             {
                 busCategory[i] = FileUtility.GetJianTiStr(busCategory[i]);
 
@@ -90,7 +90,7 @@ namespace JavBusDownload
 
         public static List<string> GetJavLibraryCategory()
         {
-            return JavDataBaseManager.GetCategories().Select(x=>x.Name).ToList();
+            return JavDataBaseManager.GetCategories().Select(x => x.Name).ToList();
         }
 
         public static Dictionary<string, bool> CategoryNotMatch(List<string> javBus, List<string> javLibrary)
@@ -154,7 +154,7 @@ namespace JavBusDownload
                         Url = url
                     });
                 }
-            }      
+            }
 
             return ret;
         }
@@ -185,7 +185,7 @@ namespace JavBusDownload
                 var mLength = Regex.Match(listHtml.Content, lengthTemplate);
 
                 var mDirector = Regex.Matches(listHtml.Content, directorTemplate);
-                var mActress = Regex.Matches(listHtml.Content, actressTemplate); 
+                var mActress = Regex.Matches(listHtml.Content, actressTemplate);
                 var mCompany = Regex.Matches(listHtml.Content, companyTemplate);
                 var mPublisher = Regex.Matches(listHtml.Content, publisherTemplate);
                 var mCategory = Regex.Matches(listHtml.Content, categotyTemplate);
@@ -229,11 +229,11 @@ namespace JavBusDownload
                     category += d.Groups[2] + ",";
                 }
 
-                DateTime parse = new DateTime(2050,1,1);
+                DateTime parse = new DateTime(2050, 1, 1);
                 av.Name = title;
                 av.ID = id.ToString();
                 av.PictureURL = img.ToString();
-                av.Publisher = publisher;              
+                av.Publisher = publisher;
                 DateTime.TryParse(date.ToString(), out parse);
                 av.ReleaseDate = parse;
                 av.Director = director;
