@@ -29,8 +29,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService", "WebService\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvVideoHelper", "CombineEpisode\AvVideoHelper.csproj", "{9EAB955D-35E8-418A-829E-087E9AC373DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HmbaDownload", "HmbaDownload\HmbaDownload.csproj", "{9A0A7CD8-C15E-4244-86FA-999367939F3D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatchJavScaner", "BatchJavScanerAndMacthMagUrl\BatchJavScaner.csproj", "{42BB157A-51A5-4C20-A640-8A4091BCA82C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{53BD1489-F098-4796-9EC6-8D8C1A623FC7}"
@@ -97,10 +95,6 @@ Global
 		{9EAB955D-35E8-418A-829E-087E9AC373DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EAB955D-35E8-418A-829E-087E9AC373DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EAB955D-35E8-418A-829E-087E9AC373DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A0A7CD8-C15E-4244-86FA-999367939F3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A0A7CD8-C15E-4244-86FA-999367939F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A0A7CD8-C15E-4244-86FA-999367939F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A0A7CD8-C15E-4244-86FA-999367939F3D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{42BB157A-51A5-4C20-A640-8A4091BCA82C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42BB157A-51A5-4C20-A640-8A4091BCA82C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42BB157A-51A5-4C20-A640-8A4091BCA82C}.Release|Any CPU.ActiveCfg = Release|Any CPU

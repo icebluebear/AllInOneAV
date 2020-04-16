@@ -1,5 +1,6 @@
 ﻿using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
+using Microsoft.Ajax.Utilities;
 using Model.JavModels;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using Utils;
 
 namespace AVWeb.Controllers
 {
@@ -126,6 +128,54 @@ namespace AVWeb.Controllers
         public ActionResult Category()
         {
             return View();
+        }
+
+        public JsonResult GetComics(int page = 1, int pageSize = 50)
+        {
+            string message = "";
+            bool success = false;
+            FileInfo[] files = null;
+            int totalCount = 0;
+            int currentCount = 0;
+
+            try
+            {
+                files = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\ComicDownload\\").GetFiles();
+                files = files.Skip((page - 1) * pageSize).Take(pageSize).ToArray();
+                totalCount = files.Count();
+                currentCount = files.Count();
+                success = true;
+            }
+            catch (Exception ee)
+            {
+                message = ee.ToString();
+            }
+
+            return Json(new { success = success, message = message, data = files.Select(x=>x.Name).ToList(), totalCount = totalCount, currentCount = currentCount, page = page, pageSize = pageSize }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetComic(string name)
+        {
+            string message = "文件未找到";
+            bool success = false;
+            FileInfo fi = null;
+            string url = "";
+            double size = 0;
+            string sizeStr = "";
+
+            var files = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\ComicDownload\\").GetFiles();
+            fi = files.FirstOrDefault(x => x.Name == name);
+
+            if (fi != null)
+            {
+                success = true;
+                message = "";
+                url = "http://www.cainqs.com:8087/comicdownload/" + fi.Name;
+                size = fi.Length;
+                sizeStr = FileSize.GetAutoSizeString(fi.Length, 1);
+            }
+
+            return Json(new { success = success, message = message, url = url, size = size, sizeStr = sizeStr }, JsonRequestBehavior.AllowGet);
         }
 
         public String Comic()

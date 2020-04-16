@@ -527,6 +527,11 @@ namespace CombineEpisode
 
             Play(current);
         }
+
+        private void btnReport_Click(object sender, EventArgs e)
+        {
+            StartReport();
+        }
         #endregion
 
         #region 方法
@@ -2193,6 +2198,41 @@ namespace CombineEpisode
                 File.Delete(current.Tag + "");
 
                 listView1.Items.Remove(current);
+            }
+        }
+
+        private async void StartReport()
+        {
+            await StartReportTask(OutputStartReport);
+        }
+
+        private async Task StartReportTask(DataReceivedEventHandler output)
+        {
+            var exe = "G:\\AllInOneAV\\GenerateReport\\bin\\Debug\\GenerateReport.exe";
+            var arg = "";
+
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = exe;
+                p.StartInfo.Arguments = arg;
+
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.RedirectStandardOutput = true;
+
+                p.OutputDataReceived += OutputStartReport;
+
+                p.Start();
+                p.BeginOutputReadLine();
+                await p.WaitForExitAsync();
+            }
+        }
+
+        private void OutputStartReport(object sendProcess, DataReceivedEventArgs output)
+        {
+            if (!String.IsNullOrEmpty(output.Data))
+            {
+                rtbReport.AppendText(output.Data + Environment.NewLine);
             }
         }
         #endregion

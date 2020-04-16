@@ -1,4 +1,5 @@
-﻿using DataBaseManager.ScanDataBaseHelper;
+﻿using DataBaseManager.JavDataBaseHelper;
+using DataBaseManager.ScanDataBaseHelper;
 using Model.Common;
 using Model.JavModels;
 using System;
@@ -9,11 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Utils;
 
-namespace GenerateReport
+namespace Service
 {
-    public class ReportHelper
+    public class ReportService
     {
-        public static Dictionary<string, List<FileInfo>> GenerateExistingAVs()
+        private static Dictionary<string, List<FileInfo>> GenerateExistingAVs()
         {
             string folder = "fin\\";
             var drivers = Environment.GetLogicalDrives();
@@ -47,7 +48,7 @@ namespace GenerateReport
             return fileContainer;
         }
 
-        public static void GenerateBasicReport(Dictionary<string, List<FileInfo>> input, List<AV> avs, Dictionary<string, AV> match, ReportModel report)
+        private static void GenerateBasicReport(Dictionary<string, List<FileInfo>> input, List<AV> avs, Dictionary<string, AV> match, ReportModel report)
         {
             int totalAV = 0;
             int totalFile = 0;
@@ -131,7 +132,7 @@ namespace GenerateReport
             //Console.WriteLine(string.Join("------", allKey.Except(matchedKey)));
         }
 
-        public static void GenerateMatchReport(Dictionary<string, List<FileInfo>> input, List<AV> avs, Dictionary<string, AV> match, ReportModel report)
+        private static void GenerateMatchReport(Dictionary<string, List<FileInfo>> input, List<AV> avs, Dictionary<string, AV> match, ReportModel report)
         {
             List<AV> matchedAV = new List<AV>();
             Dictionary<string, int> matchPrefix = new Dictionary<string, int>();
@@ -250,7 +251,7 @@ namespace GenerateReport
             report.TopDate = matchDate.OrderByDescending(s => s.Value).Take(report.Top).ToDictionary(x => x.Key, x => x.Value);
         }
 
-        public static void GenerateOtherReport(Dictionary<string, List<FileInfo>> input, List<AV> avs, Dictionary<string, AV> match, ReportModel report)
+        private static void GenerateOtherReport(Dictionary<string, List<FileInfo>> input, List<AV> avs, Dictionary<string, AV> match, ReportModel report)
         {
             int avHasFileMoreThan1 = 0;
             int fileLargeThan1G = 0;
@@ -302,12 +303,12 @@ namespace GenerateReport
             report.Formats = formats;
         }
 
-        public static string GenerateActuralReport(ReportModel report)
+        private static string GenerateActuralReport(ReportModel report)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(string.Format("总共收集 {0} 条AV信息, 本地共有 {1} 部AV, 占总信息量的 {2}%, 共有文件 {3} 个, 总大小 {4}", report.TotalRecord, report.TotalAV, GetPercentage(report.TotalFiles, report.TotalRecord), report.TotalFiles, report.TotalSizeStr));
-            sb.AppendLine(string.Format("其中一共成功匹配了 {0} 部, 没有成功匹配 {1} 部, 共有 {2} 部AV有不止一张CD", report.TotalMatch, report.TotalUnMatch, report.AvHasMoreThan1File));
-            sb.AppendLine(string.Format("有 {0} 个系列在本地没有任何AV文件存在, 文件一共涉及了 {1} 种格式, 分别为 {2}", report.NotMatchAnyThing.Count, report.Formats.Count, string.Join(",", report.Formats.Keys)));
+            sb.AppendLine(string.Format("其中一共匹配了 {0} 部, 没有匹配 {1} 部, 共有 {2} 部AV有不止一张CD", report.TotalMatch, report.TotalUnMatch, report.AvHasMoreThan1File));
+            sb.AppendLine(string.Format("有 {0} 个系列在本地没有任何AV文件, 文件一共涉及了 {1} 种格式, 分别为 {2}", report.NotMatchAnyThing.Count, report.Formats.Count, string.Join(",", report.Formats.Keys)));
             sb.AppendLine(string.Format("有 {0} 个文件大于1GB占比 {1}%, 有 {2} 个文件大于2GB占比 {3}%, 有 {4} 个文件大于4GB占比 {5}%", report.FileLargeThan1G, GetPercentage(report.FileLargeThan1G, report.TotalFiles), report.FileLargeThan2G, GetPercentage(report.FileLargeThan2G, report.TotalFiles), report.FileLargeThan4G, GetPercentage(report.FileLargeThan4G, report.TotalFiles)));
 
             sb.AppendLine(string.Format("系列拥有数前{0} -> ", report.Top));
@@ -327,7 +328,7 @@ namespace GenerateReport
             {
                 sb.AppendLine(string.Format("\t{0} -> {1}次", item.Key, item.Value));
             }
- 
+
             sb.AppendLine(string.Format("类型拥有数前{0} -> ", report.Top));
             foreach (var item in report.TopCategory)
             {
@@ -349,22 +350,7 @@ namespace GenerateReport
             return sb.ToString();
         }
 
-        public static void Test(Dictionary<string, List<FileInfo>> input, List<AV> avs, Dictionary<string, AV> match, ReportModel report)
-        {
-            foreach (var item in input)
-            {
-                if (avs.Find(x => (x.ID + "-" + x.Name).Replace("-1", "").Replace("-2", "").Replace("-3", "").Replace("-4", "").Replace("-5", "").Replace("-6", "").Replace("-c", "").Equals(item.Key, StringComparison.OrdinalIgnoreCase)) != null)
-                {
-
-                }
-                else
-                {
-                    Console.WriteLine(item.Key);
-                }
-            }
-        }
-
-        public static string GetPercentage(int divied, int divide, int round = 1)
+        private static string GetPercentage(int divied, int divide, int round = 1)
         {
             if (divide == 0)
             {
@@ -378,10 +364,10 @@ namespace GenerateReport
             }
         }
 
-        public static int UpdateScanMap(Dictionary<string, List<FileInfo>> input, List<AV> avs)
+        private static int UpdateScanMap(Dictionary<string, List<FileInfo>> input, List<AV> avs)
         {
             int ret = 0;
-            int delete = ScanDataBaseManager.DeleteMatchMap();          
+            int delete = ScanDataBaseManager.DeleteMatchMap();
 
             foreach (var av in avs)
             {
@@ -398,6 +384,30 @@ namespace GenerateReport
             }
 
             return ret;
+        }
+
+        public static void GenerateReport()
+        {
+            Dictionary<string, AV> match = new Dictionary<string, AV>();
+            ReportModel report = new ReportModel();
+            report.Top = 10;
+
+            Console.WriteLine("正在获取AV爬虫信息...");
+            var filesContainer = GenerateExistingAVs();
+            Console.WriteLine("正在获取本地AV信息...");
+            var avs = JavDataBaseManager.GetAllAV();
+
+            Console.WriteLine("正在更新本地Mapping信息...");
+            var mapCount = UpdateScanMap(filesContainer, avs);
+            Console.WriteLine("更新了" + mapCount + "条...");
+
+            Console.WriteLine("正在生成基本报表...");
+            GenerateBasicReport(filesContainer, avs, match, report);
+            Console.WriteLine("正在生成匹配报表...");
+            GenerateMatchReport(filesContainer, avs, match, report);
+            Console.WriteLine("正在生成报表其他部分...");
+            GenerateOtherReport(filesContainer, avs, match, report);
+            Console.WriteLine(GenerateActuralReport(report));
         }
     }
 }

@@ -155,8 +155,8 @@
             this.panel42 = new System.Windows.Forms.Panel();
             this.lvwRecnet = new System.Windows.Forms.ListView();
             this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader19 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel41 = new System.Windows.Forms.Panel();
             this.rbSizeA = new System.Windows.Forms.RadioButton();
             this.rbSizeD = new System.Windows.Forms.RadioButton();
@@ -185,6 +185,12 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnCheckISO = new System.Windows.Forms.Button();
             this.treeView3 = new System.Windows.Forms.TreeView();
+            this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.panel43 = new System.Windows.Forms.Panel();
+            this.panel44 = new System.Windows.Forms.Panel();
+            this.panel45 = new System.Windows.Forms.Panel();
+            this.rtbReport = new System.Windows.Forms.RichTextBox();
+            this.btnReport = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -244,6 +250,10 @@
             this.panel6.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.tabPage12.SuspendLayout();
+            this.panel43.SuspendLayout();
+            this.panel44.SuspendLayout();
+            this.panel45.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -287,6 +297,7 @@
             this.tabControl1.Controls.Add(this.tabPage11);
             this.tabControl1.Controls.Add(this.tabPage14);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage12);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
@@ -306,7 +317,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage2.Size = new System.Drawing.Size(865, 580);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "生成自动合并任务";
+            this.tabPage2.Text = "生成合并任务";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // panel9
@@ -702,7 +713,7 @@
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Size = new System.Drawing.Size(865, 580);
             this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "整体去重";
+            this.tabPage6.Text = "去重";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // panel19
@@ -786,7 +797,7 @@
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Size = new System.Drawing.Size(865, 580);
             this.tabPage7.TabIndex = 6;
-            this.tabPage7.Text = "未匹配视频磁链";
+            this.tabPage7.Text = "匹配视频磁链";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // panel24
@@ -1568,15 +1579,15 @@
             // 
             this.columnHeader16.Text = "目录";
             // 
-            // columnHeader17
-            // 
-            this.columnHeader17.Text = "大小";
-            this.columnHeader17.Width = 80;
-            // 
             // columnHeader19
             // 
             this.columnHeader19.Text = "文件";
             this.columnHeader19.Width = 300;
+            // 
+            // columnHeader17
+            // 
+            this.columnHeader17.Text = "大小";
+            this.columnHeader17.Width = 80;
             // 
             // panel41
             // 
@@ -1867,6 +1878,63 @@
             this.treeView3.TabIndex = 0;
             this.treeView3.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView3_AfterSelect);
             // 
+            // tabPage12
+            // 
+            this.tabPage12.Controls.Add(this.panel43);
+            this.tabPage12.Location = new System.Drawing.Point(4, 22);
+            this.tabPage12.Name = "tabPage12";
+            this.tabPage12.Size = new System.Drawing.Size(865, 580);
+            this.tabPage12.TabIndex = 15;
+            this.tabPage12.Text = "生成报表";
+            this.tabPage12.UseVisualStyleBackColor = true;
+            // 
+            // panel43
+            // 
+            this.panel43.Controls.Add(this.panel45);
+            this.panel43.Controls.Add(this.panel44);
+            this.panel43.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel43.Location = new System.Drawing.Point(0, 0);
+            this.panel43.Name = "panel43";
+            this.panel43.Size = new System.Drawing.Size(865, 580);
+            this.panel43.TabIndex = 0;
+            // 
+            // panel44
+            // 
+            this.panel44.Controls.Add(this.btnReport);
+            this.panel44.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel44.Location = new System.Drawing.Point(0, 0);
+            this.panel44.Name = "panel44";
+            this.panel44.Size = new System.Drawing.Size(865, 46);
+            this.panel44.TabIndex = 1;
+            // 
+            // panel45
+            // 
+            this.panel45.Controls.Add(this.rtbReport);
+            this.panel45.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel45.Location = new System.Drawing.Point(0, 46);
+            this.panel45.Name = "panel45";
+            this.panel45.Size = new System.Drawing.Size(865, 534);
+            this.panel45.TabIndex = 2;
+            // 
+            // rtbReport
+            // 
+            this.rtbReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbReport.Location = new System.Drawing.Point(0, 0);
+            this.rtbReport.Name = "rtbReport";
+            this.rtbReport.Size = new System.Drawing.Size(865, 534);
+            this.rtbReport.TabIndex = 0;
+            this.rtbReport.Text = "";
+            // 
+            // btnReport
+            // 
+            this.btnReport.Location = new System.Drawing.Point(8, 10);
+            this.btnReport.Name = "btnReport";
+            this.btnReport.Size = new System.Drawing.Size(75, 30);
+            this.btnReport.TabIndex = 0;
+            this.btnReport.Text = "生成报告";
+            this.btnReport.UseVisualStyleBackColor = true;
+            this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
+            // 
             // Main
             // 
             this.AllowDrop = true;
@@ -1954,6 +2022,10 @@
             this.panel4.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.tabPage12.ResumeLayout(false);
+            this.panel43.ResumeLayout(false);
+            this.panel44.ResumeLayout(false);
+            this.panel45.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2116,6 +2188,12 @@
         private System.Windows.Forms.RadioButton rbDateD;
         private System.Windows.Forms.Button btnRecent;
         private System.Windows.Forms.TextBox txtRecent;
+        private System.Windows.Forms.TabPage tabPage12;
+        private System.Windows.Forms.Panel panel43;
+        private System.Windows.Forms.Panel panel45;
+        private System.Windows.Forms.Panel panel44;
+        private System.Windows.Forms.RichTextBox rtbReport;
+        private System.Windows.Forms.Button btnReport;
     }
 }
 
