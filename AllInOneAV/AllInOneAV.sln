@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaDownloaderGUI", "MangaDownloaderGUI\MangaDownloaderGUI.csproj", "{78AF9905-7414-4CB3-8FF9-A2668B4E2B50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvReName", "AvReName\AvReName.csproj", "{D06B46D2-CF18-4766-B23A-2A92D26C76B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{78AF9905-7414-4CB3-8FF9-A2668B4E2B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78AF9905-7414-4CB3-8FF9-A2668B4E2B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78AF9905-7414-4CB3-8FF9-A2668B4E2B50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D06B46D2-CF18-4766-B23A-2A92D26C76B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06B46D2-CF18-4766-B23A-2A92D26C76B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D06B46D2-CF18-4766-B23A-2A92D26C76B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06B46D2-CF18-4766-B23A-2A92D26C76B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
