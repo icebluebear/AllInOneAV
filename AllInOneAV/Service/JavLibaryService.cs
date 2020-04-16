@@ -22,12 +22,12 @@ namespace Service
     public class JavLibraryHelper
     {
         private static LockModel lockModel = new LockModel();
+        private static CookieContainer cc = null;
         private static readonly string ImgFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
         private static readonly string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
 
-        private static CookieContainer GetJavCookie(bool showConsole = true)
+        private static void GetJavCookie(bool showConsole = true)
         {
-            CookieContainer cc = new CookieContainer();
             ChromeOptions options = new ChromeOptions();
             //"test-type", "--ignore-certificate-errors","window-size=1920,1080", "--disable-extensions", "--start-maximized", chromeUA, "--headless"
             var chromeUA = "--useragent=" + string.Format(UserAgent, HtmlManager.GetChromeVersion());
@@ -66,22 +66,22 @@ namespace Service
                 driver.Quit();
             }
 
-            foreach (var r in ret)
-            {
-                cc.Add(new System.Net.Cookie(r.Name, r.Value, r.Path, r.Domain));
-            }
-
             if (ret != null && ret.Count >= 3)
             {
-                return cc;
+                cc = new CookieContainer();
+
+                foreach (var r in ret)
+                {
+                    cc.Add(new System.Net.Cookie(r.Name, r.Value, r.Path, r.Domain));
+                }
             }
             else
             {
-                return null;
+                cc = null;
             }
         }
 
-        private static Dictionary<string, string> GetJavCategory(CookieContainer cc)
+        private static Dictionary<string, string> GetJavCategory()
         {
             Dictionary<string, string> genreDic = new Dictionary<string, string>();
 
@@ -91,7 +91,7 @@ namespace Service
             //最大重试3次
             while (times <= maxTimes && (cc == null || cc.Count < 3))
             {
-                cc = GetJavCookie();
+                GetJavCookie();
                 times++;
 
                 if (cc != null && cc.Count >= 3)
@@ -141,7 +141,7 @@ namespace Service
             return genreDic;
         }
 
-        private static Dictionary<string, List<string>> FillInCategory(Dictionary<string, string> category, CookieContainer cc)
+        private static Dictionary<string, List<string>> FillInCategory(Dictionary<string, string> category)
         {
             Dictionary<string, List<string>> ret = new Dictionary<string, List<string>>();
 
@@ -151,7 +151,7 @@ namespace Service
             //最大重试3次
             while (times <= maxTimes && (cc == null || cc.Count < 3))
             {
-                cc = GetJavCookie();
+                GetJavCookie();
                 times++;
 
                 if (cc != null && cc.Count >= 3)
@@ -168,7 +168,7 @@ namespace Service
                     List<string> allPages = new List<string>();
                     int lastPage = 1;
 
-                    var genreDetailhtmlRes = JavCookieContanierHelper(cc, c.Key);
+                    var genreDetailhtmlRes = JavCookieContanierHelper(c.Key);
 
                     if (genreDetailhtmlRes.Success)
                     {
@@ -234,21 +234,21 @@ namespace Service
             return allListUrl;
         }
 
-        private static void ScanAllUrl(Dictionary<string, string> allListUrl, CookieContainer cc)
+        private static void ScanAllUrl(Dictionary<string, string> allListUrl)
         {
             int index = 0;
-            Parallel.ForEach(allListUrl, new ParallelOptions { MaxDegreeOfParallelism = 20 }, url =>
+            Parallel.ForEach(allListUrl, new ParallelOptions { MaxDegreeOfParallelism = 5 }, url =>
             {
                 index++;
-                ScanCategoryPageUrl(url.Key, url.Value, cc, index, allListUrl.Count);
+                ScanCategoryPageUrl(url.Key, url.Value, index, allListUrl.Count);
             });
 
             //WriteScanFile(allUrl);
         }
 
-        private static void ScanCategoryPageUrl(string url, string cate, CookieContainer cc, int current, int total, List<string> scans = null)
+        private static void ScanCategoryPageUrl(string url, string cate, int current, int total, List<string> scans = null)
         {
-            var htmlRes = JavCookieContanierHelper(cc, url);
+            var htmlRes = JavCookieContanierHelper(url);
 
             if (htmlRes.Success)
             {
@@ -302,9 +302,9 @@ namespace Service
             }
         }
 
-        private static void ScanDailyCategoryPageUrl(string url, string cate, CookieContainer cc, int current, int total)
+        private static void ScanDailyCategoryPageUrl(string url, string cate, int current, int total)
         {
-            var htmlRes = JavCookieContanierHelper(cc, url);
+            var htmlRes = JavCookieContanierHelper(url);
 
             if (htmlRes.Success)
             {
@@ -353,7 +353,7 @@ namespace Service
             }
         }
 
-        private static void ScanCategoryPageUrlSingleThread(Dictionary<string, string> urls, CookieContainer cc)
+        private static void ScanCategoryPageUrlSingleThread(Dictionary<string, string> urls)
         {
             int index = 1;
 
@@ -369,7 +369,7 @@ namespace Service
 
                     if (htmlRes.IsExpire)
                     {
-                        cc = GetJavCookie();
+                        GetJavCookie();
                         retry++;
                         continue;
                     }
@@ -431,33 +431,33 @@ namespace Service
             }
         }
 
-        private static void ScanAvList(CookieContainer cc)
+        private static void ScanAvList()
         {
             List<ScanURL> avs = JavDataBaseManager.GetScanURL().Where(x => x.IsDownload == false).ToList();
 
             Parallel.ForEach(avs, new ParallelOptions { MaxDegreeOfParallelism = 100 }, av =>
             {
-                ScanEachAv(av, cc, string.Format("进度 {0}/{1}", avs.IndexOf(av) + 1, avs.Count));
+                ScanEachAv(av, string.Format("进度 {0}/{1}", avs.IndexOf(av) + 1, avs.Count));
             });
         }
 
-        private static void ScanDailyAvList(CookieContainer cc, List<string> urls)
+        private static void ScanDailyAvList(List<string> urls)
         {
             List<string> ret = new List<string>();
 
             Parallel.ForEach(urls, new ParallelOptions { MaxDegreeOfParallelism = 100 }, url =>
             {
-                ScanEachAv(new ScanURL { URL = url }, cc, string.Format("进度 {0}/{1}", urls.IndexOf(url) + 1, urls.Count));
+                ScanEachAv(new ScanURL { URL = url }, string.Format("进度 {0}/{1}", urls.IndexOf(url) + 1, urls.Count));
             });
         }
 
-        private static void ScanEachAv(ScanURL url, CookieContainer cc, string status)
+        private static void ScanEachAv(ScanURL url, string status)
         {
             AV av = new AV();
 
             if (!JavDataBaseManager.HasAv(url.URL))
             {
-                var htmlRes = JavCookieContanierHelper(cc, url.URL);
+                var htmlRes = JavCookieContanierHelper(url.URL);
 
                 if (htmlRes.Success)
                 {
@@ -497,7 +497,7 @@ namespace Service
             }
         }
 
-        private static void ScanEachAvSingleThread(CookieContainer cc)
+        private static void ScanEachAvSingleThread()
         {
             List<ScanURL> urls = JavDataBaseManager.GetScanURL().Where(x => x.IsDownload == false).ToList();
             int index = 0;
@@ -517,7 +517,7 @@ namespace Service
 
                         if (htmlRes.IsExpire)
                         {
-                            cc = GetJavCookie();
+                            GetJavCookie();
                             retry++;
                             continue;
                         }
@@ -751,55 +751,42 @@ namespace Service
             sw.Close();
         }
 
-        private static Utils.HtmlResponse JavCookieContanierHelper(CookieContainer cc, string url)
+        private static Utils.HtmlResponse JavCookieContanierHelper(string url)
         {
             var htmlRes = HtmlManager.GetHtmlWebClientWithRenewCC("http://www.javlibrary.com/cn/", url, cc);
 
             return htmlRes;
         }
 
-        private static void RefreshCookie(int mintutes, CookieContainer cc)
+        private static void RefreshCookie(int mintutes)
         {
-            CookieContainer ret = null;
-
             while (true)
             {
                 Thread.Sleep(1000 * 60 * (mintutes - 5));
 
-                while (ret == null)
-                {
-                    ret = GetJavCookie(true);
-                }
-
-                cc = ret;
+                GetJavCookie(false);
 
                 Console.WriteLine("*********************更新Cookie*********************");
-
-                ret = null;
             }
         }
-
 
         public static void DoFullScan(bool showConsole = true)
         {
             //获取Cookie
-            var cc = GetJavCookie(showConsole);
+            GetJavCookie(showConsole);
 
-            if (cc != null)
-            {
-                Task.Run(() => RefreshCookie(60, cc));
-            }
+            Task.Run(() => RefreshCookie(60));
 
             //获取分类
-            var genres = GetJavCategory(cc);
+            var genres = GetJavCategory();
             //获取所谓分类下面的所有页数,以便达到全站扫描
-            var allScan = FillInCategory(genres, cc);
+            var allScan = FillInCategory(genres);
             //重新组装所有列表页的去重url
             var allListUrl = GetAllListUrl(allScan);
             //对所有列表页尽享扫描
-            ScanAllUrl(allListUrl, cc);
+            ScanAllUrl(allListUrl);
             //处理每一个单独av
-            ScanAvList(cc);
+            ScanAvList();
         }
 
         public static void DoDailyUpdate(bool showConsole = true)
@@ -807,7 +794,7 @@ namespace Service
             Dictionary<string, string> updatePages = new Dictionary<string, string>();
             List<string> urls = new List<string>();
 
-            var cc = GetJavCookie(showConsole);
+            GetJavCookie(showConsole);
 
             for (int i = 1; i <= 200; i++)
             {
@@ -818,35 +805,35 @@ namespace Service
             Parallel.ForEach(updatePages, new ParallelOptions { MaxDegreeOfParallelism = 100 }, url =>
             {
                 index++;
-                ScanCategoryPageUrl(url.Key, url.Value, cc, index, 200, urls);
+                ScanCategoryPageUrl(url.Key, url.Value, index, 200, urls);
             });
 
-            ScanDailyAvList(cc, urls);
+            ScanDailyAvList(urls);
         }
 
         public static void DoCertainCategory(Dictionary<string, string> dic, bool showConsole = true)
         {
-            var cc = GetJavCookie(showConsole);
-            var allScan = FillInCategory(dic, cc);
+            GetJavCookie(showConsole);
+            var allScan = FillInCategory(dic);
             var allListUrl = GetAllListUrl(allScan);
-            ScanAllUrl(allListUrl, cc);
-            ScanAvList(cc);
+            ScanAllUrl(allListUrl);
+            ScanAvList();
         }
 
         public static void DoFullScanSingleThread(bool showConsole = true)
         {
             //获取Cookie
-            var cc = GetJavCookie(showConsole);
+            GetJavCookie(showConsole);
             //获取分类
-            var genres = GetJavCategory(cc);
+            var genres = GetJavCategory();
             //获取所谓分类下面的所有页数,以便达到全站扫描
-            var allScan = FillInCategory(genres, cc);
+            var allScan = FillInCategory(genres);
             //重新组装所有列表页的去重url
             var allListUrl = GetAllListUrl(allScan);
             //完成全列表页扫描,并且写入扫描记录
-            ScanCategoryPageUrlSingleThread(allListUrl, cc);
+            ScanCategoryPageUrlSingleThread(allListUrl);
             //下载所有未完成的下载
-            ScanEachAvSingleThread(cc);
+            ScanEachAvSingleThread();
         }
     }
 
