@@ -770,6 +770,15 @@ namespace Service
             }
         }
 
+        public static void DoDownloadOnly(bool showConsole = true)
+        {
+            GetJavCookie(showConsole);
+
+            Task.Run(() => RefreshCookie(60));
+
+            ScanAvList();
+        }
+
         public static void DoFullScan(bool showConsole = true)
         {
             //获取Cookie

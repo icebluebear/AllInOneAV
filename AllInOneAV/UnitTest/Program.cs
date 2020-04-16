@@ -47,7 +47,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            TestJavService();
+            ClearJav();
         }
 
         private static void CleanrImg(string path)
@@ -76,7 +76,9 @@ namespace UnitTest
         {
             var all = JavDataBaseManager.GetAllAV();
 
-            all.ForEach(x =>x.URL = x.URL.Trim());
+
+            var idDIc = all.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList()).Where(x=>x.Value.Count > 1).ToDictionary(x => x.Key, x => x);
+            var urlDic = all.GroupBy(x => x.URL).ToDictionary(x => x.Key, x => x.ToList()).Where(x => x.Value.Count > 1).ToDictionary(x => x.Key, x => x);
 
             var fileName = "G:\\JavAvBak.json";
             File.Create(fileName).Close();
@@ -90,7 +92,7 @@ namespace UnitTest
 
         private static void TestJavService()
         {
-            JavLibraryHelper.DoFullScan();
+            JavLibraryHelper.DoDownloadOnly();
         }
 
         private static void TestBtsow()
