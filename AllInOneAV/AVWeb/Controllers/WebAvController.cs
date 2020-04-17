@@ -130,6 +130,11 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        public ActionResult UploadComics()
+        {
+            return View();
+        }
+
         public JsonResult GetComics(int page = 1, int pageSize = 50)
         {
             string message = "";

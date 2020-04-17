@@ -48,6 +48,12 @@ namespace MangaDownloaderGUI
                     {
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(m.MangaPic);
                         request.Host = "i.jituoli.com";
+
+                        if (m.MangaPic.Contains("shaque.vip"))
+                        {
+                            request.Host = "img001.shaque.vip";
+                        }
+
                         request.Referer = "http://www.hanhande.net/search/?keywords=";
                         imageList1.Images.Add(m.MangeUrl, Image.FromStream(request.GetResponse().GetResponseStream()));
                     }

@@ -229,7 +229,13 @@ namespace CombineEpisode
 
         private void btnScanUnmathced_Click(object sender, EventArgs e)
         {
+            treeView5.Nodes.Clear();
             ScanUnmatchedClick();
+        }
+
+        private void btnScanUnmatchedSelect_Click(object sender, EventArgs e)
+        {
+            SelectAllUnmatchedSubTreeNode();
         }
 
         private void treeView5_Click(object sender, EventArgs e)
@@ -1793,7 +1799,14 @@ namespace CombineEpisode
                 {
                     richTextBox2.AppendText("文件 " + item.Key.Name + " 找到1条匹配,开始处理", Color.Green, font, true);
 
-                    var tempFileName = item.Value.FirstOrDefault().ID + "-" + item.Value.FirstOrDefault().Name + item.Key.Extension;
+                    var chinese = "";
+
+                    if (item.Key.Name.Replace(item.Value.FirstOrDefault().ID, "").Replace(item.Value.FirstOrDefault().Name, "").Contains("-C") || item.Key.Name.Replace(item.Value.FirstOrDefault().ID, "").Replace(item.Value.FirstOrDefault().Name, "").Contains("-c"))
+                    {
+                        chinese = "-C";
+                    }
+
+                    var tempFileName = item.Value.FirstOrDefault().ID + "-" + item.Value.FirstOrDefault().Name + chinese + item.Key.Extension;
 
                     if (moveReocrd.ContainsKey(tempFileName))
                     {
@@ -2234,6 +2247,29 @@ namespace CombineEpisode
             {
                 rtbReport.AppendText(output.Data + Environment.NewLine);
             }
+        }
+
+        private void SelectAllUnmatchedSubTreeNode()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (treeView5.Nodes.Count > 0)
+            {
+                foreach (TreeNode tn in treeView5.Nodes)
+                {
+                    if (tn.Nodes != null && tn.Nodes.Count > 0)
+                    {
+                        foreach (TreeNode stn in tn.Nodes)
+                        {
+                            stn.Checked = true;
+
+                            sb.AppendLine((string)stn.Tag);
+                        }
+                    }
+                }
+            }
+
+            Clipboard.SetDataObject(sb.ToString());
         }
         #endregion
     }

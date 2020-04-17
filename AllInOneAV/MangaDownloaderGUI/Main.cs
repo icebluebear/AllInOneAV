@@ -285,15 +285,32 @@ namespace MangaDownloaderGUI
                     ShowMangeHanhan();
                 }
             }
+            else
+            {
+                MessageBox.Show("没有找到漫画");
+            }
         }
 
         private void ShowMangeHanhan()
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(mi.MangaPic);
             request.Host = "i.jituoli.com";
+
+            if (mi.MangaPic.Contains("shaque.vip"))
+            {
+                request.Host = "img001.shaque.vip";
+            }
+
             request.Referer = "http://www.hanhande.net/search/?keywords=";
 
-            picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
+            try
+            {
+                picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
+            }
+            catch (Exception ee)
+            {
+
+            }
 
             txtMainUrl.Text = mi.MangeUrl;
 
@@ -806,13 +823,15 @@ namespace MangaDownloaderGUI
                         var decrypt = htmlRet.Content.Substring(htmlRet.Content.IndexOf("chapterImages = ") + "chapterImages = ".Length);
                         decrypt = decrypt.Substring(0, decrypt.IndexOf("]") + 1);
 
+                        var urlHeader = htmlRet.Content.Substring(htmlRet.Content.IndexOf("chapterPath = \"") + "chapterPath = \"".Length);
+                        urlHeader = urlHeader.Substring(0, urlHeader.IndexOf("\""));
+
                         var picList = JsonConvert.DeserializeObject<List<string>>(decrypt);
 
                         if (picList != null && picList.Count > 0)
                         {
                             Dictionary<int, string> picToBeDownloaded = new Dictionary<int, string>();
                             int index = 1;
-
                             foreach (var p in picList)
                             {
                                 picToBeDownloaded.Add(index, p);
@@ -821,7 +840,18 @@ namespace MangaDownloaderGUI
 
                             Parallel.ForEach(picToBeDownloaded, new ParallelOptions { MaxDegreeOfParallelism = setting.ThreadCount }, node =>
                             {
-                                downloadExcep += DownloadHelper.DownloadFile(node.Value, subFolder + node.Key + ".jpg", "res.img.jituoli.com", urlNode.Attributes["href"].Value.Trim());
+                                string host = "res.img.jituoli.com";
+                                var pic = node.Value;
+                                bool shaque = false;
+
+                                if (!node.Value.StartsWith("http"))
+                                {
+                                    host = "img001.shaque.vip";
+                                    pic = "http://img001.shaque.vip/" + urlHeader + node.Value;
+                                    shaque = true;
+                                }
+   
+                                downloadExcep += DownloadHelper.DownloadHttpsWithHost(pic, subFolder + node.Key + ".jpg", host, urlNode.Attributes["href"].Value.Trim(), shaque);
                             });
                         }
                         else

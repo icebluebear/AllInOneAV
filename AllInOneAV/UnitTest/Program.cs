@@ -22,6 +22,7 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Ulog;
 using Utils;
 
@@ -47,7 +48,47 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            //ClearJav();
+            RestoreCorrptedFile();
+
+            Console.ReadKey();
+        }
+
+        private static void RestoreCorrptedFile()
+        {
+            Dictionary<string, List<SeedMagnetSearchModel>> seeds = new Dictionary<string, List<SeedMagnetSearchModel>>();
+            List<string> fileList = new List<string>();
+            var file = new DirectoryInfo("K:\\Fin").GetFiles();
+
+            Parallel.ForEach(file, new ParallelOptions { MaxDegreeOfParallelism = 20 }, f =>
+            {
+                Console.WriteLine("处理 " + f.Name);
+                 var split = f.Name.Split('-');
+                 if (split.Length >= 3)
+                 {
+                     var searchContent = split[0] + "-" + split[1];
+
+                     seeds.Add(searchContent, SearchSeedHelper.SearchSukebei(searchContent));
+                 }
+            });
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var seed in seeds)
+            {
+                if (seed.Value != null && seed.Value.Count > 0)
+                {
+                    foreach (var model in seed.Value)
+                    {
+                        sb.AppendLine(model.MagUrl);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(seed.Key + " 没找到磁链接");
+                }
+            }
+
+            Console.WriteLine(sb.ToString());
         }
 
         private static void CleanrImg(string path)

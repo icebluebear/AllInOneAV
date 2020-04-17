@@ -252,6 +252,13 @@ namespace AVWeb.Controllers
             return PostFiles(HttpContext.Current.Request.Files, "c:\\FileUpload\\Seeds\\", false, ".torrent");
         }
 
+        [HttpPost]
+        [Route("PostComicFiles")]
+        public string PostComicFiles()
+        {
+            return PostFiles(HttpContext.Current.Request.Files, "G:\\AVWeb\\ComicDownload\\", false, ".zip");
+        }
+
         #region 工具
         private string PostFiles(HttpFileCollection filelist, string folder, bool addDate, string ext)
         {
@@ -264,7 +271,7 @@ namespace AVWeb.Controllers
                     HttpPostedFile file = filelist[i];
                     string fileName = file.FileName;
 
-                    if (fileName.ToLower().Contains(ext) && file.ContentLength <= 1024 * 1000 * 1000)
+                    if (fileName.ToLower().Contains(ext))
                     {
                         if (addDate)
                         {

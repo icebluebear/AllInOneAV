@@ -180,17 +180,18 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.txtHopeName = new System.Windows.Forms.TextBox();
             this.btnImport = new System.Windows.Forms.Button();
+            this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.panel43 = new System.Windows.Forms.Panel();
+            this.panel45 = new System.Windows.Forms.Panel();
+            this.rtbReport = new System.Windows.Forms.RichTextBox();
+            this.panel44 = new System.Windows.Forms.Panel();
+            this.btnReport = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnCheckISO = new System.Windows.Forms.Button();
             this.treeView3 = new System.Windows.Forms.TreeView();
-            this.tabPage12 = new System.Windows.Forms.TabPage();
-            this.panel43 = new System.Windows.Forms.Panel();
-            this.panel44 = new System.Windows.Forms.Panel();
-            this.panel45 = new System.Windows.Forms.Panel();
-            this.rtbReport = new System.Windows.Forms.RichTextBox();
-            this.btnReport = new System.Windows.Forms.Button();
+            this.btnScanUnmatchedSelect = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -252,8 +253,8 @@
             this.panel2.SuspendLayout();
             this.tabPage12.SuspendLayout();
             this.panel43.SuspendLayout();
-            this.panel44.SuspendLayout();
             this.panel45.SuspendLayout();
+            this.panel44.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -832,6 +833,7 @@
             // 
             // panel23
             // 
+            this.panel23.Controls.Add(this.btnScanUnmatchedSelect);
             this.panel23.Controls.Add(this.btnScanUnmathced);
             this.panel23.Controls.Add(this.txtUnmatched);
             this.panel23.Dock = System.Windows.Forms.DockStyle.Top;
@@ -857,7 +859,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUnmatched.Location = new System.Drawing.Point(8, 13);
             this.txtUnmatched.Name = "txtUnmatched";
-            this.txtUnmatched.Size = new System.Drawing.Size(755, 21);
+            this.txtUnmatched.Size = new System.Drawing.Size(680, 21);
             this.txtUnmatched.TabIndex = 0;
             // 
             // tabPage5
@@ -1845,6 +1847,63 @@
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
+            // tabPage12
+            // 
+            this.tabPage12.Controls.Add(this.panel43);
+            this.tabPage12.Location = new System.Drawing.Point(4, 22);
+            this.tabPage12.Name = "tabPage12";
+            this.tabPage12.Size = new System.Drawing.Size(865, 580);
+            this.tabPage12.TabIndex = 15;
+            this.tabPage12.Text = "生成报表";
+            this.tabPage12.UseVisualStyleBackColor = true;
+            // 
+            // panel43
+            // 
+            this.panel43.Controls.Add(this.panel45);
+            this.panel43.Controls.Add(this.panel44);
+            this.panel43.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel43.Location = new System.Drawing.Point(0, 0);
+            this.panel43.Name = "panel43";
+            this.panel43.Size = new System.Drawing.Size(865, 580);
+            this.panel43.TabIndex = 0;
+            // 
+            // panel45
+            // 
+            this.panel45.Controls.Add(this.rtbReport);
+            this.panel45.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel45.Location = new System.Drawing.Point(0, 46);
+            this.panel45.Name = "panel45";
+            this.panel45.Size = new System.Drawing.Size(865, 534);
+            this.panel45.TabIndex = 2;
+            // 
+            // rtbReport
+            // 
+            this.rtbReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbReport.Location = new System.Drawing.Point(0, 0);
+            this.rtbReport.Name = "rtbReport";
+            this.rtbReport.Size = new System.Drawing.Size(865, 534);
+            this.rtbReport.TabIndex = 0;
+            this.rtbReport.Text = "";
+            // 
+            // panel44
+            // 
+            this.panel44.Controls.Add(this.btnReport);
+            this.panel44.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel44.Location = new System.Drawing.Point(0, 0);
+            this.panel44.Name = "panel44";
+            this.panel44.Size = new System.Drawing.Size(865, 46);
+            this.panel44.TabIndex = 1;
+            // 
+            // btnReport
+            // 
+            this.btnReport.Location = new System.Drawing.Point(8, 10);
+            this.btnReport.Name = "btnReport";
+            this.btnReport.Size = new System.Drawing.Size(75, 30);
+            this.btnReport.TabIndex = 0;
+            this.btnReport.Text = "生成报告";
+            this.btnReport.UseVisualStyleBackColor = true;
+            this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -1878,62 +1937,16 @@
             this.treeView3.TabIndex = 0;
             this.treeView3.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView3_AfterSelect);
             // 
-            // tabPage12
+            // btnScanUnmatchedSelect
             // 
-            this.tabPage12.Controls.Add(this.panel43);
-            this.tabPage12.Location = new System.Drawing.Point(4, 22);
-            this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(865, 580);
-            this.tabPage12.TabIndex = 15;
-            this.tabPage12.Text = "生成报表";
-            this.tabPage12.UseVisualStyleBackColor = true;
-            // 
-            // panel43
-            // 
-            this.panel43.Controls.Add(this.panel45);
-            this.panel43.Controls.Add(this.panel44);
-            this.panel43.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel43.Location = new System.Drawing.Point(0, 0);
-            this.panel43.Name = "panel43";
-            this.panel43.Size = new System.Drawing.Size(865, 580);
-            this.panel43.TabIndex = 0;
-            // 
-            // panel44
-            // 
-            this.panel44.Controls.Add(this.btnReport);
-            this.panel44.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel44.Location = new System.Drawing.Point(0, 0);
-            this.panel44.Name = "panel44";
-            this.panel44.Size = new System.Drawing.Size(865, 46);
-            this.panel44.TabIndex = 1;
-            // 
-            // panel45
-            // 
-            this.panel45.Controls.Add(this.rtbReport);
-            this.panel45.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel45.Location = new System.Drawing.Point(0, 46);
-            this.panel45.Name = "panel45";
-            this.panel45.Size = new System.Drawing.Size(865, 534);
-            this.panel45.TabIndex = 2;
-            // 
-            // rtbReport
-            // 
-            this.rtbReport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbReport.Location = new System.Drawing.Point(0, 0);
-            this.rtbReport.Name = "rtbReport";
-            this.rtbReport.Size = new System.Drawing.Size(865, 534);
-            this.rtbReport.TabIndex = 0;
-            this.rtbReport.Text = "";
-            // 
-            // btnReport
-            // 
-            this.btnReport.Location = new System.Drawing.Point(8, 10);
-            this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(75, 30);
-            this.btnReport.TabIndex = 0;
-            this.btnReport.Text = "生成报告";
-            this.btnReport.UseVisualStyleBackColor = true;
-            this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
+            this.btnScanUnmatchedSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnScanUnmatchedSelect.Location = new System.Drawing.Point(701, 5);
+            this.btnScanUnmatchedSelect.Name = "btnScanUnmatchedSelect";
+            this.btnScanUnmatchedSelect.Size = new System.Drawing.Size(75, 34);
+            this.btnScanUnmatchedSelect.TabIndex = 2;
+            this.btnScanUnmatchedSelect.Text = "全选";
+            this.btnScanUnmatchedSelect.UseVisualStyleBackColor = true;
+            this.btnScanUnmatchedSelect.Click += new System.EventHandler(this.btnScanUnmatchedSelect_Click);
             // 
             // Main
             // 
@@ -2024,8 +2037,8 @@
             this.panel2.PerformLayout();
             this.tabPage12.ResumeLayout(false);
             this.panel43.ResumeLayout(false);
-            this.panel44.ResumeLayout(false);
             this.panel45.ResumeLayout(false);
+            this.panel44.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2194,6 +2207,7 @@
         private System.Windows.Forms.Panel panel44;
         private System.Windows.Forms.RichTextBox rtbReport;
         private System.Windows.Forms.Button btnReport;
+        private System.Windows.Forms.Button btnScanUnmatchedSelect;
     }
 }
 

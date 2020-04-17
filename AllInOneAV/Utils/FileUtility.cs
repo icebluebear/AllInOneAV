@@ -876,11 +876,11 @@ namespace Utils
 
             if (dri.EndsWith("\\") || dri.EndsWith("/"))
             {
-                folder = dri + "fin\\";
+                folder = dri;
             }
             else
             {
-                folder = dri + "\\fin\\";
+                folder = dri + "\\";
             }
 
             if (Directory.Exists(folder))

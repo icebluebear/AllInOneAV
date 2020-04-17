@@ -855,14 +855,18 @@ namespace Service
             driverService.HideCommandPromptWindow = true;
             //"test-type", "--ignore-certificate-errors","window-size=1920,1080", "--disable-extensions", "--start-maximized", chromeUA, "--headless"
             var chromeUA = "--useragent=" + string.Format(UserAgent, HtmlManager.GetChromeVersion());
-            options.AddArguments("--disable-gpu", "--no-sandbox", "window-size=1,1", "log-level=3", "blink-settings=imagesEnabled=false", "--disable-extensions", "--ignore-certificate-errors", "--headless");
+            options.AddArguments("--disable-gpu", "--no-sandbox", "log-level=3", "blink-settings=imagesEnabled=false", "--disable-extensions", "--ignore-certificate-errors");
             List<OpenQA.Selenium.Cookie> ret = new List<OpenQA.Selenium.Cookie>();
-            IWebDriver driver = new ChromeDriver(driverService, options);
+            IWebDriver driver = new ChromeDriver(Environment.CurrentDirectory, options);
 
             try
             {
                 driver.Navigate().GoToUrl("https://btsow.club/tags");
-  
+
+                Thread.Sleep(3 * 1000);
+
+                driver.Navigate().Refresh();
+
                 ret = driver.Manage().Cookies.AllCookies.Where(x => x.Domain == "btsow.club").ToList();
             }
             catch (Exception ee)
