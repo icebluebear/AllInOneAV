@@ -48,9 +48,22 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            RestoreCorrptedFile();
+            var list = GetMissingAV();
+
+            Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 10 }, missing =>
+            {
+                if (missing.IsMatch == false)
+                {
+                    missing.Seeds = SearchSeedHelper.SearchSukebei(missing.Av.ID);
+                }
+            });
 
             Console.ReadKey();
+        }
+
+        public static List<MissingCheckModel> GetMissingAV()
+        {
+            return JavLibraryHelper.GetAllRelatedJav("prefix", "RKI").Result;
         }
 
         private static void RestoreCorrptedFile()

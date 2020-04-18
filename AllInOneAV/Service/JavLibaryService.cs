@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using DataBaseManager.JavDataBaseHelper;
+using DataBaseManager.ScanDataBaseHelper;
 using HtmlAgilityPack;
 using Model.Common;
 using Model.JavModels;
@@ -840,6 +841,56 @@ namespace Service
             ScanCategoryPageUrlSingleThread(allListUrl);
             //下载所有未完成的下载
             ScanEachAvSingleThread();
+        }
+
+        public async static Task<List<MissingCheckModel>> GetAllRelatedJav(string table, string content)
+        {
+            return await Task.Run(() => DoAllRelatedJav(table, content));
+        }
+
+        public static List<MissingCheckModel> DoAllRelatedJav(string table, string content)
+        {
+            List<MissingCheckModel> ret = new List<MissingCheckModel>();
+            var avs = JavDataBaseManager.GetAllAV();
+
+            switch (table)
+            {
+                case "category":
+                    avs = avs.Where(x => x.Category.Contains(content)).ToList();
+                    break;
+                case "actress":
+                    avs = avs.Where(x => x.Actress.Contains(content)).ToList();
+                    break;
+                case "prefix":
+                    avs = avs.Where(x => x.ID.StartsWith(content.ToUpper() + "-")).ToList();
+                    break;
+            }
+
+            foreach (var av in avs)
+            {
+                MissingCheckModel temp = new MissingCheckModel();
+                temp.IsMatch = false;
+                temp.Av = av;
+                temp.Fi = new List<FileInfo>();
+                temp.Seeds = new List<SeedMagnetSearchModel>();
+
+                var matches = ScanDataBaseManager.GetAllMatch(av.ID);
+
+                if (matches != null && matches.Count > 0)
+                {
+                    temp.IsMatch = true;
+
+                    foreach (var m in matches)
+                    {
+                        FileInfo fi = new FileInfo(m.Location + "\\" + m.Name);
+                        temp.Fi.Add(fi);
+                    }
+                }
+
+                ret.Add(temp);
+            }
+
+            return ret.OrderBy(x=>x.Av.ID).ToList();
         }
     }
 

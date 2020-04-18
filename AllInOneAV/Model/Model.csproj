@@ -50,6 +50,7 @@
     <Compile Include="Common\ConfigType.cs" />
     <Compile Include="Common\Email.cs" />
     <Compile Include="Common\LockModel.cs" />
+    <Compile Include="Common\MissingCheckModel.cs" />
     <Compile Include="Common\PageModel.cs" />
     <Compile Include="Common\ReportModel.cs" />
     <Compile Include="Common\SearchSeedSiteEnum.cs" />

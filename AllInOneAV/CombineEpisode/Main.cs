@@ -2,7 +2,7 @@
 using DataBaseManager.ScanDataBaseHelper;
 using Model.Common;
 using Model.JavModels;
-using Model.ScanModels;
+using Newtonsoft.Json;
 using Service;
 using System;
 using System.Collections.Generic;
@@ -37,6 +37,8 @@ namespace CombineEpisode
         private Font font = new Font("微软雅黑", 10);
 
         public delegate void ProcessPb(ProgressBar pb, int value);
+
+        public delegate void ProcessListView(ListView lv, ListViewItem lvi, int column, string content, List<SeedMagnetSearchModel> model);
         #endregion
 
         #region 行为
@@ -52,7 +54,7 @@ namespace CombineEpisode
             ImportedFiles = ImportFile();
 
             if (ImportedFiles != null && ImportedFiles.Length > 0)
-            { 
+            {
                 ShowList();
 
                 txtSave.Text = new FileInfo(ImportedFiles[0]).DirectoryName;
@@ -151,6 +153,7 @@ namespace CombineEpisode
 
         private void btnPreview_Click(object sender, EventArgs e)
         {
+            treeView2.Nodes.Clear();
             Preview();
         }
 
@@ -267,7 +270,7 @@ namespace CombineEpisode
 
                 Clipboard.SetDataObject(sb.ToString());
 
-                Message ms = new Message();;
+                Message ms = new Message(); ;
                 ms.ShowDialog();
             }
         }
@@ -538,6 +541,42 @@ namespace CombineEpisode
         {
             StartReport();
         }
+
+        private void btMissing_Click(object sender, EventArgs e)
+        {
+            lvwMissing.Items.Clear();
+            pbMissing.Value = 0;
+            BtnMissingClick();
+        }
+
+        private void btMissingSearch_Click(object sender, EventArgs e)
+        {
+            btnMissingSearchClick();
+        }
+
+        private void lvwMissing_MouseClick(object sender, MouseEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (e.Button == MouseButtons.Right && lvwMissing.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem lvi in lvwMissing.SelectedItems)
+                {
+                    var seeds = ((MissingCheckModel)lvi.Tag);
+                    if (seeds != null && seeds.Seeds.Count > 0)
+                    {
+                        foreach (var seed in seeds.Seeds)
+                        {
+                            sb.AppendLine(seed.MagUrl);
+                        }
+                    }
+                }
+            }
+
+            Clipboard.SetDataObject(sb.ToString());
+            Message ms = new Message();
+            ms.ShowDialog();
+        }
         #endregion
 
         #region 方法
@@ -725,6 +764,20 @@ namespace CombineEpisode
             }
         }
 
+        private void ListViewItemUpdate(ListView lv, ListViewItem lvi, int column, string content, List<SeedMagnetSearchModel> model)
+        {
+            if (lv.InvokeRequired)
+            {
+                lv.Invoke(new ProcessListView(ListViewItemUpdate), lv, lvi, column, content, model);
+            }
+            else
+            {
+                lvi.SubItems[column].Text = content;
+                ((MissingCheckModel)lvi.Tag).Seeds = model;
+                lvi.BackColor = Color.Green;
+            }
+        }
+
         private void DeleteOriFile()
         {
             foreach (ListViewItem lvi in listView1.Items)
@@ -838,7 +891,7 @@ namespace CombineEpisode
             int totalCount = 0;
             List<string> files = new List<string>();
 
-            foreach(TreeNode tn in treeView1.Nodes)
+            foreach (TreeNode tn in treeView1.Nodes)
             {
                 foreach (TreeNode stn in tn.Nodes)
                 {
@@ -1211,7 +1264,7 @@ namespace CombineEpisode
                     }
                     catch (Exception ee)
                     {
-                        
+
                     }
                 }
             }
@@ -1225,7 +1278,7 @@ namespace CombineEpisode
                 }
                 catch (Exception ee)
                 {
-                    
+
                 }
             }
 
@@ -1429,6 +1482,7 @@ namespace CombineEpisode
         private void ScanUnmatchedClick()
         {
             Dictionary<string, List<SeedMagnetSearchModel>> ret = new Dictionary<string, List<SeedMagnetSearchModel>>();
+            List<string> unmatchedList = new List<string>();
             folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
             var rs = folderBrowserDialog1.ShowDialog();
 
@@ -1496,11 +1550,19 @@ namespace CombineEpisode
                         index++;
                     }
 
+                    unmatchedList.Add(d.Key);
+
                     treeView5.Nodes.Add(tn);
                 }
 
                 treeView5.ExpandAll();
                 treeView5.EndUpdate();
+
+                string uFile = "G:\\" + FileUtility.ReplaceInvalidChar(txtUnmatched.Text) + "-unmatched.json";
+                File.Create(uFile).Close();
+                StreamWriter sw = new StreamWriter(uFile);
+                sw.WriteLine(JsonConvert.SerializeObject(unmatchedList));
+                sw.Close();
             }
         }
 
@@ -1525,7 +1587,7 @@ namespace CombineEpisode
         }
 
         private string InitRemove(string folder)
-        {           
+        {
             var moveFolder = folder + "/movefiles/";
             excludes.Add(moveFolder);
 
@@ -1602,7 +1664,7 @@ namespace CombineEpisode
                         {
                             File.Move(moveFolder + oldN + e, moveFolder + oldN + "_1" + e);
                         }
-                    }                   
+                    }
 
                     richTextBox1.AppendText("\t移动文件 >= " + fi.FullName + " 到 => " + moveFolder + n + e, Color.Green, font, true);
                     File.Move(fi.FullName, moveFolder + n + e);
@@ -1981,6 +2043,12 @@ namespace CombineEpisode
             var titleStr = string.Join(",", dic.Select(x => x.Value));
             var urlStr = string.Join(",", dic.Select(x => x.Key));
 
+            if (rbPrefix.Checked && !string.IsNullOrEmpty(txtPrefix.Text))
+            {
+                titleStr = txtPrefix.Text.Trim();
+                urlStr = "http://www.javlibrary.com/cn/vl_searchbyid.php?&page=1&keyword=" + txtPrefix.Text.Trim();
+            }
+
             if (command == "daily")
             {
                 await StartJavScan("", " " + command, OutputJavScan);
@@ -2016,7 +2084,7 @@ namespace CombineEpisode
         {
             if (!String.IsNullOrEmpty(output.Data))
             {
-                richTextBox3.AppendText(output.Data);
+                richTextBox3.AppendText(output.Data + Environment.NewLine);
             }
         }
 
@@ -2134,7 +2202,7 @@ namespace CombineEpisode
 
             if (rs == DialogResult.Yes || rs == DialogResult.OK)
             {
-                txtRecent.Text = folderBrowserDialog1.SelectedPath;           
+                txtRecent.Text = folderBrowserDialog1.SelectedPath;
             }
         }
 
@@ -2270,6 +2338,86 @@ namespace CombineEpisode
             }
 
             Clipboard.SetDataObject(sb.ToString());
+        }
+
+        private async void BtnMissingClick()
+        {
+            if (!string.IsNullOrEmpty(txtMissing.Text))
+            {
+                List<MissingCheckModel> ret = new List<MissingCheckModel>();
+
+                lvwMissing.BeginUpdate();
+
+                if (rbMissingActress.Checked)
+                {
+                    ret = await JavLibraryHelper.GetAllRelatedJav("actress", txtMissing.Text);
+                }
+                else if (rbMissingCate.Checked)
+                {
+                    ret = await JavLibraryHelper.GetAllRelatedJav("category", txtMissing.Text);
+                }
+                else
+                {
+                    ret = await JavLibraryHelper.GetAllRelatedJav("prefix", txtMissing.Text);
+                }
+
+                foreach (var r in ret)
+                {
+                    ListViewItem lvi = new ListViewItem(r.Av.ID);
+                    lvi.SubItems.Add(r.IsMatch ? "有匹配" : "无匹配");
+                    lvi.SubItems.Add(r.IsMatch ? FileSize.GetAutoSizeString(r.Fi.Max(x => x.Length), 1) : "-");
+                    lvi.SubItems.Add("无磁链");
+                    lvi.Tag = r;
+
+                    if (r.IsMatch == false)
+                    {
+                        lvi.BackColor = Color.Yellow;
+                    }
+                    else
+                    {
+                        if (r.Fi.Max(x => x.Length) <= 1024 * 1024 * 2000)
+                        {
+                            lvi.BackColor = Color.LightBlue;
+                        }
+                    }
+
+                    lvwMissing.Items.Add(lvi);
+                }
+
+                lvwMissing.EndUpdate();
+
+                labelMissing.Text = ret.Where(x => x.IsMatch).Count() + " / " + ret.Count;
+            }
+        }
+
+        private async void btnMissingSearchClick()
+        {
+            Dictionary<ListViewItem, MissingCheckModel> list = new Dictionary<ListViewItem, MissingCheckModel>();
+
+            foreach (ListViewItem item in lvwMissing.Items)
+            {
+                list.Add(item, (MissingCheckModel)item.Tag);
+            }
+
+            await Task.Run(() => DoMissingSearch(list));
+        }
+
+        private void DoMissingSearch(Dictionary<ListViewItem, MissingCheckModel> list)
+        {
+            int index = 1;
+            pbMissing.Maximum = list.Count;
+
+            Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 10 }, missing =>
+            {
+                if (missing.Value.IsMatch == false)
+                {
+                    missing.Value.Seeds = SearchSeedHelper.SearchSukebei(missing.Value.Av.ID);
+
+                    ListViewItemUpdate(lvwMissing, missing.Key, 3, missing.Value.Seeds.Count + "", missing.Value.Seeds);
+                }
+
+                JDuBar(pbMissing, index++);
+            });
         }
         #endregion
     }
