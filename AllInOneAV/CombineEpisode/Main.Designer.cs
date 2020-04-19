@@ -183,6 +183,23 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.txtHopeName = new System.Windows.Forms.TextBox();
             this.btnImport = new System.Windows.Forms.Button();
+            this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.panel46 = new System.Windows.Forms.Panel();
+            this.panel48 = new System.Windows.Forms.Panel();
+            this.lvwMissing = new System.Windows.Forms.ListView();
+            this.columnHeader20 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader21 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader22 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader23 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.panel47 = new System.Windows.Forms.Panel();
+            this.pbMissing = new System.Windows.Forms.ProgressBar();
+            this.btMissingSearch = new System.Windows.Forms.Button();
+            this.labelMissing = new System.Windows.Forms.Label();
+            this.btMissing = new System.Windows.Forms.Button();
+            this.rbMissingPrefix = new System.Windows.Forms.RadioButton();
+            this.rbMissingActress = new System.Windows.Forms.RadioButton();
+            this.rbMissingCate = new System.Windows.Forms.RadioButton();
+            this.txtMissing = new System.Windows.Forms.TextBox();
             this.tabPage12 = new System.Windows.Forms.TabPage();
             this.panel43 = new System.Windows.Forms.Panel();
             this.panel45 = new System.Windows.Forms.Panel();
@@ -194,23 +211,6 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnCheckISO = new System.Windows.Forms.Button();
             this.treeView3 = new System.Windows.Forms.TreeView();
-            this.tabPage13 = new System.Windows.Forms.TabPage();
-            this.panel46 = new System.Windows.Forms.Panel();
-            this.panel47 = new System.Windows.Forms.Panel();
-            this.panel48 = new System.Windows.Forms.Panel();
-            this.txtMissing = new System.Windows.Forms.TextBox();
-            this.rbMissingCate = new System.Windows.Forms.RadioButton();
-            this.rbMissingActress = new System.Windows.Forms.RadioButton();
-            this.rbMissingPrefix = new System.Windows.Forms.RadioButton();
-            this.btMissing = new System.Windows.Forms.Button();
-            this.lvwMissing = new System.Windows.Forms.ListView();
-            this.columnHeader20 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader21 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader22 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader23 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.labelMissing = new System.Windows.Forms.Label();
-            this.btMissingSearch = new System.Windows.Forms.Button();
-            this.pbMissing = new System.Windows.Forms.ProgressBar();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -270,14 +270,14 @@
             this.panel6.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.tabPage13.SuspendLayout();
+            this.panel46.SuspendLayout();
+            this.panel48.SuspendLayout();
+            this.panel47.SuspendLayout();
             this.tabPage12.SuspendLayout();
             this.panel43.SuspendLayout();
             this.panel45.SuspendLayout();
             this.panel44.SuspendLayout();
-            this.tabPage13.SuspendLayout();
-            this.panel46.SuspendLayout();
-            this.panel47.SuspendLayout();
-            this.panel48.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -779,6 +779,7 @@
             this.treeView4.TabIndex = 0;
             this.treeView4.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView4_BeforeCheck);
             this.treeView4.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView4_AfterCheck);
+            this.treeView4.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.treeView4_MouseDoubleClick);
             // 
             // panel20
             // 
@@ -1553,7 +1554,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel40);
             this.splitContainer1.Size = new System.Drawing.Size(1593, 1025);
-            this.splitContainer1.SplitterDistance = 766;
+            this.splitContainer1.SplitterDistance = 741;
             this.splitContainer1.SplitterWidth = 7;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -1565,7 +1566,7 @@
             this.panel37.Location = new System.Drawing.Point(0, 0);
             this.panel37.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(766, 1025);
+            this.panel37.Size = new System.Drawing.Size(741, 1025);
             this.panel37.TabIndex = 0;
             // 
             // panel39
@@ -1575,7 +1576,7 @@
             this.panel39.Location = new System.Drawing.Point(0, 82);
             this.panel39.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel39.Name = "panel39";
-            this.panel39.Size = new System.Drawing.Size(766, 943);
+            this.panel39.Size = new System.Drawing.Size(741, 943);
             this.panel39.TabIndex = 2;
             // 
             // lvwFind
@@ -1590,7 +1591,7 @@
             this.lvwFind.Location = new System.Drawing.Point(0, 0);
             this.lvwFind.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.lvwFind.Name = "lvwFind";
-            this.lvwFind.Size = new System.Drawing.Size(766, 943);
+            this.lvwFind.Size = new System.Drawing.Size(741, 943);
             this.lvwFind.TabIndex = 0;
             this.lvwFind.UseCompatibleStateImageBehavior = false;
             this.lvwFind.View = System.Windows.Forms.View.Details;
@@ -1622,13 +1623,13 @@
             this.panel38.Location = new System.Drawing.Point(0, 0);
             this.panel38.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel38.Name = "panel38";
-            this.panel38.Size = new System.Drawing.Size(766, 82);
+            this.panel38.Size = new System.Drawing.Size(741, 82);
             this.panel38.TabIndex = 1;
             // 
             // btnFind
             // 
             this.btnFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFind.Location = new System.Drawing.Point(625, 24);
+            this.btnFind.Location = new System.Drawing.Point(600, 24);
             this.btnFind.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.btnFind.Name = "btnFind";
             this.btnFind.Size = new System.Drawing.Size(138, 40);
@@ -1644,7 +1645,7 @@
             this.txtFind.Location = new System.Drawing.Point(7, 24);
             this.txtFind.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.txtFind.Name = "txtFind";
-            this.txtFind.Size = new System.Drawing.Size(603, 31);
+            this.txtFind.Size = new System.Drawing.Size(578, 31);
             this.txtFind.TabIndex = 0;
             this.txtFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFind_KeyDown);
             // 
@@ -1656,7 +1657,7 @@
             this.panel40.Location = new System.Drawing.Point(0, 0);
             this.panel40.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel40.Name = "panel40";
-            this.panel40.Size = new System.Drawing.Size(820, 1025);
+            this.panel40.Size = new System.Drawing.Size(845, 1025);
             this.panel40.TabIndex = 1;
             // 
             // panel42
@@ -1666,7 +1667,7 @@
             this.panel42.Location = new System.Drawing.Point(0, 82);
             this.panel42.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel42.Name = "panel42";
-            this.panel42.Size = new System.Drawing.Size(820, 943);
+            this.panel42.Size = new System.Drawing.Size(845, 943);
             this.panel42.TabIndex = 2;
             // 
             // lvwRecnet
@@ -1681,7 +1682,7 @@
             this.lvwRecnet.Location = new System.Drawing.Point(0, 0);
             this.lvwRecnet.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.lvwRecnet.Name = "lvwRecnet";
-            this.lvwRecnet.Size = new System.Drawing.Size(820, 943);
+            this.lvwRecnet.Size = new System.Drawing.Size(845, 943);
             this.lvwRecnet.TabIndex = 1;
             this.lvwRecnet.UseCompatibleStateImageBehavior = false;
             this.lvwRecnet.View = System.Windows.Forms.View.Details;
@@ -1715,14 +1716,14 @@
             this.panel41.Location = new System.Drawing.Point(0, 0);
             this.panel41.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel41.Name = "panel41";
-            this.panel41.Size = new System.Drawing.Size(820, 82);
+            this.panel41.Size = new System.Drawing.Size(845, 82);
             this.panel41.TabIndex = 1;
             // 
             // rbSizeA
             // 
             this.rbSizeA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeA.AutoSize = true;
-            this.rbSizeA.Location = new System.Drawing.Point(679, 9);
+            this.rbSizeA.Location = new System.Drawing.Point(704, 9);
             this.rbSizeA.Margin = new System.Windows.Forms.Padding(4);
             this.rbSizeA.Name = "rbSizeA";
             this.rbSizeA.Size = new System.Drawing.Size(123, 25);
@@ -1735,7 +1736,7 @@
             // 
             this.rbSizeD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeD.AutoSize = true;
-            this.rbSizeD.Location = new System.Drawing.Point(679, 46);
+            this.rbSizeD.Location = new System.Drawing.Point(704, 46);
             this.rbSizeD.Margin = new System.Windows.Forms.Padding(4);
             this.rbSizeD.Name = "rbSizeD";
             this.rbSizeD.Size = new System.Drawing.Size(134, 25);
@@ -1748,7 +1749,7 @@
             // 
             this.rbDateA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateA.AutoSize = true;
-            this.rbDateA.Location = new System.Drawing.Point(542, 9);
+            this.rbDateA.Location = new System.Drawing.Point(567, 9);
             this.rbDateA.Margin = new System.Windows.Forms.Padding(4);
             this.rbDateA.Name = "rbDateA";
             this.rbDateA.Size = new System.Drawing.Size(123, 25);
@@ -1762,7 +1763,7 @@
             this.rbDateD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateD.AutoSize = true;
             this.rbDateD.Checked = true;
-            this.rbDateD.Location = new System.Drawing.Point(542, 46);
+            this.rbDateD.Location = new System.Drawing.Point(567, 46);
             this.rbDateD.Margin = new System.Windows.Forms.Padding(4);
             this.rbDateD.Name = "rbDateD";
             this.rbDateD.Size = new System.Drawing.Size(134, 25);
@@ -1775,7 +1776,7 @@
             // btnRecent
             // 
             this.btnRecent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRecent.Location = new System.Drawing.Point(437, 21);
+            this.btnRecent.Location = new System.Drawing.Point(462, 21);
             this.btnRecent.Margin = new System.Windows.Forms.Padding(4);
             this.btnRecent.Name = "btnRecent";
             this.btnRecent.Size = new System.Drawing.Size(79, 44);
@@ -1791,7 +1792,7 @@
             this.txtRecent.Location = new System.Drawing.Point(4, 24);
             this.txtRecent.Margin = new System.Windows.Forms.Padding(4);
             this.txtRecent.Name = "txtRecent";
-            this.txtRecent.Size = new System.Drawing.Size(423, 31);
+            this.txtRecent.Size = new System.Drawing.Size(448, 31);
             this.txtRecent.TabIndex = 7;
             this.txtRecent.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtRecent_MouseClick);
             // 
@@ -1967,6 +1968,171 @@
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
+            // tabPage13
+            // 
+            this.tabPage13.Controls.Add(this.panel46);
+            this.tabPage13.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tabPage13.Location = new System.Drawing.Point(4, 31);
+            this.tabPage13.Name = "tabPage13";
+            this.tabPage13.Size = new System.Drawing.Size(1593, 1025);
+            this.tabPage13.TabIndex = 16;
+            this.tabPage13.Text = "补齐缺失";
+            this.tabPage13.UseVisualStyleBackColor = true;
+            // 
+            // panel46
+            // 
+            this.panel46.Controls.Add(this.panel48);
+            this.panel46.Controls.Add(this.panel47);
+            this.panel46.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel46.Location = new System.Drawing.Point(0, 0);
+            this.panel46.Name = "panel46";
+            this.panel46.Size = new System.Drawing.Size(1593, 1025);
+            this.panel46.TabIndex = 0;
+            // 
+            // panel48
+            // 
+            this.panel48.Controls.Add(this.lvwMissing);
+            this.panel48.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel48.Location = new System.Drawing.Point(0, 130);
+            this.panel48.Name = "panel48";
+            this.panel48.Size = new System.Drawing.Size(1593, 895);
+            this.panel48.TabIndex = 2;
+            // 
+            // lvwMissing
+            // 
+            this.lvwMissing.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader20,
+            this.columnHeader21,
+            this.columnHeader22,
+            this.columnHeader23});
+            this.lvwMissing.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvwMissing.FullRowSelect = true;
+            this.lvwMissing.HideSelection = false;
+            this.lvwMissing.Location = new System.Drawing.Point(0, 0);
+            this.lvwMissing.Name = "lvwMissing";
+            this.lvwMissing.Size = new System.Drawing.Size(1593, 895);
+            this.lvwMissing.TabIndex = 0;
+            this.lvwMissing.UseCompatibleStateImageBehavior = false;
+            this.lvwMissing.View = System.Windows.Forms.View.Details;
+            this.lvwMissing.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.lvwMissing_KeyPress);
+            this.lvwMissing.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvwMissing_MouseClick);
+            // 
+            // columnHeader20
+            // 
+            this.columnHeader20.Text = "ID";
+            this.columnHeader20.Width = 100;
+            // 
+            // columnHeader21
+            // 
+            this.columnHeader21.Text = "匹配";
+            this.columnHeader21.Width = 100;
+            // 
+            // columnHeader22
+            // 
+            this.columnHeader22.Text = "大小";
+            this.columnHeader22.Width = 100;
+            // 
+            // columnHeader23
+            // 
+            this.columnHeader23.Text = "磁链接";
+            this.columnHeader23.Width = 500;
+            // 
+            // panel47
+            // 
+            this.panel47.Controls.Add(this.pbMissing);
+            this.panel47.Controls.Add(this.btMissingSearch);
+            this.panel47.Controls.Add(this.labelMissing);
+            this.panel47.Controls.Add(this.btMissing);
+            this.panel47.Controls.Add(this.rbMissingPrefix);
+            this.panel47.Controls.Add(this.rbMissingActress);
+            this.panel47.Controls.Add(this.rbMissingCate);
+            this.panel47.Controls.Add(this.txtMissing);
+            this.panel47.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel47.Location = new System.Drawing.Point(0, 0);
+            this.panel47.Name = "panel47";
+            this.panel47.Size = new System.Drawing.Size(1593, 130);
+            this.panel47.TabIndex = 1;
+            // 
+            // pbMissing
+            // 
+            this.pbMissing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbMissing.Location = new System.Drawing.Point(745, 88);
+            this.pbMissing.Name = "pbMissing";
+            this.pbMissing.Size = new System.Drawing.Size(652, 37);
+            this.pbMissing.TabIndex = 7;
+            // 
+            // btMissingSearch
+            // 
+            this.btMissingSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btMissingSearch.Location = new System.Drawing.Point(1431, 72);
+            this.btMissingSearch.Name = "btMissingSearch";
+            this.btMissingSearch.Size = new System.Drawing.Size(119, 42);
+            this.btMissingSearch.TabIndex = 6;
+            this.btMissingSearch.Text = "搜磁链";
+            this.btMissingSearch.UseVisualStyleBackColor = true;
+            this.btMissingSearch.Click += new System.EventHandler(this.btMissingSearch_Click);
+            // 
+            // labelMissing
+            // 
+            this.labelMissing.AutoSize = true;
+            this.labelMissing.Location = new System.Drawing.Point(112, 94);
+            this.labelMissing.Name = "labelMissing";
+            this.labelMissing.Size = new System.Drawing.Size(0, 28);
+            this.labelMissing.TabIndex = 5;
+            // 
+            // btMissing
+            // 
+            this.btMissing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btMissing.Location = new System.Drawing.Point(1431, 12);
+            this.btMissing.Name = "btMissing";
+            this.btMissing.Size = new System.Drawing.Size(119, 42);
+            this.btMissing.TabIndex = 4;
+            this.btMissing.Text = "扫描";
+            this.btMissing.UseVisualStyleBackColor = true;
+            this.btMissing.Click += new System.EventHandler(this.btMissing_Click);
+            // 
+            // rbMissingPrefix
+            // 
+            this.rbMissingPrefix.AutoSize = true;
+            this.rbMissingPrefix.Checked = true;
+            this.rbMissingPrefix.Location = new System.Drawing.Point(8, 82);
+            this.rbMissingPrefix.Name = "rbMissingPrefix";
+            this.rbMissingPrefix.Size = new System.Drawing.Size(79, 32);
+            this.rbMissingPrefix.TabIndex = 3;
+            this.rbMissingPrefix.TabStop = true;
+            this.rbMissingPrefix.Text = "前缀";
+            this.rbMissingPrefix.UseVisualStyleBackColor = true;
+            // 
+            // rbMissingActress
+            // 
+            this.rbMissingActress.AutoSize = true;
+            this.rbMissingActress.Location = new System.Drawing.Point(8, 44);
+            this.rbMissingActress.Name = "rbMissingActress";
+            this.rbMissingActress.Size = new System.Drawing.Size(79, 32);
+            this.rbMissingActress.TabIndex = 2;
+            this.rbMissingActress.Text = "演员";
+            this.rbMissingActress.UseVisualStyleBackColor = true;
+            // 
+            // rbMissingCate
+            // 
+            this.rbMissingCate.AutoSize = true;
+            this.rbMissingCate.Location = new System.Drawing.Point(8, 6);
+            this.rbMissingCate.Name = "rbMissingCate";
+            this.rbMissingCate.Size = new System.Drawing.Size(79, 32);
+            this.rbMissingCate.TabIndex = 1;
+            this.rbMissingCate.Text = "类型";
+            this.rbMissingCate.UseVisualStyleBackColor = true;
+            // 
+            // txtMissing
+            // 
+            this.txtMissing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMissing.Location = new System.Drawing.Point(111, 44);
+            this.txtMissing.Name = "txtMissing";
+            this.txtMissing.Size = new System.Drawing.Size(1281, 34);
+            this.txtMissing.TabIndex = 0;
+            // 
             // tabPage12
             // 
             this.tabPage12.Controls.Add(this.panel43);
@@ -2064,170 +2230,6 @@
             this.treeView3.TabIndex = 0;
             this.treeView3.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView3_AfterSelect);
             // 
-            // tabPage13
-            // 
-            this.tabPage13.Controls.Add(this.panel46);
-            this.tabPage13.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tabPage13.Location = new System.Drawing.Point(4, 31);
-            this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(1593, 1025);
-            this.tabPage13.TabIndex = 16;
-            this.tabPage13.Text = "补齐缺失";
-            this.tabPage13.UseVisualStyleBackColor = true;
-            // 
-            // panel46
-            // 
-            this.panel46.Controls.Add(this.panel48);
-            this.panel46.Controls.Add(this.panel47);
-            this.panel46.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel46.Location = new System.Drawing.Point(0, 0);
-            this.panel46.Name = "panel46";
-            this.panel46.Size = new System.Drawing.Size(1593, 1025);
-            this.panel46.TabIndex = 0;
-            // 
-            // panel47
-            // 
-            this.panel47.Controls.Add(this.pbMissing);
-            this.panel47.Controls.Add(this.btMissingSearch);
-            this.panel47.Controls.Add(this.labelMissing);
-            this.panel47.Controls.Add(this.btMissing);
-            this.panel47.Controls.Add(this.rbMissingPrefix);
-            this.panel47.Controls.Add(this.rbMissingActress);
-            this.panel47.Controls.Add(this.rbMissingCate);
-            this.panel47.Controls.Add(this.txtMissing);
-            this.panel47.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel47.Location = new System.Drawing.Point(0, 0);
-            this.panel47.Name = "panel47";
-            this.panel47.Size = new System.Drawing.Size(1593, 130);
-            this.panel47.TabIndex = 1;
-            // 
-            // panel48
-            // 
-            this.panel48.Controls.Add(this.lvwMissing);
-            this.panel48.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel48.Location = new System.Drawing.Point(0, 130);
-            this.panel48.Name = "panel48";
-            this.panel48.Size = new System.Drawing.Size(1593, 895);
-            this.panel48.TabIndex = 2;
-            // 
-            // txtMissing
-            // 
-            this.txtMissing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMissing.Location = new System.Drawing.Point(111, 44);
-            this.txtMissing.Name = "txtMissing";
-            this.txtMissing.Size = new System.Drawing.Size(1281, 34);
-            this.txtMissing.TabIndex = 0;
-            // 
-            // rbMissingCate
-            // 
-            this.rbMissingCate.AutoSize = true;
-            this.rbMissingCate.Location = new System.Drawing.Point(8, 6);
-            this.rbMissingCate.Name = "rbMissingCate";
-            this.rbMissingCate.Size = new System.Drawing.Size(79, 32);
-            this.rbMissingCate.TabIndex = 1;
-            this.rbMissingCate.Text = "类型";
-            this.rbMissingCate.UseVisualStyleBackColor = true;
-            // 
-            // rbMissingActress
-            // 
-            this.rbMissingActress.AutoSize = true;
-            this.rbMissingActress.Location = new System.Drawing.Point(8, 44);
-            this.rbMissingActress.Name = "rbMissingActress";
-            this.rbMissingActress.Size = new System.Drawing.Size(79, 32);
-            this.rbMissingActress.TabIndex = 2;
-            this.rbMissingActress.Text = "演员";
-            this.rbMissingActress.UseVisualStyleBackColor = true;
-            // 
-            // rbMissingPrefix
-            // 
-            this.rbMissingPrefix.AutoSize = true;
-            this.rbMissingPrefix.Checked = true;
-            this.rbMissingPrefix.Location = new System.Drawing.Point(8, 82);
-            this.rbMissingPrefix.Name = "rbMissingPrefix";
-            this.rbMissingPrefix.Size = new System.Drawing.Size(79, 32);
-            this.rbMissingPrefix.TabIndex = 3;
-            this.rbMissingPrefix.TabStop = true;
-            this.rbMissingPrefix.Text = "前缀";
-            this.rbMissingPrefix.UseVisualStyleBackColor = true;
-            // 
-            // btMissing
-            // 
-            this.btMissing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btMissing.Location = new System.Drawing.Point(1431, 12);
-            this.btMissing.Name = "btMissing";
-            this.btMissing.Size = new System.Drawing.Size(119, 42);
-            this.btMissing.TabIndex = 4;
-            this.btMissing.Text = "扫描";
-            this.btMissing.UseVisualStyleBackColor = true;
-            this.btMissing.Click += new System.EventHandler(this.btMissing_Click);
-            // 
-            // lvwMissing
-            // 
-            this.lvwMissing.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader20,
-            this.columnHeader21,
-            this.columnHeader22,
-            this.columnHeader23});
-            this.lvwMissing.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvwMissing.FullRowSelect = true;
-            this.lvwMissing.HideSelection = false;
-            this.lvwMissing.Location = new System.Drawing.Point(0, 0);
-            this.lvwMissing.Name = "lvwMissing";
-            this.lvwMissing.Size = new System.Drawing.Size(1593, 895);
-            this.lvwMissing.TabIndex = 0;
-            this.lvwMissing.UseCompatibleStateImageBehavior = false;
-            this.lvwMissing.View = System.Windows.Forms.View.Details;
-            this.lvwMissing.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvwMissing_MouseClick);
-            // 
-            // columnHeader20
-            // 
-            this.columnHeader20.Text = "ID";
-            this.columnHeader20.Width = 80;
-            // 
-            // columnHeader21
-            // 
-            this.columnHeader21.Text = "匹配";
-            this.columnHeader21.Width = 80;
-            // 
-            // columnHeader22
-            // 
-            this.columnHeader22.Text = "大小";
-            this.columnHeader22.Width = 80;
-            // 
-            // columnHeader23
-            // 
-            this.columnHeader23.Text = "磁链接";
-            this.columnHeader23.Width = 500;
-            // 
-            // labelMissing
-            // 
-            this.labelMissing.AutoSize = true;
-            this.labelMissing.Location = new System.Drawing.Point(112, 94);
-            this.labelMissing.Name = "labelMissing";
-            this.labelMissing.Size = new System.Drawing.Size(0, 28);
-            this.labelMissing.TabIndex = 5;
-            // 
-            // btMissingSearch
-            // 
-            this.btMissingSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btMissingSearch.Location = new System.Drawing.Point(1431, 72);
-            this.btMissingSearch.Name = "btMissingSearch";
-            this.btMissingSearch.Size = new System.Drawing.Size(119, 42);
-            this.btMissingSearch.TabIndex = 6;
-            this.btMissingSearch.Text = "搜磁链";
-            this.btMissingSearch.UseVisualStyleBackColor = true;
-            this.btMissingSearch.Click += new System.EventHandler(this.btMissingSearch_Click);
-            // 
-            // pbMissing
-            // 
-            this.pbMissing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbMissing.Location = new System.Drawing.Point(745, 88);
-            this.pbMissing.Name = "pbMissing";
-            this.pbMissing.Size = new System.Drawing.Size(652, 37);
-            this.pbMissing.TabIndex = 7;
-            // 
             // Main
             // 
             this.AllowDrop = true;
@@ -2316,15 +2318,15 @@
             this.panel4.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.tabPage13.ResumeLayout(false);
+            this.panel46.ResumeLayout(false);
+            this.panel48.ResumeLayout(false);
+            this.panel47.ResumeLayout(false);
+            this.panel47.PerformLayout();
             this.tabPage12.ResumeLayout(false);
             this.panel43.ResumeLayout(false);
             this.panel45.ResumeLayout(false);
             this.panel44.ResumeLayout(false);
-            this.tabPage13.ResumeLayout(false);
-            this.panel46.ResumeLayout(false);
-            this.panel47.ResumeLayout(false);
-            this.panel47.PerformLayout();
-            this.panel48.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

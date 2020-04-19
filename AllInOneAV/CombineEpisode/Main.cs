@@ -571,11 +571,35 @@ namespace CombineEpisode
                         }
                     }
                 }
-            }
 
-            Clipboard.SetDataObject(sb.ToString());
-            Message ms = new Message();
-            ms.ShowDialog();
+                Clipboard.SetDataObject(sb.ToString());
+                Message ms = new Message();
+                ms.ShowDialog();
+            }
+        }
+
+        private void treeView4_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            TreeNode tn = treeView4.SelectedNode;
+            Process.Start(@"" + ((FileInfo)tn.Tag).FullName);
+        }
+
+        private void lvwMissing_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 's')
+            {
+                e.Handled = true;
+                var model = ((MissingCheckModel)lvwMissing.SelectedItems[0].Tag);
+
+                var picPath = imageFolder + model.Av.ID + model.Av.Name + ".jpg";
+
+                if (File.Exists(picPath))
+                {
+                    Pic pic = new Pic(picPath);
+                    pic.Location = this.PointToClient(MousePosition);
+                    var rs = pic.ShowDialog();
+                }
+            }
         }
         #endregion
 
@@ -1408,6 +1432,10 @@ namespace CombineEpisode
                     {
                         stn.BackColor = Color.Yellow;
                         stn.Checked = true;
+                    }
+                    else if (sd.Name.Contains("-C") || sd.Name.Contains("-c"))
+                    {
+                        stn.BackColor = Color.Green;
                     }
                     else
                     {
@@ -2360,6 +2388,8 @@ namespace CombineEpisode
                 {
                     ret = await JavLibraryHelper.GetAllRelatedJav("prefix", txtMissing.Text);
                 }
+
+                lvwMissing.SmallImageList = new ImageList();
 
                 foreach (var r in ret)
                 {
