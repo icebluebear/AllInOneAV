@@ -1554,7 +1554,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel40);
             this.splitContainer1.Size = new System.Drawing.Size(1593, 1025);
-            this.splitContainer1.SplitterDistance = 741;
+            this.splitContainer1.SplitterDistance = 740;
             this.splitContainer1.SplitterWidth = 7;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -1566,7 +1566,7 @@
             this.panel37.Location = new System.Drawing.Point(0, 0);
             this.panel37.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(741, 1025);
+            this.panel37.Size = new System.Drawing.Size(740, 1025);
             this.panel37.TabIndex = 0;
             // 
             // panel39
@@ -1576,7 +1576,7 @@
             this.panel39.Location = new System.Drawing.Point(0, 82);
             this.panel39.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel39.Name = "panel39";
-            this.panel39.Size = new System.Drawing.Size(741, 943);
+            this.panel39.Size = new System.Drawing.Size(740, 943);
             this.panel39.TabIndex = 2;
             // 
             // lvwFind
@@ -1591,7 +1591,7 @@
             this.lvwFind.Location = new System.Drawing.Point(0, 0);
             this.lvwFind.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.lvwFind.Name = "lvwFind";
-            this.lvwFind.Size = new System.Drawing.Size(741, 943);
+            this.lvwFind.Size = new System.Drawing.Size(740, 943);
             this.lvwFind.TabIndex = 0;
             this.lvwFind.UseCompatibleStateImageBehavior = false;
             this.lvwFind.View = System.Windows.Forms.View.Details;
@@ -1623,13 +1623,13 @@
             this.panel38.Location = new System.Drawing.Point(0, 0);
             this.panel38.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel38.Name = "panel38";
-            this.panel38.Size = new System.Drawing.Size(741, 82);
+            this.panel38.Size = new System.Drawing.Size(740, 82);
             this.panel38.TabIndex = 1;
             // 
             // btnFind
             // 
             this.btnFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFind.Location = new System.Drawing.Point(600, 24);
+            this.btnFind.Location = new System.Drawing.Point(599, 24);
             this.btnFind.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.btnFind.Name = "btnFind";
             this.btnFind.Size = new System.Drawing.Size(138, 40);
@@ -1645,7 +1645,7 @@
             this.txtFind.Location = new System.Drawing.Point(7, 24);
             this.txtFind.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.txtFind.Name = "txtFind";
-            this.txtFind.Size = new System.Drawing.Size(578, 31);
+            this.txtFind.Size = new System.Drawing.Size(577, 31);
             this.txtFind.TabIndex = 0;
             this.txtFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFind_KeyDown);
             // 
@@ -1657,7 +1657,7 @@
             this.panel40.Location = new System.Drawing.Point(0, 0);
             this.panel40.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel40.Name = "panel40";
-            this.panel40.Size = new System.Drawing.Size(845, 1025);
+            this.panel40.Size = new System.Drawing.Size(846, 1025);
             this.panel40.TabIndex = 1;
             // 
             // panel42
@@ -1667,7 +1667,7 @@
             this.panel42.Location = new System.Drawing.Point(0, 82);
             this.panel42.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel42.Name = "panel42";
-            this.panel42.Size = new System.Drawing.Size(845, 943);
+            this.panel42.Size = new System.Drawing.Size(846, 943);
             this.panel42.TabIndex = 2;
             // 
             // lvwRecnet
@@ -1682,7 +1682,7 @@
             this.lvwRecnet.Location = new System.Drawing.Point(0, 0);
             this.lvwRecnet.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.lvwRecnet.Name = "lvwRecnet";
-            this.lvwRecnet.Size = new System.Drawing.Size(845, 943);
+            this.lvwRecnet.Size = new System.Drawing.Size(846, 943);
             this.lvwRecnet.TabIndex = 1;
             this.lvwRecnet.UseCompatibleStateImageBehavior = false;
             this.lvwRecnet.View = System.Windows.Forms.View.Details;
@@ -1716,14 +1716,14 @@
             this.panel41.Location = new System.Drawing.Point(0, 0);
             this.panel41.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panel41.Name = "panel41";
-            this.panel41.Size = new System.Drawing.Size(845, 82);
+            this.panel41.Size = new System.Drawing.Size(846, 82);
             this.panel41.TabIndex = 1;
             // 
             // rbSizeA
             // 
             this.rbSizeA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeA.AutoSize = true;
-            this.rbSizeA.Location = new System.Drawing.Point(704, 9);
+            this.rbSizeA.Location = new System.Drawing.Point(705, 9);
             this.rbSizeA.Margin = new System.Windows.Forms.Padding(4);
             this.rbSizeA.Name = "rbSizeA";
             this.rbSizeA.Size = new System.Drawing.Size(123, 25);
@@ -1736,7 +1736,7 @@
             // 
             this.rbSizeD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeD.AutoSize = true;
-            this.rbSizeD.Location = new System.Drawing.Point(704, 46);
+            this.rbSizeD.Location = new System.Drawing.Point(705, 46);
             this.rbSizeD.Margin = new System.Windows.Forms.Padding(4);
             this.rbSizeD.Name = "rbSizeD";
             this.rbSizeD.Size = new System.Drawing.Size(134, 25);
@@ -1749,7 +1749,7 @@
             // 
             this.rbDateA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateA.AutoSize = true;
-            this.rbDateA.Location = new System.Drawing.Point(567, 9);
+            this.rbDateA.Location = new System.Drawing.Point(568, 9);
             this.rbDateA.Margin = new System.Windows.Forms.Padding(4);
             this.rbDateA.Name = "rbDateA";
             this.rbDateA.Size = new System.Drawing.Size(123, 25);
@@ -1763,7 +1763,7 @@
             this.rbDateD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateD.AutoSize = true;
             this.rbDateD.Checked = true;
-            this.rbDateD.Location = new System.Drawing.Point(567, 46);
+            this.rbDateD.Location = new System.Drawing.Point(568, 46);
             this.rbDateD.Margin = new System.Windows.Forms.Padding(4);
             this.rbDateD.Name = "rbDateD";
             this.rbDateD.Size = new System.Drawing.Size(134, 25);
@@ -1776,7 +1776,7 @@
             // btnRecent
             // 
             this.btnRecent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRecent.Location = new System.Drawing.Point(462, 21);
+            this.btnRecent.Location = new System.Drawing.Point(463, 21);
             this.btnRecent.Margin = new System.Windows.Forms.Padding(4);
             this.btnRecent.Name = "btnRecent";
             this.btnRecent.Size = new System.Drawing.Size(79, 44);
@@ -1792,7 +1792,7 @@
             this.txtRecent.Location = new System.Drawing.Point(4, 24);
             this.txtRecent.Margin = new System.Windows.Forms.Padding(4);
             this.txtRecent.Name = "txtRecent";
-            this.txtRecent.Size = new System.Drawing.Size(448, 31);
+            this.txtRecent.Size = new System.Drawing.Size(449, 31);
             this.txtRecent.TabIndex = 7;
             this.txtRecent.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtRecent_MouseClick);
             // 
@@ -2057,9 +2057,9 @@
             // 
             this.pbMissing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbMissing.Location = new System.Drawing.Point(745, 88);
+            this.pbMissing.Location = new System.Drawing.Point(856, 88);
             this.pbMissing.Name = "pbMissing";
-            this.pbMissing.Size = new System.Drawing.Size(652, 37);
+            this.pbMissing.Size = new System.Drawing.Size(541, 37);
             this.pbMissing.TabIndex = 7;
             // 
             // btMissingSearch

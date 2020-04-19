@@ -173,5 +173,33 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<MatchMap>();
         }
+
+        public static List<MagUrlModel> GetAllMagUrl()
+        {
+            var sql = "SELECT * FROM MagUrl";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<MagUrlModel>();
+        }
+
+        public static List<MagUrlModel> GetAllMagUrlById(string id)
+        {
+            var sql = "SELECT * FROM MagUrl WHERE Avid = '" + id + "' AND IsFound = 1";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<MagUrlModel>();
+        }
+
+        public static int DeleteMagUrlById(string avid)
+        {
+            var sql = "DELETE FROM MagUrl WHERE AvId = '" + avid + "'";
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int InsertMagUrl(string avid, string magUrl, string magTitle, int isFound)
+        {
+            var sql = "INSERT INTO MagUrl (AvId, MagUrl, MagTitle, IsFound) VALUES ('" + avid + "', '" + magUrl + "', '" + magTitle + "', " + isFound + ")";
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
     }
 }

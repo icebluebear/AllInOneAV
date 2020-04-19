@@ -576,6 +576,11 @@ namespace CombineEpisode
                 Message ms = new Message();
                 ms.ShowDialog();
             }
+
+            if (e.Button == MouseButtons.Left && lvwMissing.SelectedItems.Count > 0)
+            {
+                Clipboard.SetDataObject(lvwMissing.SelectedItems[0].SubItems[0].Text);
+            }
         }
 
         private void treeView4_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -2372,6 +2377,9 @@ namespace CombineEpisode
         {
             if (!string.IsNullOrEmpty(txtMissing.Text))
             {
+                int lessThan = 0;
+                int greaterThen = 0;
+
                 List<MissingCheckModel> ret = new List<MissingCheckModel>();
 
                 lvwMissing.BeginUpdate();
@@ -2393,30 +2401,73 @@ namespace CombineEpisode
 
                 foreach (var r in ret)
                 {
-                    ListViewItem lvi = new ListViewItem(r.Av.ID);
-                    lvi.SubItems.Add(r.IsMatch ? "有匹配" : "无匹配");
-                    lvi.SubItems.Add(r.IsMatch ? FileSize.GetAutoSizeString(r.Fi.Max(x => x.Length), 1) : "-");
-                    lvi.SubItems.Add("无磁链");
-                    lvi.Tag = r;
+                    try
+                    {
+                        ListViewItem lvi = new ListViewItem(r.Av.ID);
+                        lvi.SubItems.Add(r.IsMatch ? "有匹配" : "无匹配");
+                        lvi.SubItems.Add(r.IsMatch ? FileSize.GetAutoSizeString(r.Fi.Max(x => x.Length), 1) : "-");
+                        
+                        lvi.Tag = r;
 
-                    if (r.IsMatch == false)
-                    {
-                        lvi.BackColor = Color.Yellow;
-                    }
-                    else
-                    {
-                        if (r.Fi.Max(x => x.Length) <= 1024 * 1024 * 2000)
+                        var magUrls = ScanDataBaseManager.GetAllMagUrlById(r.Av.ID);
+
+                        if (magUrls != null && magUrls.Count > 0)
                         {
-                            lvi.BackColor = Color.LightBlue;
-                        }
-                    }
+                            lvi.SubItems.Add(magUrls.Count + "");
 
-                    lvwMissing.Items.Add(lvi);
+                            List<SeedMagnetSearchModel> tempList = new List<SeedMagnetSearchModel>();
+
+                            foreach (var m in magUrls)
+                            {
+                                tempList.Add(new SeedMagnetSearchModel
+                                {
+                                    MagUrl = m.MagUrl,
+                                    Title = m.MagTitle
+                                });
+                            }
+
+                            r.Seeds = tempList;
+                        }
+                        else
+                        {
+                            lvi.SubItems.Add("无磁链");
+                        }
+
+                        if (r.IsMatch == false)
+                        {
+                            lvi.BackColor = Color.Yellow;
+                        }
+                        else
+                        {
+                            if (r.Fi.Max(x => x.Length) <= 1024 * 1024 * 2000)
+                            {
+                                lvi.BackColor = Color.LightBlue;
+                            }
+
+                            foreach (var f in r.Fi)
+                            {
+                                if (f.Length <= 1024 * 1024 * 2000)
+                                {
+                                    lessThan++;
+                                }
+                                else
+                                {
+                                    greaterThen++;
+                                }
+                            }
+                        }
+
+                        lvwMissing.Items.Add(lvi);
+                    }
+                    catch (Exception ee)
+                    {
+
+                    }
                 }
 
                 lvwMissing.EndUpdate();
 
-                labelMissing.Text = ret.Where(x => x.IsMatch).Count() + " / " + ret.Count;
+                labelMissing.Text = "拥有: " + ret.Where(x => x.IsMatch).Count() + " / 总共: " + ret.Count + " 大于2GB的有: " + greaterThen + " 小于2GB的有: " + lessThan;
             }
         }
 
@@ -2439,9 +2490,19 @@ namespace CombineEpisode
 
             Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 10 }, missing =>
             {
-                if (missing.Value.IsMatch == false)
+                if (missing.Value.IsMatch == false && missing.Value.Seeds.Count <= 0)
                 {
                     missing.Value.Seeds = SearchSeedHelper.SearchSukebei(missing.Value.Av.ID);
+
+                    if (missing.Value.Seeds.Count > 0)
+                    {
+                        ScanDataBaseManager.DeleteMagUrlById(missing.Value.Av.ID);
+
+                        foreach (var m in missing.Value.Seeds)
+                        {
+                            ScanDataBaseManager.InsertMagUrl(missing.Value.Av.ID, m.MagUrl, m.Title, 1);
+                        }
+                    }
 
                     ListViewItemUpdate(lvwMissing, missing.Key, 3, missing.Value.Seeds.Count + "", missing.Value.Seeds);
                 }
