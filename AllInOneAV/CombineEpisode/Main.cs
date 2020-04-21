@@ -24,6 +24,7 @@ namespace CombineEpisode
     public partial class Main : Form
     {
         #region GlobalVar
+
         private static List<string> formats = JavINIClass.IniReadValue("Scan", "Format").Split(',').ToList();
         private static List<string> excludes = JavINIClass.IniReadValue("Scan", "Exclude").Split(',').ToList();
         private static readonly string imageFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
@@ -37,11 +38,12 @@ namespace CombineEpisode
         private Font font = new Font("微软雅黑", 10);
 
         public delegate void ProcessPb(ProgressBar pb, int value);
-
         public delegate void ProcessListView(ListView lv, ListViewItem lvi, int column, string content, List<SeedMagnetSearchModel> model);
+
         #endregion
 
         #region 行为
+
         public Main()
         {
             Control.CheckForIllegalCrossThreadCalls = false;
@@ -606,6 +608,7 @@ namespace CombineEpisode
                 }
             }
         }
+
         #endregion
 
         #region 方法
@@ -2487,8 +2490,9 @@ namespace CombineEpisode
         {
             int index = 1;
             pbMissing.Maximum = list.Count;
+            Random ran = new Random();
 
-            Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 10 }, missing =>
+            Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 5 }, missing =>
             {
                 if (missing.Value.IsMatch == false && missing.Value.Seeds.Count <= 0)
                 {
@@ -2504,16 +2508,20 @@ namespace CombineEpisode
                         }
                     }
 
+                    Thread.Sleep(100 * ran.Next(5));
+
                     ListViewItemUpdate(lvwMissing, missing.Key, 3, missing.Value.Seeds.Count + "", missing.Value.Seeds);
                 }
 
                 JDuBar(pbMissing, index++);
             });
         }
+
         #endregion
     }
 
     #region 扩展方法
+
     public static class ProcessExtensions
     {
         public static Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default(CancellationToken))
@@ -2546,5 +2554,6 @@ namespace CombineEpisode
             rtb.ResumeLayout();
         }
     }
+
     #endregion
 }

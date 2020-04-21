@@ -57,6 +57,18 @@ namespace MangaDownloaderGUI
                         request.Referer = "http://www.hanhande.net/search/?keywords=";
                         imageList1.Images.Add(m.MangeUrl, Image.FromStream(request.GetResponse().GetResponseStream()));
                     }
+                    else if (si.SourceName == "污污漫画")
+                    {
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(m.MangaPic);
+                        request.Host = "pic.muamh.com";
+                        imageList1.Images.Add(m.MangeUrl, Image.FromStream(request.GetResponse().GetResponseStream()));
+                    }
+                    else if (si.SourceName == "知音漫客")
+                    {
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(m.MangaPic);
+                        request.Host = "tu.jiayouzhibo.com";
+                        imageList1.Images.Add(m.MangeUrl, Image.FromStream(request.GetResponse().GetResponseStream()));
+                    }
                 }
                 catch (Exception ee)
                 {

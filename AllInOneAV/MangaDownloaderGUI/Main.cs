@@ -149,6 +149,24 @@ namespace MangaDownloaderGUI
             shh.SourceHost = "http://www.hanhande.net/";
 
             sourceList.Add(shh);
+
+            SourceInfo sww = new SourceInfo();
+            sww.SourceName = "污污漫画";
+            sww.SourceUrl = "https://www.5wmh.com/";
+            sww.SourceSearch = "https://www.5wmh.com/search?keyword=";
+            sww.SourceReffer = "";
+            sww.SourceHost = "https://www.5wmh.com/";
+
+            sourceList.Add(sww);
+
+            SourceInfo szymk = new SourceInfo();
+            szymk.SourceName = "知音漫客";
+            szymk.SourceUrl = "http://www.zuozuomanhua.com/";
+            szymk.SourceSearch = "http://www.zuozuomanhua.com/search?keyword=";
+            szymk.SourceReffer = "";
+            szymk.SourceHost = "http://www.zuozuomanhua.com/";
+
+            sourceList.Add(szymk);
         }
 
         private void InitCbSource()
@@ -272,64 +290,6 @@ namespace MangaDownloaderGUI
             }
         }
 
-        private void DoShowManga(SourceInfo si)
-        {
-            if (mi != null)
-            {
-                if (si.SourceName == "韩漫吧")
-                {
-                    ShowMangeHmb();
-                }
-                else if (si.SourceName == "憨憨的漫画")
-                {
-                    ShowMangeHanhan();
-                }
-            }
-            else
-            {
-                MessageBox.Show("没有找到漫画");
-            }
-        }
-
-        private void ShowMangeHanhan()
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(mi.MangaPic);
-            request.Host = "i.jituoli.com";
-
-            if (mi.MangaPic.Contains("shaque.vip"))
-            {
-                request.Host = "img001.shaque.vip";
-            }
-
-            request.Referer = "http://www.hanhande.net/search/?keywords=";
-
-            try
-            {
-                picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
-            }
-            catch (Exception ee)
-            {
-
-            }
-
-            txtMainUrl.Text = mi.MangeUrl;
-
-            lvwMainList.Focus();
-        }
-
-        private void ShowMangeHmb()
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(mi.MangaPic);
-            request.Host = "img.manjiavip.com";
-            request.Referer = "http://www.hmba.vip/home/search";
-
-            picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
-
-            txtMainUrl.Text = mi.MangeUrl;
-
-            lvwMainList.Focus();
-        }
-
         private List<MangaInfo> DoSearch(string type, string content, bool searchList)
         {
             if (type == "韩漫吧")
@@ -342,7 +302,125 @@ namespace MangaDownloaderGUI
                 return SearchHanhan(content);
             }
 
+            if (type == "污污漫画")
+            {
+                return SearchWuwu(content);
+            }
+
+            if (type == "知音漫客")
+            {
+                return SearchZhiyinmanke(content);
+            }
+
             return new List<MangaInfo>();
+        }
+
+        private void AddAdditionalInfo(SourceInfo si)
+        {
+            if (mi != null)
+            {
+                if (si.SourceName == "韩漫吧")
+                {
+                    AddAddtionalInfoHmb();
+                }
+                else if (si.SourceName == "憨憨的漫画")
+                {
+                    AddAddtionalInfoHanhan();
+                }
+                else if (si.SourceName == "污污漫画")
+                {
+                    AddAdditionalInfoWuwu();
+                }
+                else if (si.SourceName == "知音漫客")
+                {
+                    AddAdditionalInfoZhiyinmanke();
+                }
+            }
+        }
+
+        private void DoShowManga(SourceInfo si)
+        {
+            if (mi != null)
+            {
+                if (si.SourceName == "韩漫吧")
+                {
+                    ShowMangeHmb();
+                }
+                else if (si.SourceName == "憨憨的漫画")
+                {
+                    ShowMangeHanhan();
+                }
+                else if (si.SourceName == "污污漫画")
+                {
+                    ShowMangeWuwu();
+                }
+                else if (si.SourceName == "知音漫客")
+                {
+                    ShowMangeZhiyinmanke();
+                }
+            }
+            else
+            {
+                MessageBox.Show("没有找到漫画");
+            }
+        }
+
+        private async void DoDownload(string type)
+        {
+            var setting = SettingSevice.ReadSetting();
+            string root = "";
+
+            if (string.IsNullOrEmpty(setting.HistoryFolder) || (setting.IsZip && string.IsNullOrEmpty(setting.ZipFolder)) || string.IsNullOrEmpty(setting.MangaFolder))
+            {
+                MessageBox.Show("请先去设置页面完成设置");
+                return;
+            }
+
+            Dictionary<string, string> downloadUrls = new Dictionary<string, string>();
+            foreach (ListViewItem lvi in lvwMainList.SelectedItems)
+            {
+                downloadUrls.Add((string)lvi.Tag, lvi.Text);
+            }
+
+            if (type == "韩漫吧")
+            {
+                root = await Task.Run(() => DownloadHmb(downloadUrls, setting));
+            }
+
+            if (type == "憨憨的漫画")
+            {
+                root = await Task.Run(() => DownloadHanhan(downloadUrls, setting));
+            }
+
+            if (type == "污污漫画")
+            {
+                root = await Task.Run(() => DownloadWuwu(downloadUrls, setting));
+            }
+
+            if (type == "知音漫客")
+            {
+                root = await Task.Run(() => DownloadZhiyinmanke(downloadUrls, setting));
+            }
+
+            if (!string.IsNullOrEmpty(root))
+            {
+                if (setting.IsZip)
+                {
+                    var targerFile = setting.ZipFolder + mi.MangaName + ".zip";
+                    rcbLog.AppendText("准备压缩文件夹 " + root + " 到文件 " + targerFile + Environment.NewLine);
+
+                    var res = ZipHelper.Zip(root, targerFile);
+
+                    if (res)
+                    {
+                        rcbLog.AppendText("压缩成功");
+                    }
+                    else
+                    {
+                        rcbLog.AppendText("压缩失败");
+                    }
+                }
+            }
         }
 
         private List<MangaInfo> SearchHmb(string content, bool searchList = true)
@@ -484,17 +562,242 @@ namespace MangaDownloaderGUI
             return ret;
         }
 
-        private void AddAdditionalInfo(SourceInfo si)
+        private List<MangaInfo> SearchWuwu(string content)
         {
-            if (mi != null)
+            List<MangaInfo> ret = new List<MangaInfo>();
+            CookieContainer cc = new CookieContainer();
+            cc.Add(HtmlManager.GetCookies(si.SourceUrl));
+
+            rcbLog.AppendText("开始搜索污污漫画" + Environment.NewLine);
+
+            var searchUrl = si.SourceSearch;
+            content = HttpUtility.UrlEncode(content, Encoding.UTF8);
+
+            var htmlRet = HtmlManager.GetHtmlWebClient(si.SourceHost, searchUrl + content, cc);
+
+            //暂时只搜第一页
+            if (htmlRet.Success)
             {
-                if (si.SourceName == "韩漫吧")
+                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                htmlDocument.LoadHtml(htmlRet.Content);
+
+                var itemPath = "//li[@class='item']";
+
+                var itemNodes = htmlDocument.DocumentNode.SelectNodes(itemPath);
+
+                if (itemNodes != null)
                 {
-                    AddAddtionalInfoHmb();
+                    foreach (var item in itemNodes)
+                    {
+                        MangaInfo cmi = new MangaInfo();
+                        cmi.Urls = new List<string>();
+                        cmi.Cc = cc;
+                        var nameNode = item.ChildNodes.FindFirst("a");
+
+                        if (nameNode != null)
+                        {
+                            cmi.MangeUrl = nameNode.Attributes["href"].Value.Trim();
+                            cmi.MangaName = FileUtility.ReplaceInvalidChar(nameNode.Attributes["title"].Value.Trim());
+
+                            var picNode = nameNode.ChildNodes.FindFirst("img");
+
+                            if (picNode != null)
+                            {
+                                cmi.MangaPic = picNode.Attributes["data-src"].Value.Trim();
+
+                                ret.Add(cmi);
+                            }
+                        }
+                    }
                 }
-                else if (si.SourceName == "憨憨的漫画")
+            }
+
+            return ret;
+        }
+
+        private List<MangaInfo> SearchZhiyinmanke(string content)
+        {
+            List<MangaInfo> ret = new List<MangaInfo>();
+            CookieContainer cc = new CookieContainer();
+            cc.Add(HtmlManager.GetCookies(si.SourceUrl));
+
+            rcbLog.AppendText("开始搜索知音漫客" + Environment.NewLine);
+
+            var searchUrl = si.SourceSearch;
+            content = HttpUtility.UrlEncode(content, Encoding.UTF8);
+
+            var htmlRet = HtmlManager.GetHtmlWebClient(si.SourceHost, searchUrl + content, cc);
+
+            //暂时只搜第一页
+            if (htmlRet.Success)
+            {
+                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                htmlDocument.LoadHtml(htmlRet.Content);
+
+                var itemPath = "//ul[@class='comic-list col5 clearfix']//li[@class='item']";
+
+                var itemNodes = htmlDocument.DocumentNode.SelectNodes(itemPath);
+
+                if (itemNodes != null)
                 {
-                    AddAddtionalInfoHanhan();
+                    foreach (var item in itemNodes)
+                    {
+                        MangaInfo cmi = new MangaInfo();
+                        cmi.Urls = new List<string>();
+                        cmi.Cc = cc;
+                        var nameNode = item.ChildNodes.FindFirst("a");
+
+                        if (nameNode != null)
+                        {
+                            cmi.MangeUrl = "http://www.zuozuomanhua.com" + nameNode.Attributes["href"].Value.Trim();
+                            cmi.MangaName = FileUtility.ReplaceInvalidChar(nameNode.Attributes["title"].Value.Trim());
+
+                            var picNode = nameNode.ChildNodes.FindFirst("img");
+
+                            if (picNode != null)
+                            {
+                                cmi.MangaPic = picNode.Attributes["data-src"].Value.Trim();
+
+                                ret.Add(cmi);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+        private void AddAdditionalInfoWuwu()
+        {
+            var setting = SettingSevice.ReadSetting();
+
+            if (string.IsNullOrEmpty(setting.HistoryFolder) || string.IsNullOrEmpty(setting.ZipFolder) || string.IsNullOrEmpty(setting.MangaFolder))
+            {
+                MessageBox.Show("请先去设置页面完成设置");
+                return;
+            }
+
+            var history = HistoryService.ReadHistory(si.SourceName, mi.MangaName, setting.HistoryFolder);
+
+            var htmlRet = HtmlManager.GetHtmlWebClient(si.SourceHost, mi.MangeUrl, mi.Cc);
+
+            if (htmlRet.Success)
+            {
+                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                htmlDocument.LoadHtml(htmlRet.Content);
+                var chapterPath = "//ul[@class='chapter-list clearfix']//li";
+                var updatePath = "//p[@class='update']";
+
+                var chapterNodes = htmlDocument.DocumentNode.SelectNodes(chapterPath);
+                var updateNode = htmlDocument.DocumentNode.SelectSingleNode(updatePath);
+
+                if (chapterNodes != null)
+                {
+                    lvwMainList.BeginUpdate();
+                    int count = 1;
+                    foreach (var node in chapterNodes)
+                    {
+                        var aTag = node.ChildNodes.FindFirst("a");
+
+                        if (aTag != null)
+                        {
+                            var subUrl = aTag.Attributes["href"].Value.Trim();
+                            var title = aTag.InnerHtml.Trim();
+
+                            mi.Urls.Add(subUrl);
+
+                            ListViewItem lvi = new ListViewItem(title);
+                            lvi.Tag = subUrl;
+
+                            if (count % 2 == 0)
+                            {
+                                lvi.BackColor = Color.LightGray;
+                            }
+
+                            if (!history.DownloadedChapters.Contains(subUrl))
+                            {
+                                lvi.Selected = true;
+                            }
+
+                            lvwMainList.Items.Add(lvi);
+                            count++;
+                        }
+                    }
+
+                    mi.MangaChapters = count;
+                    lvwMainList.EndUpdate();
+
+                    txtMainChapters.Text = count + "章";
+                    txtMainStatus.Text = updateNode.InnerHtml.Trim();
+                    txtMainLastChapter.Text = history.DownloadedChapters.Count + "章";
+                }
+            }
+        }
+
+        private void AddAdditionalInfoZhiyinmanke()
+        {
+            var setting = SettingSevice.ReadSetting();
+
+            if (string.IsNullOrEmpty(setting.HistoryFolder) || string.IsNullOrEmpty(setting.ZipFolder) || string.IsNullOrEmpty(setting.MangaFolder))
+            {
+                MessageBox.Show("请先去设置页面完成设置");
+                return;
+            }
+
+            var history = HistoryService.ReadHistory(si.SourceName, mi.MangaName, setting.HistoryFolder);
+
+            var htmlRet = HtmlManager.GetHtmlWebClient(si.SourceHost, mi.MangeUrl, mi.Cc);
+
+            if (htmlRet.Success)
+            {
+                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                htmlDocument.LoadHtml(htmlRet.Content);
+                var chapterPath = "//ul[@class='chapter-list clearfix']//li";
+                var updatePath = "//p[@class='update']";
+
+                var chapterNodes = htmlDocument.DocumentNode.SelectNodes(chapterPath);
+                var updateNode = htmlDocument.DocumentNode.SelectSingleNode(updatePath);
+
+                if (chapterNodes != null)
+                {
+                    lvwMainList.BeginUpdate();
+                    int count = 1;
+                    foreach (var node in chapterNodes)
+                    {
+                        var aTag = node.ChildNodes.FindFirst("a");
+
+                        if (aTag != null)
+                        {
+                            var subUrl = aTag.Attributes["href"].Value.Trim();
+                            var title = aTag.InnerHtml.Trim();
+
+                            mi.Urls.Add("http://www.zuozuomanhua.com/" + subUrl);
+
+                            ListViewItem lvi = new ListViewItem(title);
+                            lvi.Tag = "http://www.zuozuomanhua.com/" + subUrl;
+
+                            if (count % 2 == 0)
+                            {
+                                lvi.BackColor = Color.LightGray;
+                            }
+
+                            if (!history.DownloadedChapters.Contains(subUrl))
+                            {
+                                lvi.Selected = true;
+                            }
+
+                            lvwMainList.Items.Add(lvi);
+                            count++;
+                        }
+                    }
+
+                    mi.MangaChapters = count;
+                    lvwMainList.EndUpdate();
+
+                    txtMainChapters.Text = count + "章";
+                    txtMainStatus.Text = updateNode.InnerHtml.Trim();
+                    txtMainLastChapter.Text = history.DownloadedChapters.Count + "章";
                 }
             }
         }
@@ -553,7 +856,7 @@ namespace MangaDownloaderGUI
 
                             lvwMainList.Items.Add(lvi);
                             count++;
-                        }                    
+                        }
                     }
 
                     mi.MangaChapters = count;
@@ -641,52 +944,81 @@ namespace MangaDownloaderGUI
             }
         }
 
-        private async void DoDownload(string type)
+        private void ShowMangeWuwu()
         {
-            var setting = SettingSevice.ReadSetting();
-            string root = "";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(mi.MangaPic);
+            request.Host = "pic.muamh.com";
 
-            if (string.IsNullOrEmpty(setting.HistoryFolder) || (setting.IsZip && string.IsNullOrEmpty(setting.ZipFolder)) || string.IsNullOrEmpty(setting.MangaFolder))
+            try
             {
-                MessageBox.Show("请先去设置页面完成设置");
-                return;
+                picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
+            }
+            catch (Exception ee)
+            {
+
             }
 
-            Dictionary<string, string> downloadUrls = new Dictionary<string, string>();
-            foreach (ListViewItem lvi in lvwMainList.SelectedItems)
+            txtMainUrl.Text = mi.MangeUrl;
+
+            lvwMainList.Focus();
+        }
+
+        private void ShowMangeZhiyinmanke()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(mi.MangaPic);
+            request.Host = "tu.jiayouzhibo.com";
+
+            try
             {
-                downloadUrls.Add((string)lvi.Tag, lvi.Text);
+                picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
+            }
+            catch (Exception ee)
+            {
+
             }
 
-            if (type == "韩漫吧")
+            txtMainUrl.Text = mi.MangeUrl;
+
+            lvwMainList.Focus();
+        }
+
+        private void ShowMangeHanhan()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(mi.MangaPic);
+            request.Host = "i.jituoli.com";
+
+            if (mi.MangaPic.Contains("shaque.vip"))
             {
-                root = await Task.Run(() => DownloadHmb(downloadUrls, setting));
+                request.Host = "img001.shaque.vip";
             }
 
-            if (type == "憨憨的漫画")
+            request.Referer = "http://www.hanhande.net/search/?keywords=";
+
+            try
             {
-                root = await Task.Run(() => DownloadHanhan(downloadUrls, setting));
+                picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
+            }
+            catch (Exception ee)
+            {
+
             }
 
-            if (!string.IsNullOrEmpty(root))
-            {
-                if (setting.IsZip)
-                {
-                    var targerFile = setting.ZipFolder + mi.MangaName + ".zip";
-                    rcbLog.AppendText("准备压缩文件夹 " + root + " 到文件 " + targerFile + Environment.NewLine);
+            txtMainUrl.Text = mi.MangeUrl;
 
-                    var res = ZipHelper.Zip(root, targerFile);
+            lvwMainList.Focus();
+        }
 
-                    if (res)
-                    {
-                        rcbLog.AppendText("压缩成功");
-                    }
-                    else
-                    {
-                        rcbLog.AppendText("压缩失败");
-                    }
-                }
-            }
+        private void ShowMangeHmb()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(mi.MangaPic);
+            request.Host = "img.manjiavip.com";
+            request.Referer = "http://www.hmba.vip/home/search";
+
+            picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
+
+            txtMainUrl.Text = mi.MangeUrl;
+
+            lvwMainList.Focus();
         }
 
         private string DownloadHmb(Dictionary<string, string> dic, SettingModel setting)
@@ -757,9 +1089,15 @@ namespace MangaDownloaderGUI
                                     }
                                 }
 
+                                int finish = 0;
+
                                 Parallel.ForEach(picToBeDownloaded, new ParallelOptions { MaxDegreeOfParallelism = setting.ThreadCount }, node =>
                                 {
+                                    downloadExcep = "";
+
                                     downloadExcep += DownloadHelper.DownloadFile(node.Value, subFolder + node.Key + ".jpg", "img.manjiavip.com", url.Key);
+
+                                    UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
                                 });
                             }
                             else
@@ -771,6 +1109,10 @@ namespace MangaDownloaderGUI
                             {
                                 HistoryService.WriteHistory(si.SourceName, mi.MangaName, setting.HistoryFolder, url.Key, mi.MangeUrl);
                                 UpdateRtb(rcbLog, "下载" + url.Value + " 成功");
+                            }
+                            else
+                            {
+                                UpdateRtb(rcbLog, "下载" + url.Value + " 部分失败");
                             }
                         }
                         else
@@ -838,8 +1180,11 @@ namespace MangaDownloaderGUI
                                 index++;
                             }
 
+                            int finish = 0;
+
                             Parallel.ForEach(picToBeDownloaded, new ParallelOptions { MaxDegreeOfParallelism = setting.ThreadCount }, node =>
                             {
+                                downloadExcep = "";
                                 string host = "res.img.jituoli.com";
                                 var pic = node.Value;
                                 bool shaque = false;
@@ -852,6 +1197,8 @@ namespace MangaDownloaderGUI
                                 }
    
                                 downloadExcep += DownloadHelper.DownloadHttpsWithHost(pic, subFolder + node.Key + ".jpg", host, urlNode.Attributes["href"].Value.Trim(), shaque);
+
+                                UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
                             });
                         }
                         else
@@ -863,6 +1210,170 @@ namespace MangaDownloaderGUI
                         {
                             HistoryService.WriteHistory(si.SourceName, mi.MangaName, setting.HistoryFolder, url.Key, mi.MangeUrl);
                             UpdateRtb(rcbLog, "下载" + url.Value + " 成功");
+                        }
+                        else
+                        {
+                            UpdateRtb(rcbLog, "下载" + url.Value + " 部分失败");
+                        }
+
+                        UpdatePb(pbMain, currentChapert, downloadUrls.Count);
+                        currentChapert++;
+                    }
+                }
+            }
+
+            return mangaRoot;
+        }
+
+        private string DownloadWuwu(Dictionary<string, string> dic, SettingModel setting)
+        {
+            var mangaRoot = GenerateFolder(setting.MangaFolder + mi.MangaName + "\\");
+
+            Dictionary<string, string> downloadUrls = dic;
+
+            var history = HistoryService.ReadHistory(si.SourceName, mi.MangaName, setting.HistoryFolder);
+
+            int currentChapert = 1;
+
+            foreach (var url in downloadUrls)
+            {
+                if (history.DownloadedChapters.Contains(url.Key))
+                {
+                    UpdateRtb(rcbLog, url.Value + " 已经下载过,跳过");
+                    continue;
+                }
+                else
+                {
+                    var htmlRet = HtmlManager.GetHtmlWebClient(si.SourceHost, url.Key, mi.Cc);
+
+                    if (htmlRet.Success)
+                    {
+                        var downloadExcep = "";
+                        var subFolder = GenerateFolder(mangaRoot + FileUtility.ReplaceInvalidChar(url.Value) + "\\");
+
+                        HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                        htmlDocument.LoadHtml(htmlRet.Content);
+
+                        var urlPath = "//div[@class='comiclist']//div[@class='comicpage']//img";
+
+                        var urlNode = htmlDocument.DocumentNode.SelectNodes(urlPath);
+
+                        if (urlNode != null && urlNode.Count > 0)
+                        {
+                            Dictionary<int, string> picToBeDownloaded = new Dictionary<int, string>();
+                            int index = 1;
+                            foreach (var p in urlNode)
+                            {
+                                picToBeDownloaded.Add(index, p.Attributes["src"].Value.Trim());
+                                index++;
+                            }
+
+                            int finish = 0;
+
+                            Parallel.ForEach(picToBeDownloaded, new ParallelOptions { MaxDegreeOfParallelism = setting.ThreadCount }, node =>
+                            {
+                                downloadExcep = "";
+                                string host = "pic.muamh.com";
+                                var pic = node.Value;
+
+                                downloadExcep += DownloadHelper.DownloadHttpsWithHost(pic, subFolder + node.Key + ".jpg", host, "", false);
+
+                                UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
+                            });
+                        }
+                        else
+                        {
+                            UpdateRtb(rcbLog, "图片获取失败" + Environment.NewLine);
+                        }
+
+                        if (string.IsNullOrEmpty(downloadExcep))
+                        {
+                            HistoryService.WriteHistory(si.SourceName, mi.MangaName, setting.HistoryFolder, url.Key, mi.MangeUrl);
+                            UpdateRtb(rcbLog, "下载" + url.Value + " 成功");
+                        }
+                        else
+                        {
+                            UpdateRtb(rcbLog, "下载" + url.Value + " 部分失败");
+                        }
+
+                        UpdatePb(pbMain, currentChapert, downloadUrls.Count);
+                        currentChapert++;
+                    }
+                }
+            }
+
+            return mangaRoot;
+        }
+
+        private string DownloadZhiyinmanke(Dictionary<string, string> dic, SettingModel setting)
+        {
+            var mangaRoot = GenerateFolder(setting.MangaFolder + FileUtility.ReplaceInvalidChar(mi.MangaName).Replace(".","") + "\\");
+
+            Dictionary<string, string> downloadUrls = dic;
+
+            var history = HistoryService.ReadHistory(si.SourceName, mi.MangaName, setting.HistoryFolder);
+
+            int currentChapert = 1;
+
+            foreach (var url in downloadUrls)
+            {
+                if (history.DownloadedChapters.Contains(url.Key))
+                {
+                    UpdateRtb(rcbLog, url.Value + " 已经下载过,跳过");
+                    continue;
+                }
+                else
+                {
+                    var htmlRet = HtmlManager.GetHtmlWebClient(si.SourceHost, url.Key, mi.Cc);
+
+                    if (htmlRet.Success)
+                    {
+                        var downloadExcep = "";
+                        var subFolder = GenerateFolder(mangaRoot + FileUtility.ReplaceInvalidChar(url.Value) + "\\");
+
+                        HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                        htmlDocument.LoadHtml(htmlRet.Content);
+
+                        var urlPath = "//div[@class='comiclist']//div[@class='comicpage']//img";
+
+                        var urlNode = htmlDocument.DocumentNode.SelectNodes(urlPath);
+
+                        if (urlNode != null && urlNode.Count > 0)
+                        {
+                            Dictionary<int, string> picToBeDownloaded = new Dictionary<int, string>();
+                            int index = 1;
+                            foreach (var p in urlNode)
+                            {
+                                picToBeDownloaded.Add(index, p.Attributes["src"].Value.Trim());
+                                index++;
+                            }
+
+                            int finish = 0;
+
+                            Parallel.ForEach(picToBeDownloaded, new ParallelOptions { MaxDegreeOfParallelism = setting.ThreadCount }, node =>
+                            {
+                                downloadExcep = "";
+                                string host = "tu.jiayouzhibo.com";
+                                var pic = node.Value;
+
+                                downloadExcep += DownloadHelper.DownloadHttpsWithHost(pic, subFolder + node.Key + ".jpg", host, "", false);
+
+                                UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
+                            });
+                        }
+                        else
+                        {
+                            UpdateRtb(rcbLog, "图片获取失败" + Environment.NewLine);
+                        }
+
+                        if (string.IsNullOrEmpty(downloadExcep))
+                        {
+                            HistoryService.WriteHistory(si.SourceName, mi.MangaName, setting.HistoryFolder, url.Key, mi.MangeUrl);
+                            UpdateRtb(rcbLog, "下载" + url.Value + " 成功");
+                        }
+                        else
+                        {
+                            UpdateRtb(rcbLog, "下载" + url.Value + " 部分有重试下载，可能有部分失败");
                         }
 
                         UpdatePb(pbMain, currentChapert, downloadUrls.Count);

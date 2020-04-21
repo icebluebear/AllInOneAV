@@ -11,6 +11,7 @@ using Model.JavModels;
 using Model.ScanModels;
 using Model.SisModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Service;
 using System;
 using System.Collections.Generic;
@@ -48,17 +49,44 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            var list = GetMissingAV();
+            Get115SearchResult("acw_tc=784e2c9615855538661758289e5284296d88f07074d8443211fd738c3467df; UM_distinctid=171391065c9289-0a2caddd6cd2b3-551019-1fa400-171391065ca7e2; UID=340200422_A1_1587181203; CID=4001ab6dcedeebc471da5b8f4fe8b677; SEID=c412c8298bdf64018dbe0bdd83859f84a4a58acfcd5345e0ec161154c103c526c4253f9044145671d105e56ff879624eb348035f7e4b2c4664f1860e; last_video_volume=12; 115_lang=zh", "vdd");
+        }
 
-            Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 10 }, missing =>
+        public static bool Get115SearchResult(string cookieStr, string content, string host = "115.com", string reffer = "https://115.com/?cid=0&offset=0&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
+        {
+            bool ret = false;
+
+            CookieContainer cc = new CookieContainer();
+
+            string[] cookies = cookieStr.Split(';');
+
+            foreach (var cookie in cookies)
             {
-                if (missing.IsMatch == false)
+                if (cookie.Contains("="))
                 {
-                    missing.Seeds = SearchSeedHelper.SearchSukebei(missing.Av.ID);
+                    var cookieItemSplit = cookie.Split('=');
+                    cc.Add(new Cookie
+                    {
+                        Name = cookieItemSplit[0].Trim(),
+                        Value = cookieItemSplit[1].Trim(),
+                        Domain = "115.com"
+                    });
                 }
-            });
+            }
 
-            Console.ReadKey();
+            var url = string.Format("https://webapi.115.com/files/search?search_value=vdd-095&format=json");
+            var htmlRet = HtmlManager.GetHtmlWebClient("https://115.com", url, cc);
+            if (htmlRet.Success)
+            {
+                var data = JObject.Parse(htmlRet.Content);
+
+                if (data.Property("count").HasValues && int.Parse(data.Property("count").Value.ToString()) > 0)
+                {
+                    ret = true;
+                }
+            }
+
+            return ret;
         }
 
         public static List<MissingCheckModel> GetMissingAV()
