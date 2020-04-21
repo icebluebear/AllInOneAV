@@ -345,11 +345,15 @@ namespace CombineEpisode
         private void btnJavScanDaily_Click(object sender, EventArgs e)
         {
             JavScanAsync("daily");
+
+            MessageBox.Show("操作完毕");
         }
 
         private void btnJavScan_Click(object sender, EventArgs e)
         {
             JavScanAsync("certain");
+
+            MessageBox.Show("操作完毕");
         }
 
         private void richTextBox3_ContentsResized(object sender, ContentsResizedEventArgs e)

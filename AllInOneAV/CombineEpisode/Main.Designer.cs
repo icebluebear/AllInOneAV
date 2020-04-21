@@ -1510,7 +1510,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel40);
             this.splitContainer1.Size = new System.Drawing.Size(865, 580);
-            this.splitContainer1.SplitterDistance = 401;
+            this.splitContainer1.SplitterDistance = 373;
             this.splitContainer1.TabIndex = 0;
             // 
             // panel37
@@ -1520,7 +1520,7 @@
             this.panel37.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel37.Location = new System.Drawing.Point(0, 0);
             this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(401, 580);
+            this.panel37.Size = new System.Drawing.Size(373, 580);
             this.panel37.TabIndex = 0;
             // 
             // panel39
@@ -1529,7 +1529,7 @@
             this.panel39.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel39.Location = new System.Drawing.Point(0, 48);
             this.panel39.Name = "panel39";
-            this.panel39.Size = new System.Drawing.Size(401, 532);
+            this.panel39.Size = new System.Drawing.Size(373, 532);
             this.panel39.TabIndex = 2;
             // 
             // lvwFind
@@ -1543,7 +1543,7 @@
             this.lvwFind.HideSelection = false;
             this.lvwFind.Location = new System.Drawing.Point(0, 0);
             this.lvwFind.Name = "lvwFind";
-            this.lvwFind.Size = new System.Drawing.Size(401, 532);
+            this.lvwFind.Size = new System.Drawing.Size(373, 532);
             this.lvwFind.TabIndex = 0;
             this.lvwFind.UseCompatibleStateImageBehavior = false;
             this.lvwFind.View = System.Windows.Forms.View.Details;
@@ -1574,13 +1574,13 @@
             this.panel38.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel38.Location = new System.Drawing.Point(0, 0);
             this.panel38.Name = "panel38";
-            this.panel38.Size = new System.Drawing.Size(401, 48);
+            this.panel38.Size = new System.Drawing.Size(373, 48);
             this.panel38.TabIndex = 1;
             // 
             // btnFind
             // 
             this.btnFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFind.Location = new System.Drawing.Point(323, 14);
+            this.btnFind.Location = new System.Drawing.Point(295, 14);
             this.btnFind.Name = "btnFind";
             this.btnFind.Size = new System.Drawing.Size(75, 23);
             this.btnFind.TabIndex = 1;
@@ -1594,7 +1594,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFind.Location = new System.Drawing.Point(4, 14);
             this.txtFind.Name = "txtFind";
-            this.txtFind.Size = new System.Drawing.Size(313, 21);
+            this.txtFind.Size = new System.Drawing.Size(285, 21);
             this.txtFind.TabIndex = 0;
             this.txtFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFind_KeyDown);
             // 
@@ -1605,7 +1605,7 @@
             this.panel40.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel40.Location = new System.Drawing.Point(0, 0);
             this.panel40.Name = "panel40";
-            this.panel40.Size = new System.Drawing.Size(460, 580);
+            this.panel40.Size = new System.Drawing.Size(488, 580);
             this.panel40.TabIndex = 1;
             // 
             // panel42
@@ -1614,7 +1614,7 @@
             this.panel42.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel42.Location = new System.Drawing.Point(0, 48);
             this.panel42.Name = "panel42";
-            this.panel42.Size = new System.Drawing.Size(460, 532);
+            this.panel42.Size = new System.Drawing.Size(488, 532);
             this.panel42.TabIndex = 2;
             // 
             // lvwRecnet
@@ -1628,7 +1628,7 @@
             this.lvwRecnet.HideSelection = false;
             this.lvwRecnet.Location = new System.Drawing.Point(0, 0);
             this.lvwRecnet.Name = "lvwRecnet";
-            this.lvwRecnet.Size = new System.Drawing.Size(460, 532);
+            this.lvwRecnet.Size = new System.Drawing.Size(488, 532);
             this.lvwRecnet.TabIndex = 1;
             this.lvwRecnet.UseCompatibleStateImageBehavior = false;
             this.lvwRecnet.View = System.Windows.Forms.View.Details;
@@ -1661,14 +1661,14 @@
             this.panel41.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel41.Location = new System.Drawing.Point(0, 0);
             this.panel41.Name = "panel41";
-            this.panel41.Size = new System.Drawing.Size(460, 48);
+            this.panel41.Size = new System.Drawing.Size(488, 48);
             this.panel41.TabIndex = 1;
             // 
             // rbSizeA
             // 
             this.rbSizeA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeA.AutoSize = true;
-            this.rbSizeA.Location = new System.Drawing.Point(379, 5);
+            this.rbSizeA.Location = new System.Drawing.Point(407, 5);
             this.rbSizeA.Margin = new System.Windows.Forms.Padding(2);
             this.rbSizeA.Name = "rbSizeA";
             this.rbSizeA.Size = new System.Drawing.Size(71, 16);
@@ -1681,7 +1681,7 @@
             // 
             this.rbSizeD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeD.AutoSize = true;
-            this.rbSizeD.Location = new System.Drawing.Point(379, 26);
+            this.rbSizeD.Location = new System.Drawing.Point(407, 26);
             this.rbSizeD.Margin = new System.Windows.Forms.Padding(2);
             this.rbSizeD.Name = "rbSizeD";
             this.rbSizeD.Size = new System.Drawing.Size(77, 16);
@@ -1694,7 +1694,7 @@
             // 
             this.rbDateA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateA.AutoSize = true;
-            this.rbDateA.Location = new System.Drawing.Point(304, 5);
+            this.rbDateA.Location = new System.Drawing.Point(332, 5);
             this.rbDateA.Margin = new System.Windows.Forms.Padding(2);
             this.rbDateA.Name = "rbDateA";
             this.rbDateA.Size = new System.Drawing.Size(71, 16);
@@ -1708,7 +1708,7 @@
             this.rbDateD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateD.AutoSize = true;
             this.rbDateD.Checked = true;
-            this.rbDateD.Location = new System.Drawing.Point(304, 26);
+            this.rbDateD.Location = new System.Drawing.Point(332, 26);
             this.rbDateD.Margin = new System.Windows.Forms.Padding(2);
             this.rbDateD.Name = "rbDateD";
             this.rbDateD.Size = new System.Drawing.Size(77, 16);
@@ -1721,7 +1721,7 @@
             // btnRecent
             // 
             this.btnRecent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRecent.Location = new System.Drawing.Point(251, 12);
+            this.btnRecent.Location = new System.Drawing.Point(279, 12);
             this.btnRecent.Margin = new System.Windows.Forms.Padding(2);
             this.btnRecent.Name = "btnRecent";
             this.btnRecent.Size = new System.Drawing.Size(43, 25);
@@ -1737,7 +1737,7 @@
             this.txtRecent.Location = new System.Drawing.Point(2, 14);
             this.txtRecent.Margin = new System.Windows.Forms.Padding(2);
             this.txtRecent.Name = "txtRecent";
-            this.txtRecent.Size = new System.Drawing.Size(245, 21);
+            this.txtRecent.Size = new System.Drawing.Size(273, 21);
             this.txtRecent.TabIndex = 7;
             this.txtRecent.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtRecent_MouseClick);
             // 

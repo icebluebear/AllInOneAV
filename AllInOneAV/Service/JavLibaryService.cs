@@ -439,6 +439,16 @@ namespace Service
             });
         }
 
+        private static void ScanAvList(List<ScanURL> urls, bool force = false)
+        {
+            List<ScanURL> avs = urls;
+
+            Parallel.ForEach(avs, new ParallelOptions { MaxDegreeOfParallelism = 100 }, av =>
+            {
+                ScanEachAv(av, string.Format("进度 {0}/{1}", avs.IndexOf(av) + 1, avs.Count), force);
+            });
+        }
+
         private static void ScanDailyAvList(List<string> urls)
         {
             List<string> ret = new List<string>();
@@ -449,11 +459,11 @@ namespace Service
             });
         }
 
-        private static void ScanEachAv(ScanURL url, string status)
+        private static void ScanEachAv(ScanURL url, string status, bool force = false)
         {
             AV av = new AV();
 
-            if (!JavDataBaseManager.HasAv(url.URL))
+            if (!JavDataBaseManager.HasAv(url.URL) || force)
             {
                 var htmlRes = JavCookieContanierHelper(url.URL);
 
@@ -464,9 +474,13 @@ namespace Service
 
                     av = GenerateAVModel(htmlRes.Content, url.URL);
 
-                    JavDataBaseManager.InsertAV(av);
-                    Console.WriteLine("线程 " + Thread.CurrentThread.ManagedThreadId.ToString() + " => 插入AV => " + av.ID + " - " + av.Name + " " + status);
-                    JavDataBaseManager.UpdateScanURL(url.URL);
+                    if (!force)
+                    {
+                        JavDataBaseManager.InsertAV(av);
+
+                        Console.WriteLine("线程 " + Thread.CurrentThread.ManagedThreadId.ToString() + " => 插入AV => " + av.ID + " - " + av.Name + " " + status);
+                        JavDataBaseManager.UpdateScanURL(url.URL);
+                    }
 
                     string result = "";
                     if (!File.Exists(ImgFolder + av.ID + av.Name + ".jpg"))
@@ -841,6 +855,23 @@ namespace Service
             ScanCategoryPageUrlSingleThread(allListUrl);
             //下载所有未完成的下载
             ScanEachAvSingleThread();
+        }
+
+        public static void DoListSearch(List<string> urls, bool force, bool showConsole = true)
+        {
+            GetJavCookie(showConsole);
+
+            List<ScanURL> list = new List<ScanURL>();
+
+            foreach (var url in urls)
+            {
+                list.Add(new ScanURL
+                {
+                    URL = url
+                });
+            }
+
+            ScanAvList(list, force);
         }
 
         public async static Task<List<MissingCheckModel>> GetAllRelatedJav(string table, string content)

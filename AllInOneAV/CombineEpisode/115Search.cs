@@ -49,7 +49,7 @@ namespace CombineEpisode
                 }
                 else
                 {
-                    missing.Remove(mi);
+                    MessageBox.Show(mi.Av.ID + "" + mi.Av.Name);
                 }
             }
         }
@@ -83,6 +83,27 @@ namespace CombineEpisode
                 Clipboard.SetDataObject(mcm.Av.ID);
 
                 listView1.SelectedItems[0].BackColor = Color.Blue;
+            }
+
+            if (e.Button == MouseButtons.Right && listView1.SelectedItems.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                foreach (ListViewItem lvi in listView1.SelectedItems)
+                {
+                    var seeds = ((MissingCheckModel)lvi.Tag);
+                    if (seeds != null && seeds.Seeds.Count > 0)
+                    {
+                        foreach (var seed in seeds.Seeds)
+                        {
+                            sb.AppendLine(seed.MagUrl);
+                        }
+                    }
+                }
+
+                Clipboard.SetDataObject(sb.ToString());
+                Message ms = new Message();
+                ms.ShowDialog();
             }
         }
     }

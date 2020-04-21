@@ -81,7 +81,7 @@ namespace ScanAllAndMatch
 
                 foreach (var match in matches)
                 {
-                    Console.WriteLine("保存 " + match.AvID);
+                    //Console.WriteLine("保存 " + match.AvID);
                     ScanDataBaseManager.SaveMatch(match);
                 }
             }

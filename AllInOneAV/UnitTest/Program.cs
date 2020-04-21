@@ -42,6 +42,7 @@ namespace UnitTest
         private static string ListPattern = JavINIClass.IniReadValue("Sis", "ListPattern");
         private static string ListDatePattern = JavINIClass.IniReadValue("Sis", "ListDatePattern");
         private static string Prefix = JavINIClass.IniReadValue("Sis", "Prefix");
+        private static readonly string imageFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
         private static readonly Dictionary<string, string> ChannelMapping = new Dictionary<string, string> { { AsiaCensoredAuthorshipSeed, "亚洲有码原创" }, { AsiaCensoredSection, "亚洲有码转帖" }, { WesternUncensoredAuthorshipSeed, "欧美无码原创" }, { WesternUncensored, "欧美无码转帖" }, { AsiaUncensoredAuthorshipSeed, "亚洲无码原创" }, { AsiaUncensoredSection, "亚洲无码转帖" } };
         #endregion
 
@@ -49,7 +50,108 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            Get115SearchResult("acw_tc=784e2c9615855538661758289e5284296d88f07074d8443211fd738c3467df; UM_distinctid=171391065c9289-0a2caddd6cd2b3-551019-1fa400-171391065ca7e2; UID=340200422_A1_1587181203; CID=4001ab6dcedeebc471da5b8f4fe8b677; SEID=c412c8298bdf64018dbe0bdd83859f84a4a58acfcd5345e0ec161154c103c526c4253f9044145671d105e56ff879624eb348035f7e4b2c4664f1860e; last_video_volume=12; 115_lang=zh", "vdd");
+
+            Console.ReadKey();
+        }
+
+        private static void CheckNameMapping()
+        {
+            var avs = JavDataBaseManager.GetAllAV();
+            var files = new DirectoryInfo(imageFolder).GetFiles();
+
+            foreach (var av in avs)
+            {
+                if (!File.Exists(imageFolder + av.ID + av.Name + ".jpg"))
+                {
+                    var possibleFiles = files.Where(x => x.Name.StartsWith(av.ID)).ToList();
+
+                    if (possibleFiles != null && possibleFiles.Count == 1 && av.PictureURL != "http:../img/noimagepl.gif")
+                    {
+                        Console.WriteLine(av.ID + " " + av.Name);
+
+                        foreach (var sub in possibleFiles)
+                        {
+                            //sub.MoveTo(FileUtility.ReplaceInvalidChar(sub.Name.Replace(sub.Extension, "")) + sub.Extension);
+                            //JavDataBaseManager.UpdateAvName(FileUtility.ReplaceInvalidChar(sub.Name.Replace(av.ID,"").Replace(sub.Extension, "")), av.AvId);
+                            Console.WriteLine("\t" + sub.Name);
+                        }
+                    }
+                }
+            }
+
+            //foreach (var av in avs)
+            //{
+            //    if (av.Name.Contains(".jpg"))
+            //    {
+            //        JavDataBaseManager.UpdateAvName(av.Name.Replace(".jpg", ""), av.AvId);
+            //    }
+            //}
+
+            //JavLibraryHelper.DoListSearch(list, true);
+
+            //var files = new DirectoryInfo(imageFolder).GetFiles();
+
+            //foreach (var file in files)
+            //{
+            //    if (file.Name.Replace(file.Extension, "").EndsWith(" "))
+            //    {
+            //        if (!File.Exists(imageFolder + file.Name.Replace(file.Extension, "").Trim() + file.Extension))
+            //        {
+            //            file.MoveTo(imageFolder + file.Name.Replace(file.Extension, "").Trim() + file.Extension);
+            //        }
+            //        else
+            //        {
+            //            file.Delete();
+            //        }
+            //    }
+            //}
+
+            //int fcount = 0;
+            //int dcount = 0;
+
+            //foreach (var file in files)
+            //{
+            //    if (FileUtility.HasInvalidChar(file.Name.Replace(file.Extension, "")))
+            //    {
+            //        var newFile = imageFolder + FileUtility.ReplaceInvalidChar(file.Name.Replace(file.Extension, "")) + file.Extension;
+
+            //        if (File.Exists(newFile))
+            //        {
+            //            file.Delete();
+            //        }
+            //        else
+            //        {
+            //            file.MoveTo(newFile);
+            //            fcount++;
+            //        }
+            //    }
+
+
+            //}
+
+            //foreach (var av in avs)
+            //{
+
+            //    if (FileUtility.HasInvalidChar(av.Name))
+            //    {
+            //        var newName = FileUtility.ReplaceInvalidChar(av.Name);
+
+            //        if (JavDataBaseManager.HasAv(av.ID, newName))
+            //        {
+            //            JavDataBaseManager.DeleteAV(av.AvId);
+            //        }
+            //        else
+            //        {
+            //            JavDataBaseManager.UpdateAvName(newName, av.AvId);
+            //            dcount++;
+            //        }
+            //    }
+            //}
+
+            //Console.WriteLine("File " + fcount);
+            //Console.WriteLine("DB " + dcount);
+
+            Console.WriteLine("完毕");
         }
 
         public static bool Get115SearchResult(string cookieStr, string content, string host = "115.com", string reffer = "https://115.com/?cid=0&offset=0&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")

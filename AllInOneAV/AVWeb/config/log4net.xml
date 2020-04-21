@@ -10,7 +10,7 @@
   
   <appender name="RollingLogFileAppender" type="log4net.Appender.RollingFileAppender">
     <!--日志文件名开头-->
-    <file value="g:\log\CheckScoreLog" />
+    <file value="g:\log\WebAv" />
     <!--是否追加到文件-->
     <appendToFile value="true" />
     <!--变换的形式为日期-->
@@ -27,7 +27,7 @@
   </appender>
 
   <appender name="DebugRollingFileAppender" type="log4net.Appender.RollingFileAppender" LEVEL="DEBUG">
-    <file value="g:\log\CheckScoreDebugLog" />
+    <file value="g:\log\WebAvDebug" />
     <appendToFile value="true" />
     <rollingStyle value="Composite" />
     <maxSizeRollBackups value="-1" />
@@ -45,7 +45,7 @@
   </appender>
   
   <appender name="ErrorRollingFileAppender" type="log4net.Appender.RollingFileAppender" LEVEL="ERROR">
-    <file value="g:\log\CheckScoreErrorLog" />
+    <file value="g:\log\WebAvErrorLog" />
     <appendToFile value="true" />
     <rollingStyle value="Date" />
     <!--文件名后日期的格式-->

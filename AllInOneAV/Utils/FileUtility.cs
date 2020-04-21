@@ -201,12 +201,12 @@ namespace Utils
 
         public static string ReplaceInvalidChar(string str)
         {
-            return str.Replace("'","").Replace("?","").Replace(":","").Replace("*","").Replace("|","").Replace("\\","").Replace("/", "").Replace("<", "").Replace(">", "").Replace (" （ブルーレイディスク）","");
+            return str.Replace("'","").Replace("?","").Replace(":","").Replace("*","").Replace("|","").Replace("\\","").Replace("/", "").Replace("<", "").Replace(">", "").Replace (" （ブルーレイディスク）","").Replace("（ブルーレイディスク）", "").Replace("・", "").Replace("♪", "").Replace("´", "").Replace("′","").Replace("｀", "").Replace("◯", "").Replace("?", "").Replace("≪", "").Replace("≫", "").Replace("｢", "").Replace("｣", "").Replace("〜", "").Replace("･", "").Replace("∀", "").Replace("○", "").Replace("～", "").Replace("♯", "").Replace("､", "").Replace("━", "").Replace("ﾟ", "").Replace("｡", "").Replace("⇒", "").Replace("⇔", "").Replace("ｷ", "").Replace("ﾀ", "");
         }
 
         public static bool HasInvalidChar(string str)
-        {
-            return str.Contains("'") || str.Contains("?") || str.Contains(":") || str.Contains("*") || str.Contains("|") || str.Contains("\\") || str.Contains("/") || str.Contains("<") || str.Contains(">") || str.Contains(" （ブルーレイディスク）");
+        {         
+            return str.Contains("'") || str.Contains("?") || str.Contains(":") || str.Contains("*") || str.Contains("|") || str.Contains("\\") || str.Contains("/") || str.Contains("<") || str.Contains(">") || str.Contains(" （ブルーレイディスク）") || str.Contains("（ブルーレイディスク）") || str.Contains("′") || str.Contains("・") || str.Contains("♪") || str.Contains("´") || str.Contains("｀") || str.Contains("◯") || str.Contains("?") || str.Contains("≪") || str.Contains("≫") || str.Contains("｢") || str.Contains("｣") || str.Contains("〜") || str.Contains("･") || str.Contains("∀") || str.Contains("○") || str.Contains("～") || str.Contains("♯") || str.Contains("､") || str.Contains("━") || str.Contains("ﾟ") || str.Contains("｡") || str.Contains("⇒") || str.Contains("⇔") || str.Contains("ｷ") || str.Contains("ﾀ");
         }
 
         public static string SecondToHour(double time)

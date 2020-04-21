@@ -44,6 +44,13 @@ namespace DataBaseManager.JavDataBaseHelper
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<CommonModel>();
         }
 
+        public static int UpdateAvName(string name, int id)
+        {
+            var sql = @"UPDATE AV SET Name = '" + name + "' WHERE AvId = " + id;
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
         public static int InsertCategory(Category category)
         {
             var sql = @"INSERT INTO Category (Name, URL, CreateTime) VALUES (@name, @url, @createTime)";
