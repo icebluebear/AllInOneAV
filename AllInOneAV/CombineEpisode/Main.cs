@@ -609,6 +609,25 @@ namespace CombineEpisode
             }
         }
 
+        private void btnMissing115_Click(object sender, EventArgs e)
+        {
+            List<MissingCheckModel> list = new List<MissingCheckModel>();
+
+            foreach (ListViewItem item in lvwMissing.Items)
+            {
+                MissingCheckModel temp = (MissingCheckModel)item.Tag;
+
+                if (temp.IsMatch == false && temp.Seeds != null && temp.Seeds.Count > 0)
+                {
+                    list.Add(temp);
+                }
+            }
+
+            _115Search _115 = new _115Search(list);
+
+            _115.ShowDialog();
+        }
+
         #endregion
 
         #region 方法
