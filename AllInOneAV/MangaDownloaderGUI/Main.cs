@@ -1033,7 +1033,14 @@ namespace MangaDownloaderGUI
 
             foreach (var url in downloadUrls)
             {
+                DialogResult rs = DialogResult.Yes;
+
                 if (history.DownloadedChapters.Contains(url.Key))
+                {
+                    rs = MessageBox.Show("之前已经下载过该章节是否要跳过", "提示", MessageBoxButtons.YesNo);
+                }
+
+                if (rs == DialogResult.Yes)
                 {
                     UpdateRtb(rcbLog, url.Value + " 已经下载过,跳过");
                     continue;
@@ -1141,7 +1148,14 @@ namespace MangaDownloaderGUI
 
             foreach (var url in downloadUrls)
             {
+                DialogResult rs = DialogResult.Yes;
+
                 if (history.DownloadedChapters.Contains(url.Key))
+                {
+                    rs = MessageBox.Show("之前已经下载过该章节是否要跳过", "提示", MessageBoxButtons.YesNo);
+                }
+
+                if (rs == DialogResult.Yes)
                 {
                     UpdateRtb(rcbLog, url.Value + " 已经下载过,跳过");
                     continue;
@@ -1237,7 +1251,14 @@ namespace MangaDownloaderGUI
 
             foreach (var url in downloadUrls)
             {
+                DialogResult rs = DialogResult.Yes;
+
                 if (history.DownloadedChapters.Contains(url.Key))
+                {
+                    rs = MessageBox.Show("之前已经下载过该章节是否要跳过", "提示", MessageBoxButtons.YesNo);
+                }
+
+                if (rs == DialogResult.Yes)
                 {
                     UpdateRtb(rcbLog, url.Value + " 已经下载过,跳过");
                     continue;
@@ -1317,7 +1338,14 @@ namespace MangaDownloaderGUI
 
             foreach (var url in downloadUrls)
             {
+                DialogResult rs = DialogResult.Yes;
+
                 if (history.DownloadedChapters.Contains(url.Key))
+                {
+                    rs = MessageBox.Show("之前已经下载过该章节是否要跳过", "提示", MessageBoxButtons.YesNo);
+                }
+
+                if (rs == DialogResult.Yes)
                 {
                     UpdateRtb(rcbLog, url.Value + " 已经下载过,跳过");
                     continue;

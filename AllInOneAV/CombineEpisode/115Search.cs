@@ -81,6 +81,8 @@ namespace CombineEpisode
                 MissingCheckModel mcm = (MissingCheckModel)listView1.SelectedItems[0].Tag;
 
                 Clipboard.SetDataObject(mcm.Av.ID);
+
+                listView1.SelectedItems[0].BackColor = Color.Blue;
             }
         }
     }
