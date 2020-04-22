@@ -212,6 +212,17 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnCheckISO = new System.Windows.Forms.Button();
             this.treeView3 = new System.Windows.Forms.TreeView();
+            this.tabPage15 = new System.Windows.Forms.TabPage();
+            this.panel49 = new System.Windows.Forms.Panel();
+            this.panel50 = new System.Windows.Forms.Panel();
+            this.panel51 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtDailyPage = new System.Windows.Forms.TextBox();
+            this.cbDailyOnly = new System.Windows.Forms.CheckBox();
+            this.btnDaily = new System.Windows.Forms.Button();
+            this.lwDaily = new System.Windows.Forms.ListView();
+            this.ilDaily = new System.Windows.Forms.ImageList(this.components);
+            this.pbDaily = new System.Windows.Forms.ProgressBar();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -279,6 +290,10 @@
             this.panel43.SuspendLayout();
             this.panel45.SuspendLayout();
             this.panel44.SuspendLayout();
+            this.tabPage15.SuspendLayout();
+            this.panel49.SuspendLayout();
+            this.panel50.SuspendLayout();
+            this.panel51.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -287,7 +302,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(873, 606);
+            this.panel1.Size = new System.Drawing.Size(1014, 606);
             this.panel1.TabIndex = 0;
             // 
             // panel3
@@ -296,7 +311,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(873, 606);
+            this.panel3.Size = new System.Drawing.Size(1014, 606);
             this.panel3.TabIndex = 1;
             // 
             // panel5
@@ -305,7 +320,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(873, 606);
+            this.panel5.Size = new System.Drawing.Size(1014, 606);
             this.panel5.TabIndex = 2;
             // 
             // tabControl1
@@ -323,13 +338,14 @@
             this.tabControl1.Controls.Add(this.tabPage14);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage13);
+            this.tabControl1.Controls.Add(this.tabPage15);
             this.tabControl1.Controls.Add(this.tabPage12);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(873, 606);
+            this.tabControl1.Size = new System.Drawing.Size(1014, 606);
             this.tabControl1.TabIndex = 6;
             // 
             // tabPage2
@@ -2187,12 +2203,121 @@
             this.treeView3.TabIndex = 0;
             this.treeView3.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView3_AfterSelect);
             // 
+            // tabPage15
+            // 
+            this.tabPage15.Controls.Add(this.panel49);
+            this.tabPage15.Location = new System.Drawing.Point(4, 22);
+            this.tabPage15.Name = "tabPage15";
+            this.tabPage15.Size = new System.Drawing.Size(1006, 580);
+            this.tabPage15.TabIndex = 17;
+            this.tabPage15.Text = "日常更新";
+            this.tabPage15.UseVisualStyleBackColor = true;
+            // 
+            // panel49
+            // 
+            this.panel49.Controls.Add(this.panel51);
+            this.panel49.Controls.Add(this.panel50);
+            this.panel49.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel49.Location = new System.Drawing.Point(0, 0);
+            this.panel49.Name = "panel49";
+            this.panel49.Size = new System.Drawing.Size(1006, 580);
+            this.panel49.TabIndex = 0;
+            // 
+            // panel50
+            // 
+            this.panel50.Controls.Add(this.pbDaily);
+            this.panel50.Controls.Add(this.btnDaily);
+            this.panel50.Controls.Add(this.cbDailyOnly);
+            this.panel50.Controls.Add(this.txtDailyPage);
+            this.panel50.Controls.Add(this.label3);
+            this.panel50.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel50.Location = new System.Drawing.Point(0, 0);
+            this.panel50.Name = "panel50";
+            this.panel50.Size = new System.Drawing.Size(1006, 51);
+            this.panel50.TabIndex = 1;
+            // 
+            // panel51
+            // 
+            this.panel51.Controls.Add(this.lwDaily);
+            this.panel51.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel51.Location = new System.Drawing.Point(0, 51);
+            this.panel51.Name = "panel51";
+            this.panel51.Size = new System.Drawing.Size(1006, 529);
+            this.panel51.TabIndex = 2;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(9, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(29, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "页数";
+            // 
+            // txtDailyPage
+            // 
+            this.txtDailyPage.Location = new System.Drawing.Point(44, 14);
+            this.txtDailyPage.Name = "txtDailyPage";
+            this.txtDailyPage.Size = new System.Drawing.Size(100, 21);
+            this.txtDailyPage.TabIndex = 1;
+            // 
+            // cbDailyOnly
+            // 
+            this.cbDailyOnly.AutoSize = true;
+            this.cbDailyOnly.Checked = true;
+            this.cbDailyOnly.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbDailyOnly.Location = new System.Drawing.Point(177, 17);
+            this.cbDailyOnly.Name = "cbDailyOnly";
+            this.cbDailyOnly.Size = new System.Drawing.Size(72, 16);
+            this.cbDailyOnly.TabIndex = 2;
+            this.cbDailyOnly.Text = "包含匹配";
+            this.cbDailyOnly.UseVisualStyleBackColor = true;
+            // 
+            // btnDaily
+            // 
+            this.btnDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDaily.Location = new System.Drawing.Point(921, 7);
+            this.btnDaily.Name = "btnDaily";
+            this.btnDaily.Size = new System.Drawing.Size(75, 38);
+            this.btnDaily.TabIndex = 3;
+            this.btnDaily.Text = "搜索";
+            this.btnDaily.UseVisualStyleBackColor = true;
+            this.btnDaily.Click += new System.EventHandler(this.btnDaily_Click);
+            // 
+            // lwDaily
+            // 
+            this.lwDaily.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lwDaily.HideSelection = false;
+            this.lwDaily.LargeImageList = this.ilDaily;
+            this.lwDaily.Location = new System.Drawing.Point(0, 0);
+            this.lwDaily.Name = "lwDaily";
+            this.lwDaily.Size = new System.Drawing.Size(1006, 529);
+            this.lwDaily.TabIndex = 0;
+            this.lwDaily.UseCompatibleStateImageBehavior = false;
+            this.lwDaily.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lwDaily_MouseClick);
+            // 
+            // ilDaily
+            // 
+            this.ilDaily.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.ilDaily.ImageSize = new System.Drawing.Size(250, 200);
+            this.ilDaily.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // pbDaily
+            // 
+            this.pbDaily.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbDaily.Location = new System.Drawing.Point(266, 12);
+            this.pbDaily.Name = "pbDaily";
+            this.pbDaily.Size = new System.Drawing.Size(634, 23);
+            this.pbDaily.TabIndex = 4;
+            this.pbDaily.Click += new System.EventHandler(this.pbDaily_Click);
+            // 
             // Main
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(873, 606);
+            this.ClientSize = new System.Drawing.Size(1014, 606);
             this.Controls.Add(this.panel1);
             this.KeyPreview = true;
             this.Name = "Main";
@@ -2283,6 +2408,11 @@
             this.panel43.ResumeLayout(false);
             this.panel45.ResumeLayout(false);
             this.panel44.ResumeLayout(false);
+            this.tabPage15.ResumeLayout(false);
+            this.panel49.ResumeLayout(false);
+            this.panel50.ResumeLayout(false);
+            this.panel50.PerformLayout();
+            this.panel51.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2472,6 +2602,17 @@
         private System.Windows.Forms.Button btMissingSearch;
         private System.Windows.Forms.ProgressBar pbMissing;
         private System.Windows.Forms.Button btnMissing115;
+        private System.Windows.Forms.TabPage tabPage15;
+        private System.Windows.Forms.Panel panel49;
+        private System.Windows.Forms.Panel panel51;
+        private System.Windows.Forms.Panel panel50;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtDailyPage;
+        private System.Windows.Forms.CheckBox cbDailyOnly;
+        private System.Windows.Forms.Button btnDaily;
+        private System.Windows.Forms.ListView lwDaily;
+        private System.Windows.Forms.ImageList ilDaily;
+        private System.Windows.Forms.ProgressBar pbDaily;
     }
 }
 

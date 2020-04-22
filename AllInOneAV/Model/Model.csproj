@@ -78,6 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanModels\DuplicateJSON.cs" />
     <Compile Include="ScanModels\Finish.cs" />
+    <Compile Include="ScanModels\FreshModel.cs" />
     <Compile Include="ScanModels\MagUrl.cs" />
     <Compile Include="ScanModels\Match.cs" />
     <Compile Include="ScanModels\MatchMap.cs" />

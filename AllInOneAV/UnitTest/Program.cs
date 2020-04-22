@@ -50,6 +50,9 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
+            var url = "http://cdnfhn304.115.com/IAJdtXSMAhMHOQBjdYFYh0eAkAMH2kuINQYULB2K/ABG-002-%E9%87%91%E7%B2%89%E5%A5%B4%E9%9A%B7%E5%A5%B3%E7%8E%8B%E7%A5%9E%E7%B4%8D%E8%8A%B1.mp4";
+
+            Download115("", url);
 
             Console.ReadKey();
         }
@@ -59,25 +62,25 @@ namespace UnitTest
             var avs = JavDataBaseManager.GetAllAV();
             var files = new DirectoryInfo(imageFolder).GetFiles();
 
-            foreach (var av in avs)
-            {
-                if (!File.Exists(imageFolder + av.ID + av.Name + ".jpg"))
-                {
-                    var possibleFiles = files.Where(x => x.Name.StartsWith(av.ID)).ToList();
+            //foreach (var av in avs)
+            //{
+            //    if (!File.Exists(imageFolder + av.ID + av.Name + ".jpg"))
+            //    {
+            //        var possibleFiles = files.Where(x => x.Name.StartsWith(av.ID)).ToList();
 
-                    if (possibleFiles != null && possibleFiles.Count == 1 && av.PictureURL != "http:../img/noimagepl.gif")
-                    {
-                        Console.WriteLine(av.ID + " " + av.Name);
+            //        if (possibleFiles != null && possibleFiles.Count == 1 && av.PictureURL != "http:../img/noimagepl.gif")
+            //        {
+            //            Console.WriteLine(av.ID + " " + av.Name);
 
-                        foreach (var sub in possibleFiles)
-                        {
-                            //sub.MoveTo(FileUtility.ReplaceInvalidChar(sub.Name.Replace(sub.Extension, "")) + sub.Extension);
-                            //JavDataBaseManager.UpdateAvName(FileUtility.ReplaceInvalidChar(sub.Name.Replace(av.ID,"").Replace(sub.Extension, "")), av.AvId);
-                            Console.WriteLine("\t" + sub.Name);
-                        }
-                    }
-                }
-            }
+            //            foreach (var sub in possibleFiles)
+            //            {
+            //                //sub.MoveTo(FileUtility.ReplaceInvalidChar(sub.Name.Replace(sub.Extension, "")) + sub.Extension);
+            //                //JavDataBaseManager.UpdateAvName(FileUtility.ReplaceInvalidChar(sub.Name.Replace(av.ID,"").Replace(sub.Extension, "")), av.AvId);
+            //                Console.WriteLine("\t" + sub.Name);
+            //            }
+            //        }
+            //    }
+            //}
 
             //foreach (var av in avs)
             //{
@@ -154,7 +157,30 @@ namespace UnitTest
             Console.WriteLine("完毕");
         }
 
-        public static bool Get115SearchResult(string cookieStr, string content, string host = "115.com", string reffer = "https://115.com/?cid=0&offset=0&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
+        private static void Download115(string cookieStr, string url)
+        {
+            CookieContainer cc = new CookieContainer();
+
+            string[] cookies = cookieStr.Split(';');
+
+            foreach (var cookie in cookies)
+            {
+                if (cookie.Contains("="))
+                {
+                    var cookieItemSplit = cookie.Split('=');
+                    cc.Add(new Cookie
+                    {
+                        Name = cookieItemSplit[0].Trim(),
+                        Value = cookieItemSplit[1].Trim(),
+                        Domain = "115.com"
+                    });
+                }
+            }
+
+            DownloadHelper.DownloadHttpsWithHost(url, "c:\\setting\\test.mp4", "115.com", "");
+        }
+
+        private static bool Get115SearchResult(string cookieStr, string content, string host = "115.com", string reffer = "https://115.com/?cid=0&offset=0&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
         {
             bool ret = false;
 
@@ -191,7 +217,7 @@ namespace UnitTest
             return ret;
         }
 
-        public static List<MissingCheckModel> GetMissingAV()
+        private static List<MissingCheckModel> GetMissingAV()
         {
             return JavLibraryHelper.GetAllRelatedJav("prefix", "RKI").Result;
         }

@@ -21,7 +21,7 @@ namespace BatchJavScanerAndMacthMagUrl
 
             if (args[0] == "daily")
             {
-                JavLibraryHelper.DoDailyUpdate(true);
+                JavLibraryHelper.DoDailyUpdate(200, true);
             }
 
             if (args[0] == "full")
@@ -32,6 +32,15 @@ namespace BatchJavScanerAndMacthMagUrl
             if (args[0] == "single")
             {
                 JavLibraryHelper.DoFullScanSingleThread(true);
+            }
+
+            if (args[0] == "refresh")
+            {
+                int page = 15;
+
+                int.TryParse(args[1], out page);
+
+                JavLibraryHelper.DoDailyRefresh(page, true);
             }
 
             if (args[0] == "certain")

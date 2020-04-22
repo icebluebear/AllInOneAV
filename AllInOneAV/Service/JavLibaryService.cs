@@ -10,6 +10,7 @@ using DataBaseManager.ScanDataBaseHelper;
 using HtmlAgilityPack;
 using Model.Common;
 using Model.JavModels;
+using Model.ScanModels;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -298,6 +299,56 @@ namespace Service
                     Console.WriteLine(cate + " " + url + " 扫描了 " + unScanCount + " 未扫描, 进度" + current + " / " + total);
                 }
             }
+        }
+
+        private static List<AV> ScanAndReturnAv(string url, string cate, int current, int total, List<string> scans = null)
+        {
+            List<AV> ret = new List<AV>();
+            var htmlRes = JavCookieContanierHelper(url);
+
+            if (htmlRes.Success)
+            {
+                HtmlDocument htmlDocument = new HtmlDocument();
+                htmlDocument.LoadHtml(htmlRes.Content);
+
+                var videoPath = "//div[@class='video']";
+
+                var videoNodes = htmlDocument.DocumentNode.SelectNodes(videoPath);
+
+                if (videoNodes != null)
+                {
+                    foreach (var node in videoNodes)
+                    {
+                        var urlAndTitle = node.ChildNodes[0];
+                        if (urlAndTitle != null && urlAndTitle.ChildNodes.Count >= 3)
+                        {
+                            var id = urlAndTitle.ChildNodes[0].InnerText.Trim();
+                            var name = FileUtility.ReplaceInvalidChar(urlAndTitle.ChildNodes[2].InnerText.Trim());
+                            var pic = urlAndTitle.ChildNodes[1].Attributes["src"].Value;
+
+                            if (!pic.StartsWith("http"))
+                            {
+                                pic = "http:" + pic;
+                            }
+
+                            if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(pic) && !string.IsNullOrEmpty(name))
+                            {
+                                
+
+                                Console.WriteLine("AV:" + JsonConvert.SerializeObject(new RefreshModel
+                                    {
+                                        Id = id,
+                                        Name = name,
+                                        Url = pic
+                                    })
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ret;
         }
 
         private static void ScanDailyCategoryPageUrl(string url, string cate, int current, int total)
@@ -810,14 +861,14 @@ namespace Service
             ScanAvList();
         }
 
-        public static void DoDailyUpdate(bool showConsole = true)
+        public static void DoDailyUpdate(int page = 200, bool showConsole = true)
         {
             Dictionary<string, string> updatePages = new Dictionary<string, string>();
             List<string> urls = new List<string>();
 
             GetJavCookie(showConsole);
 
-            for (int i = 1; i <= 200; i++)
+            for (int i = 1; i <= page; i++)
             {
                 updatePages.Add("http://www.javlibrary.com/cn/vl_update.php?&mode=&page=" + i, "更新");
             }
@@ -826,10 +877,30 @@ namespace Service
             Parallel.ForEach(updatePages, new ParallelOptions { MaxDegreeOfParallelism = 100 }, url =>
             {
                 index++;
-                ScanCategoryPageUrl(url.Key, url.Value, index, 200, urls);
+                ScanCategoryPageUrl(url.Key, url.Value, index, page, urls);
             });
 
             ScanDailyAvList(urls);
+        }
+
+        public static void DoDailyRefresh(int page = 200, bool showConsole = true)
+        {
+            Dictionary<string, string> updatePages = new Dictionary<string, string>();
+            List<string> urls = new List<string>();
+
+            GetJavCookie(showConsole);
+
+            for (int i = 1; i <= page; i++)
+            {
+                updatePages.Add("http://www.javlibrary.com/cn/vl_update.php?&mode=&page=" + i, "更新");
+            }
+
+            int index = 0;
+            Parallel.ForEach(updatePages, new ParallelOptions { MaxDegreeOfParallelism = 100 }, url =>
+            {
+                index++;
+                ScanAndReturnAv(url.Key, url.Value, index, page, urls);
+            });
         }
 
         public static void DoCertainCategory(Dictionary<string, string> dic, bool showConsole = true)

@@ -1033,7 +1033,7 @@ namespace MangaDownloaderGUI
 
             foreach (var url in downloadUrls)
             {
-                DialogResult rs = DialogResult.Yes;
+                DialogResult rs = DialogResult.No;
 
                 if (history.DownloadedChapters.Contains(url.Key))
                 {
@@ -1148,7 +1148,7 @@ namespace MangaDownloaderGUI
 
             foreach (var url in downloadUrls)
             {
-                DialogResult rs = DialogResult.Yes;
+                DialogResult rs = DialogResult.No;
 
                 if (history.DownloadedChapters.Contains(url.Key))
                 {
@@ -1251,7 +1251,7 @@ namespace MangaDownloaderGUI
 
             foreach (var url in downloadUrls)
             {
-                DialogResult rs = DialogResult.Yes;
+                DialogResult rs = DialogResult.No;
 
                 if (history.DownloadedChapters.Contains(url.Key))
                 {
@@ -1338,7 +1338,7 @@ namespace MangaDownloaderGUI
 
             foreach (var url in downloadUrls)
             {
-                DialogResult rs = DialogResult.Yes;
+                DialogResult rs = DialogResult.No;
 
                 if (history.DownloadedChapters.Contains(url.Key))
                 {

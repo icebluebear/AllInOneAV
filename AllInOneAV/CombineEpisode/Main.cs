@@ -2,6 +2,7 @@
 using DataBaseManager.ScanDataBaseHelper;
 using Model.Common;
 using Model.JavModels;
+using Model.ScanModels;
 using Newtonsoft.Json;
 using Service;
 using System;
@@ -345,15 +346,11 @@ namespace CombineEpisode
         private void btnJavScanDaily_Click(object sender, EventArgs e)
         {
             JavScanAsync("daily");
-
-            MessageBox.Show("操作完毕");
         }
 
         private void btnJavScan_Click(object sender, EventArgs e)
         {
             JavScanAsync("certain");
-
-            MessageBox.Show("操作完毕");
         }
 
         private void richTextBox3_ContentsResized(object sender, ContentsResizedEventArgs e)
@@ -632,6 +629,13 @@ namespace CombineEpisode
             _115.ShowDialog();
         }
 
+        private void btnDaily_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtDailyPage.Text))
+            {
+                DoDailyRefesh(txtDailyPage.Text);
+            }
+        }
         #endregion
 
         #region 方法
@@ -2116,6 +2120,8 @@ namespace CombineEpisode
             {
                 await StartJavScan("", " " + command + " " + titleStr + " " + urlStr, OutputJavScan);
             }
+
+            MessageBox.Show("操作完毕");
         }
 
         private async Task StartJavScan(string exe, string arg, DataReceivedEventHandler output)
@@ -2540,7 +2546,98 @@ namespace CombineEpisode
             });
         }
 
+        private async void DoDailyRefesh(string pageStr)
+        {
+            int page = 15;
+            int.TryParse(pageStr, out page);
+            var arg = " refresh " + page;
+
+            pbDaily.Maximum = page * 20;
+
+            await StartJavRefresh("", arg, OutputJavRefresh);
+        }
+
+        private async Task StartJavRefresh(string exe, string arg, DataReceivedEventHandler output)
+        {
+            exe = "G:\\Github\\AllInOneAV\\AllInOneAV\\BatchJavScanerAndMacthMagUrl\\bin\\Debug\\BatchJavScanerAndMacthMagUrl.exe";
+
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = exe;
+                p.StartInfo.Arguments = arg;
+
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.RedirectStandardOutput = true;
+
+                p.OutputDataReceived += output;
+
+                p.Start();
+                p.BeginOutputReadLine();
+                await p.WaitForExitAsync();
+            }
+        }
+
+        private void OutputJavRefresh(object sendProcess, DataReceivedEventArgs output)
+        {
+            if (!string.IsNullOrEmpty(output.Data) && output.Data.StartsWith("AV:"))
+            {
+                var jsonStr = output.Data.Replace("AV:", "");
+
+                RefreshModel rm = JsonConvert.DeserializeObject<RefreshModel>(jsonStr);
+
+                lwDaily.BeginUpdate();
+
+                if (File.Exists(imageFolder + rm.Id + rm.Name + ".jpg"))
+                {
+                    ilDaily.Images.Add(rm.Name, Image.FromFile(imageFolder + rm.Id + rm.Name + ".jpg"));
+                }
+                else
+                {
+                    ilDaily.Images.Add(rm.Name, Image.FromStream(WebRequest.Create(rm.Url).GetResponse().GetResponseStream()));
+                }
+
+                ListViewItem lvi = new ListViewItem(rm.Id + " " + rm.Name);
+                lvi.ImageIndex = ilDaily.Images.IndexOfKey(rm.Name);
+
+                lwDaily.Items.Add(lvi);
+
+                var list = SearchSeedHelper.SearchSukebei(rm.Id);
+
+                if (list != null && list.Count > 0)
+                {
+                    lvi.Tag = list;
+                    lvi.BackColor = Color.Green;
+                }
+                else
+                {
+                    lvi.Tag = new List<SeedMagnetSearchModel>();
+                    lvi.BackColor = Color.Red;
+                }
+
+                JDuBar(pbDaily, lwDaily.Items.Count);
+
+                lwDaily.EndUpdate();
+            }
+        }
+
         #endregion
+
+        private void pbDaily_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lwDaily_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && lwDaily.SelectedItems.Count > 0)
+            {
+                List<SeedMagnetSearchModel> list = (List<SeedMagnetSearchModel>)lwDaily.SelectedItems[0].Tag;
+
+                SeedList sl = new SeedList(list);
+                sl.ShowDialog();
+            }
+        }
     }
 
     #region 扩展方法
