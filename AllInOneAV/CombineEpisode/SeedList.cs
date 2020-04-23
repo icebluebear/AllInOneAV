@@ -60,6 +60,8 @@ namespace CombineEpisode
                 }
 
                 Clipboard.SetDataObject(sb.ToString());
+
+                this.Close();
             }
         }
     }

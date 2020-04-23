@@ -2687,11 +2687,14 @@ namespace CombineEpisode
 
         private async void DoDailyRefesh(string pageStr)
         {
+            lwDaily.Items.Clear();
+
             refreshModel = new List<RefreshModel>();
             int page = 15;
             int.TryParse(pageStr, out page);
             var arg = " refresh " + page;
 
+            pbDaily.Value = 0;
             pbDaily.Maximum = page * 20;
 
             await StartJavRefresh("", arg, OutputJavRefresh);
@@ -2701,6 +2704,8 @@ namespace CombineEpisode
 
         private void UpdateRefreshUi()
         {
+            Random ran = new Random();
+
             Parallel.ForEach(refreshModel, new ParallelOptions { MaxDegreeOfParallelism = 10 }, rm =>
             {
                 if (File.Exists(imageFolder + rm.Id + rm.Name + ".jpg"))
@@ -2724,7 +2729,6 @@ namespace CombineEpisode
                 if (list != null && list.Count > 0)
                 {
                     lvi.Tag = list;
-                    lvi.BackColor = Color.Green;
 
                     ScanDataBaseManager.DeleteMagUrlById(rm.Id);
 
@@ -2732,16 +2736,26 @@ namespace CombineEpisode
                     {
                         ScanDataBaseManager.InsertMagUrl(rm.Id, seed.MagUrl, seed.Title, 1);
                     }
+
+                    if (new EverythingHelper().SearchFile(rm.Id, EverythingSearchEnum.Video).Count > 0)
+                    {
+                        lvi.BackColor = Color.Blue;
+                    }
+                    else
+                    {
+                        lvi.BackColor = Color.Green;
+                    }
+
+                    ListViewItemUpdate2(lwDaily, lvi);
                 }
                 else
                 {
-                    lvi.Tag = new List<SeedMagnetSearchModel>();
-                    lvi.BackColor = Color.Red;
+                    pbDaily.Maximum--;
                 }
-
-                ListViewItemUpdate2(lwDaily, lvi);
-
+              
                 JDuBar(pbDaily, lwDaily.Items.Count);
+
+                Thread.Sleep(100 * ran.Next(5));
             });
         }
 
