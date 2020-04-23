@@ -16,7 +16,6 @@ namespace Utils
     {
         [DllImport("User32.dll")]
         static extern int SetForegroundWindow(IntPtr hWnd);
-        static Process process = null;
 
         public static Process OpenBrowserUrl(string url)
         {
