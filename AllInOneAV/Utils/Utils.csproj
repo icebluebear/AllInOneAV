@@ -102,6 +102,7 @@
     <Compile Include="DownloadHelper.cs" />
     <Compile Include="EjectHelper.cs" />
     <Compile Include="EmailHelper.cs" />
+    <Compile Include="EverythingHelper.cs" />
     <Compile Include="FfmpegHelper.cs" />
     <Compile Include="FileSize.cs" />
     <Compile Include="FileUtility.cs" />

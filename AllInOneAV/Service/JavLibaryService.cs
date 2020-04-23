@@ -976,7 +976,7 @@ namespace Service
                 temp.Fi = new List<FileInfo>();
                 temp.Seeds = new List<SeedMagnetSearchModel>();
 
-                var matches = ScanDataBaseManager.GetAllMatch(av.ID);
+                var matches = new EverythingHelper().SearchFile(av.ID + " | " + av.ID.Replace("-", ""), EverythingSearchEnum.Video);
 
                 if (matches != null && matches.Count > 0)
                 {
@@ -984,8 +984,7 @@ namespace Service
 
                     foreach (var m in matches)
                     {
-                        FileInfo fi = new FileInfo(m.Location + "\\" + m.Name);
-                        temp.Fi.Add(fi);
+                        temp.Fi.Add(m);
                     }
                 }
 

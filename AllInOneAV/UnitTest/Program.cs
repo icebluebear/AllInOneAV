@@ -50,9 +50,16 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            TestScanMatchResult();
+            TestEverything();
 
             Console.ReadKey();
+        }
+
+        private static void TestEverything(EverythingSearchEnum type = EverythingSearchEnum.Video)
+        {
+            var content = "mvsd-029 | mvsd029";
+
+            var res = new EverythingHelper().SearchFile(content, type);
         }
 
         private static void TestScanMatchResult()

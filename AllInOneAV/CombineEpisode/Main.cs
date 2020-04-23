@@ -2305,12 +2305,19 @@ namespace CombineEpisode
 
         private void DoFindMovie()
         {
-            if (matchesAV == null || matchesAV.Count <= 0)
+            if (cbFindOnly.Checked)
             {
-                matchesAV = GetAllMatched();
-            }
+                if (matchesAV == null || matchesAV.Count <= 0)
+                {
+                    matchesAV = GetAllMatched();
+                }
 
-            ShowMatch(txtFind.Text.Split(','));
+                ShowMatchedMatch(txtFind.Text.Split(','));
+            }
+            else
+            {
+                ShowAllMatch(txtFind.Text.Split(','));
+            }
         }
 
         private List<Model.ScanModels.Match> GetAllMatched()
@@ -2318,7 +2325,7 @@ namespace CombineEpisode
             return ScanDataBaseManager.GetAllMatch();
         }
 
-        private void ShowMatch(string[] inputs)
+        private void ShowMatchedMatch(string[] inputs)
         {
             lvwFind.BeginUpdate();
 
@@ -2350,6 +2357,29 @@ namespace CombineEpisode
                         }
                     }
                 }
+            }
+
+            lvwFind.EndUpdate();
+        }
+
+        private void ShowAllMatch(string[] inputs)
+        {
+            lvwFind.BeginUpdate();
+
+            var content = string.Join(" | ", inputs);
+
+            var matchesAV = new EverythingHelper().SearchFile(content, EverythingSearchEnum.Video);
+
+            foreach (var movie in matchesAV)
+            {
+                ListViewItem lvi = new ListViewItem(movie.Name.Replace(movie.Extension, ""));
+
+                lvi.SubItems.Add(FileSize.GetAutoSizeString(movie.Length, 2));
+                lvi.SubItems.Add(movie.FullName);
+
+                lvi.Tag = movie.FullName;
+
+                lvwFind.Items.Add(lvi);
             }
 
             lvwFind.EndUpdate();
@@ -2525,8 +2555,6 @@ namespace CombineEpisode
 
                 List<MissingCheckModel> ret = new List<MissingCheckModel>();
 
-                lvwMissing.BeginUpdate();
-
                 if (rbMissingActress.Checked)
                 {
                     ret = await JavLibraryHelper.GetAllRelatedJav("actress", txtMissing.Text);
@@ -2540,7 +2568,7 @@ namespace CombineEpisode
                     ret = await JavLibraryHelper.GetAllRelatedJav("prefix", txtMissing.Text);
                 }
 
-                lvwMissing.SmallImageList = new ImageList();
+                lvwMissing.BeginUpdate();
 
                 foreach (var r in ret)
                 {
@@ -2600,7 +2628,7 @@ namespace CombineEpisode
                             }
                         }
 
-                        lvwMissing.Items.Add(lvi);
+                        ListViewItemUpdate2(lvwMissing, lvi);
                     }
                     catch (Exception ee)
                     {
