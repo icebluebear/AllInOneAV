@@ -52,7 +52,7 @@ namespace CombineEpisode
             {
                 StringBuilder sb = new StringBuilder();
 
-                foreach (ListViewItem lvi in listView1.Items)
+                foreach (ListViewItem lvi in listView1.SelectedItems)
                 {
                     var mag = (string)lvi.Tag;
 
@@ -60,8 +60,6 @@ namespace CombineEpisode
                 }
 
                 Clipboard.SetDataObject(sb.ToString());
-                Message ms = new Message();
-                ms.ShowDialog();
             }
         }
     }

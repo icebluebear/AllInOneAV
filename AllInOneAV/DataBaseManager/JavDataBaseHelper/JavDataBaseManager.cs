@@ -523,6 +523,13 @@ namespace DataBaseManager.JavDataBaseHelper
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<CommonModel>();
         }
 
+        public static List<CommonModel> GetSimilarContent(string table)
+        {
+            var sql = @"SELECT Name FROM " + table;
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<CommonModel>();
+        }
+
         public static List<Actress> GetAllValidMap(string table)
         {
             var sql = @"SELECT Name, Url FROM " + table + " WHERE Url <> ''";

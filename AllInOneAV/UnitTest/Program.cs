@@ -50,11 +50,81 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            var url = "http://cdnfhn304.115.com/IAJdtXSMAhMHOQBjdYFYh0eAkAMH2kuINQYULB2K/ABG-002-%E9%87%91%E7%B2%89%E5%A5%B4%E9%9A%B7%E5%A5%B3%E7%8E%8B%E7%A5%9E%E7%B4%8D%E8%8A%B1.mp4";
-
-            Download115("", url);
+            TestScanMatchResult();
 
             Console.ReadKey();
+        }
+
+        private static void TestScanMatchResult()
+        {
+            var res = ScanDataBaseManager.GetMatchScanResult();
+
+            var actressDic = new Dictionary<string, List<ScanResult>>();
+            var categoryDic = new Dictionary<string, List<ScanResult>>();
+            var prefixDic = res.GroupBy(x => x.Prefix).ToDictionary(x => x.Key, x => x.ToList());
+
+            foreach (var r in res)
+            {
+                foreach (var category in r.CategoryList)
+                {
+                    if (categoryDic.ContainsKey(category))
+                    {
+                        categoryDic[category].Add(r);
+                    }
+                    else
+                    {
+                        categoryDic.Add(category, new List<ScanResult> { r });
+                    }
+                }
+
+                foreach (var actress in r.ActressList)
+                {
+                    if (actressDic.ContainsKey(actress))
+                    {
+                        actressDic[actress].Add(r);
+                    }
+                    else
+                    {
+                        actressDic.Add(actress, new List<ScanResult> { r });
+                    }
+                }
+            }
+        }
+
+        private static void ClearAvFile()
+        {
+            List<FileInfo> fis = new List<FileInfo>();
+            var drivers = Environment.GetLogicalDrives();
+
+            foreach (var dri in drivers)
+            {
+                var folder = dri + "\\fin\\";
+
+                if (Directory.Exists(folder))
+                {
+                    var files = Directory.GetFiles(folder);
+
+                    foreach (var file in files)
+                    {
+                        FileInfo fi = new FileInfo(file);
+
+                        if (FileUtility.HasInvalidChar(fi.Name.Replace(fi.Extension, "")))
+                        {
+                            //Console.WriteLine(fi.Name);
+                            fis.Add(fi);
+                        }
+                    }
+                }
+            }
+
+            foreach (var fi in fis)
+            {
+                var targetPath = fi.Directory + "\\" + FileUtility.ReplaceInvalidChar(fi.Name.Replace(fi.Extension, "")) + fi.Extension;
+
+                Console.WriteLine("Move " + fi.FullName + " to " + targetPath);
+
+                fi.MoveTo(targetPath);
+            }
         }
 
         private static void CheckNameMapping()

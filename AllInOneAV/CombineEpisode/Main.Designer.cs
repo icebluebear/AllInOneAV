@@ -201,6 +201,17 @@
             this.rbMissingActress = new System.Windows.Forms.RadioButton();
             this.rbMissingCate = new System.Windows.Forms.RadioButton();
             this.txtMissing = new System.Windows.Forms.TextBox();
+            this.tabPage15 = new System.Windows.Forms.TabPage();
+            this.panel49 = new System.Windows.Forms.Panel();
+            this.panel51 = new System.Windows.Forms.Panel();
+            this.lwDaily = new System.Windows.Forms.ListView();
+            this.ilDaily = new System.Windows.Forms.ImageList(this.components);
+            this.panel50 = new System.Windows.Forms.Panel();
+            this.pbDaily = new System.Windows.Forms.ProgressBar();
+            this.btnDaily = new System.Windows.Forms.Button();
+            this.cbDailyOnly = new System.Windows.Forms.CheckBox();
+            this.txtDailyPage = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.tabPage12 = new System.Windows.Forms.TabPage();
             this.panel43 = new System.Windows.Forms.Panel();
             this.panel45 = new System.Windows.Forms.Panel();
@@ -212,17 +223,21 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnCheckISO = new System.Windows.Forms.Button();
             this.treeView3 = new System.Windows.Forms.TreeView();
-            this.tabPage15 = new System.Windows.Forms.TabPage();
-            this.panel49 = new System.Windows.Forms.Panel();
-            this.panel50 = new System.Windows.Forms.Panel();
-            this.panel51 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtDailyPage = new System.Windows.Forms.TextBox();
-            this.cbDailyOnly = new System.Windows.Forms.CheckBox();
-            this.btnDaily = new System.Windows.Forms.Button();
-            this.lwDaily = new System.Windows.Forms.ListView();
-            this.ilDaily = new System.Windows.Forms.ImageList(this.components);
-            this.pbDaily = new System.Windows.Forms.ProgressBar();
+            this.tabPage16 = new System.Windows.Forms.TabPage();
+            this.panel52 = new System.Windows.Forms.Panel();
+            this.panel53 = new System.Windows.Forms.Panel();
+            this.panel54 = new System.Windows.Forms.Panel();
+            this.cbPlayActress = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cbPlayCategory = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbPlayPrefix = new System.Windows.Forms.ComboBox();
+            this.btnPlay = new System.Windows.Forms.Button();
+            this.lbPlayStatus = new System.Windows.Forms.Label();
+            this.lvPlay = new System.Windows.Forms.ListView();
+            this.ilPlay = new System.Windows.Forms.ImageList(this.components);
+            this.btnPlayRefresh = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -286,14 +301,18 @@
             this.panel46.SuspendLayout();
             this.panel48.SuspendLayout();
             this.panel47.SuspendLayout();
+            this.tabPage15.SuspendLayout();
+            this.panel49.SuspendLayout();
+            this.panel51.SuspendLayout();
+            this.panel50.SuspendLayout();
             this.tabPage12.SuspendLayout();
             this.panel43.SuspendLayout();
             this.panel45.SuspendLayout();
             this.panel44.SuspendLayout();
-            this.tabPage15.SuspendLayout();
-            this.panel49.SuspendLayout();
-            this.panel50.SuspendLayout();
-            this.panel51.SuspendLayout();
+            this.tabPage16.SuspendLayout();
+            this.panel52.SuspendLayout();
+            this.panel53.SuspendLayout();
+            this.panel54.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -302,7 +321,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1014, 606);
+            this.panel1.Size = new System.Drawing.Size(1132, 606);
             this.panel1.TabIndex = 0;
             // 
             // panel3
@@ -311,7 +330,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1014, 606);
+            this.panel3.Size = new System.Drawing.Size(1132, 606);
             this.panel3.TabIndex = 1;
             // 
             // panel5
@@ -320,7 +339,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1014, 606);
+            this.panel5.Size = new System.Drawing.Size(1132, 606);
             this.panel5.TabIndex = 2;
             // 
             // tabControl1
@@ -340,13 +359,15 @@
             this.tabControl1.Controls.Add(this.tabPage13);
             this.tabControl1.Controls.Add(this.tabPage15);
             this.tabControl1.Controls.Add(this.tabPage12);
+            this.tabControl1.Controls.Add(this.tabPage16);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1014, 606);
+            this.tabControl1.Size = new System.Drawing.Size(1132, 606);
             this.tabControl1.TabIndex = 6;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage2
             // 
@@ -354,10 +375,10 @@
             this.tabPage2.Controls.Add(this.panel8);
             this.tabPage2.Controls.Add(this.panel7);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(865, 580);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Size = new System.Drawing.Size(1124, 580);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "生成合并任务";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -367,18 +388,18 @@
             this.panel9.Controls.Add(this.treeView1);
             this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel9.Location = new System.Drawing.Point(2, 43);
-            this.panel9.Margin = new System.Windows.Forms.Padding(2);
+            this.panel9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(861, 485);
+            this.panel9.Size = new System.Drawing.Size(1120, 485);
             this.panel9.TabIndex = 2;
             // 
             // treeView1
             // 
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
-            this.treeView1.Margin = new System.Windows.Forms.Padding(2);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(861, 485);
+            this.treeView1.Size = new System.Drawing.Size(1120, 485);
             this.treeView1.TabIndex = 0;
             // 
             // panel8
@@ -388,16 +409,16 @@
             this.panel8.Controls.Add(this.btnGenerate);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel8.Location = new System.Drawing.Point(2, 528);
-            this.panel8.Margin = new System.Windows.Forms.Padding(2);
+            this.panel8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(861, 50);
+            this.panel8.Size = new System.Drawing.Size(1120, 50);
             this.panel8.TabIndex = 1;
             // 
             // btnDelete
             // 
             this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelete.Location = new System.Drawing.Point(699, 13);
-            this.btnDelete.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDelete.Location = new System.Drawing.Point(958, 13);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(71, 26);
             this.btnDelete.TabIndex = 3;
@@ -410,16 +431,16 @@
             this.pb2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pb2.Location = new System.Drawing.Point(9, 13);
-            this.pb2.Margin = new System.Windows.Forms.Padding(2);
+            this.pb2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pb2.Name = "pb2";
-            this.pb2.Size = new System.Drawing.Size(681, 26);
+            this.pb2.Size = new System.Drawing.Size(940, 26);
             this.pb2.TabIndex = 3;
             // 
             // btnGenerate
             // 
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.Location = new System.Drawing.Point(777, 13);
-            this.btnGenerate.Margin = new System.Windows.Forms.Padding(2);
+            this.btnGenerate.Location = new System.Drawing.Point(1036, 13);
+            this.btnGenerate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(71, 26);
             this.btnGenerate.TabIndex = 2;
@@ -433,16 +454,16 @@
             this.panel7.Controls.Add(this.txtLook);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel7.Location = new System.Drawing.Point(2, 2);
-            this.panel7.Margin = new System.Windows.Forms.Padding(2);
+            this.panel7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(861, 41);
+            this.panel7.Size = new System.Drawing.Size(1120, 41);
             this.panel7.TabIndex = 0;
             // 
             // btnLook
             // 
             this.btnLook.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLook.Location = new System.Drawing.Point(777, 5);
-            this.btnLook.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLook.Location = new System.Drawing.Point(1036, 5);
+            this.btnLook.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnLook.Name = "btnLook";
             this.btnLook.Size = new System.Drawing.Size(71, 26);
             this.btnLook.TabIndex = 1;
@@ -455,9 +476,9 @@
             this.txtLook.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLook.Location = new System.Drawing.Point(9, 10);
-            this.txtLook.Margin = new System.Windows.Forms.Padding(2);
+            this.txtLook.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtLook.Name = "txtLook";
-            this.txtLook.Size = new System.Drawing.Size(754, 21);
+            this.txtLook.Size = new System.Drawing.Size(1013, 21);
             this.txtLook.TabIndex = 0;
             // 
             // tabPage3
@@ -465,9 +486,9 @@
             this.tabPage3.Controls.Add(this.panel11);
             this.tabPage3.Controls.Add(this.panel10);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(865, 580);
+            this.tabPage3.Size = new System.Drawing.Size(1124, 580);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "自动合并";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -477,18 +498,18 @@
             this.panel11.Controls.Add(this.treeView2);
             this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel11.Location = new System.Drawing.Point(0, 72);
-            this.panel11.Margin = new System.Windows.Forms.Padding(2);
+            this.panel11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(865, 508);
+            this.panel11.Size = new System.Drawing.Size(1124, 508);
             this.panel11.TabIndex = 1;
             // 
             // treeView2
             // 
             this.treeView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView2.Location = new System.Drawing.Point(0, 0);
-            this.treeView2.Margin = new System.Windows.Forms.Padding(2);
+            this.treeView2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.treeView2.Name = "treeView2";
-            this.treeView2.Size = new System.Drawing.Size(865, 508);
+            this.treeView2.Size = new System.Drawing.Size(1124, 508);
             this.treeView2.TabIndex = 0;
             // 
             // panel10
@@ -501,16 +522,16 @@
             this.panel10.Controls.Add(this.btnPreview);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel10.Location = new System.Drawing.Point(0, 0);
-            this.panel10.Margin = new System.Windows.Forms.Padding(2);
+            this.panel10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(865, 72);
+            this.panel10.Size = new System.Drawing.Size(1124, 72);
             this.panel10.TabIndex = 0;
             // 
             // btnAutoSave
             // 
             this.btnAutoSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAutoSave.Location = new System.Drawing.Point(805, 43);
-            this.btnAutoSave.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAutoSave.Location = new System.Drawing.Point(1064, 43);
+            this.btnAutoSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAutoSave.Name = "btnAutoSave";
             this.btnAutoSave.Size = new System.Drawing.Size(56, 22);
             this.btnAutoSave.TabIndex = 5;
@@ -523,10 +544,10 @@
             this.txtAutoSave.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAutoSave.Location = new System.Drawing.Point(13, 46);
-            this.txtAutoSave.Margin = new System.Windows.Forms.Padding(2);
+            this.txtAutoSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtAutoSave.Name = "txtAutoSave";
             this.txtAutoSave.ReadOnly = true;
-            this.txtAutoSave.Size = new System.Drawing.Size(784, 21);
+            this.txtAutoSave.Size = new System.Drawing.Size(1043, 21);
             this.txtAutoSave.TabIndex = 4;
             // 
             // pbTotal
@@ -534,9 +555,9 @@
             this.pbTotal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbTotal.Location = new System.Drawing.Point(163, 25);
-            this.pbTotal.Margin = new System.Windows.Forms.Padding(2);
+            this.pbTotal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbTotal.Name = "pbTotal";
-            this.pbTotal.Size = new System.Drawing.Size(697, 13);
+            this.pbTotal.Size = new System.Drawing.Size(956, 13);
             this.pbTotal.TabIndex = 3;
             // 
             // pbCurrent
@@ -544,15 +565,15 @@
             this.pbCurrent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbCurrent.Location = new System.Drawing.Point(163, 9);
-            this.pbCurrent.Margin = new System.Windows.Forms.Padding(2);
+            this.pbCurrent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbCurrent.Name = "pbCurrent";
-            this.pbCurrent.Size = new System.Drawing.Size(697, 13);
+            this.pbCurrent.Size = new System.Drawing.Size(956, 13);
             this.pbCurrent.TabIndex = 2;
             // 
             // btnAuto
             // 
             this.btnAuto.Location = new System.Drawing.Point(87, 9);
-            this.btnAuto.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAuto.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAuto.Name = "btnAuto";
             this.btnAuto.Size = new System.Drawing.Size(60, 29);
             this.btnAuto.TabIndex = 1;
@@ -563,7 +584,7 @@
             // btnPreview
             // 
             this.btnPreview.Location = new System.Drawing.Point(13, 9);
-            this.btnPreview.Margin = new System.Windows.Forms.Padding(2);
+            this.btnPreview.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnPreview.Name = "btnPreview";
             this.btnPreview.Size = new System.Drawing.Size(60, 29);
             this.btnPreview.TabIndex = 0;
@@ -575,9 +596,9 @@
             // 
             this.tabPage4.Controls.Add(this.panel12);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(865, 580);
+            this.tabPage4.Size = new System.Drawing.Size(1124, 580);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "批量转码";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -589,9 +610,9 @@
             this.panel12.Controls.Add(this.panel13);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel12.Location = new System.Drawing.Point(0, 0);
-            this.panel12.Margin = new System.Windows.Forms.Padding(2);
+            this.panel12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(865, 580);
+            this.panel12.Size = new System.Drawing.Size(1124, 580);
             this.panel12.TabIndex = 0;
             // 
             // panel15
@@ -599,9 +620,9 @@
             this.panel15.Controls.Add(this.listView2);
             this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel15.Location = new System.Drawing.Point(0, 45);
-            this.panel15.Margin = new System.Windows.Forms.Padding(2);
+            this.panel15.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(865, 460);
+            this.panel15.Size = new System.Drawing.Size(1124, 460);
             this.panel15.TabIndex = 3;
             // 
             // listView2
@@ -616,7 +637,7 @@
             this.listView2.HideSelection = false;
             this.listView2.Location = new System.Drawing.Point(0, 0);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(865, 460);
+            this.listView2.Size = new System.Drawing.Size(1124, 460);
             this.listView2.TabIndex = 1;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -646,16 +667,16 @@
             this.panel14.Controls.Add(this.cbDeleteConvert);
             this.panel14.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel14.Location = new System.Drawing.Point(0, 505);
-            this.panel14.Margin = new System.Windows.Forms.Padding(2);
+            this.panel14.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(865, 75);
+            this.panel14.Size = new System.Drawing.Size(1124, 75);
             this.panel14.TabIndex = 2;
             // 
             // btStartConvert
             // 
             this.btStartConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btStartConvert.Location = new System.Drawing.Point(789, 44);
-            this.btStartConvert.Margin = new System.Windows.Forms.Padding(2);
+            this.btStartConvert.Location = new System.Drawing.Point(1048, 44);
+            this.btStartConvert.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btStartConvert.Name = "btStartConvert";
             this.btStartConvert.Size = new System.Drawing.Size(65, 27);
             this.btStartConvert.TabIndex = 5;
@@ -666,8 +687,8 @@
             // pbConvertCurrent
             // 
             this.pbConvertCurrent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbConvertCurrent.Location = new System.Drawing.Point(397, 46);
-            this.pbConvertCurrent.Margin = new System.Windows.Forms.Padding(2);
+            this.pbConvertCurrent.Location = new System.Drawing.Point(656, 46);
+            this.pbConvertCurrent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbConvertCurrent.Name = "pbConvertCurrent";
             this.pbConvertCurrent.Size = new System.Drawing.Size(380, 22);
             this.pbConvertCurrent.TabIndex = 4;
@@ -677,16 +698,16 @@
             this.pbConvertTotal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbConvertTotal.Location = new System.Drawing.Point(5, 46);
-            this.pbConvertTotal.Margin = new System.Windows.Forms.Padding(2);
+            this.pbConvertTotal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbConvertTotal.Name = "pbConvertTotal";
-            this.pbConvertTotal.Size = new System.Drawing.Size(364, 22);
+            this.pbConvertTotal.Size = new System.Drawing.Size(622, 22);
             this.pbConvertTotal.TabIndex = 3;
             // 
             // btnConvertStart
             // 
             this.btnConvertStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnConvertStart.Location = new System.Drawing.Point(789, 5);
-            this.btnConvertStart.Margin = new System.Windows.Forms.Padding(2);
+            this.btnConvertStart.Location = new System.Drawing.Point(1048, 5);
+            this.btnConvertStart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnConvertStart.Name = "btnConvertStart";
             this.btnConvertStart.Size = new System.Drawing.Size(65, 27);
             this.btnConvertStart.TabIndex = 2;
@@ -699,16 +720,16 @@
             this.txtConvertSave.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtConvertSave.Location = new System.Drawing.Point(4, 23);
-            this.txtConvertSave.Margin = new System.Windows.Forms.Padding(2);
+            this.txtConvertSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtConvertSave.Name = "txtConvertSave";
-            this.txtConvertSave.Size = new System.Drawing.Size(775, 21);
+            this.txtConvertSave.Size = new System.Drawing.Size(1034, 21);
             this.txtConvertSave.TabIndex = 1;
             // 
             // cbDeleteConvert
             // 
             this.cbDeleteConvert.AutoSize = true;
             this.cbDeleteConvert.Location = new System.Drawing.Point(5, 5);
-            this.cbDeleteConvert.Margin = new System.Windows.Forms.Padding(2);
+            this.cbDeleteConvert.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbDeleteConvert.Name = "cbDeleteConvert";
             this.cbDeleteConvert.Size = new System.Drawing.Size(84, 16);
             this.cbDeleteConvert.TabIndex = 0;
@@ -721,16 +742,16 @@
             this.panel13.Controls.Add(this.txtConvertImport);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel13.Location = new System.Drawing.Point(0, 0);
-            this.panel13.Margin = new System.Windows.Forms.Padding(2);
+            this.panel13.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(865, 45);
+            this.panel13.Size = new System.Drawing.Size(1124, 45);
             this.panel13.TabIndex = 1;
             // 
             // btnConvertImport
             // 
             this.btnConvertImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnConvertImport.Location = new System.Drawing.Point(789, 7);
-            this.btnConvertImport.Margin = new System.Windows.Forms.Padding(2);
+            this.btnConvertImport.Location = new System.Drawing.Point(1048, 7);
+            this.btnConvertImport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnConvertImport.Name = "btnConvertImport";
             this.btnConvertImport.Size = new System.Drawing.Size(65, 27);
             this.btnConvertImport.TabIndex = 1;
@@ -743,9 +764,9 @@
             this.txtConvertImport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtConvertImport.Location = new System.Drawing.Point(4, 13);
-            this.txtConvertImport.Margin = new System.Windows.Forms.Padding(2);
+            this.txtConvertImport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtConvertImport.Name = "txtConvertImport";
-            this.txtConvertImport.Size = new System.Drawing.Size(775, 21);
+            this.txtConvertImport.Size = new System.Drawing.Size(1034, 21);
             this.txtConvertImport.TabIndex = 0;
             // 
             // tabPage6
@@ -753,7 +774,7 @@
             this.tabPage6.Controls.Add(this.panel19);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(865, 580);
+            this.tabPage6.Size = new System.Drawing.Size(1124, 580);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "去重";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -765,7 +786,7 @@
             this.panel19.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel19.Location = new System.Drawing.Point(0, 0);
             this.panel19.Name = "panel19";
-            this.panel19.Size = new System.Drawing.Size(865, 580);
+            this.panel19.Size = new System.Drawing.Size(1124, 580);
             this.panel19.TabIndex = 0;
             // 
             // panel21
@@ -774,7 +795,7 @@
             this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel21.Location = new System.Drawing.Point(0, 45);
             this.panel21.Name = "panel21";
-            this.panel21.Size = new System.Drawing.Size(865, 535);
+            this.panel21.Size = new System.Drawing.Size(1124, 535);
             this.panel21.TabIndex = 2;
             // 
             // treeView4
@@ -784,7 +805,7 @@
             this.treeView4.FullRowSelect = true;
             this.treeView4.Location = new System.Drawing.Point(0, 0);
             this.treeView4.Name = "treeView4";
-            this.treeView4.Size = new System.Drawing.Size(865, 535);
+            this.treeView4.Size = new System.Drawing.Size(1124, 535);
             this.treeView4.TabIndex = 0;
             this.treeView4.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView4_BeforeCheck);
             this.treeView4.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView4_AfterCheck);
@@ -798,7 +819,7 @@
             this.panel20.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel20.Location = new System.Drawing.Point(0, 0);
             this.panel20.Name = "panel20";
-            this.panel20.Size = new System.Drawing.Size(865, 45);
+            this.panel20.Size = new System.Drawing.Size(1124, 45);
             this.panel20.TabIndex = 1;
             // 
             // btnScanClear
@@ -814,7 +835,7 @@
             // btnScanDelete
             // 
             this.btnScanDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnScanDelete.Location = new System.Drawing.Point(701, 3);
+            this.btnScanDelete.Location = new System.Drawing.Point(959, 3);
             this.btnScanDelete.Name = "btnScanDelete";
             this.btnScanDelete.Size = new System.Drawing.Size(75, 39);
             this.btnScanDelete.TabIndex = 1;
@@ -825,7 +846,7 @@
             // btnScanRedundant
             // 
             this.btnScanRedundant.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnScanRedundant.Location = new System.Drawing.Point(782, 3);
+            this.btnScanRedundant.Location = new System.Drawing.Point(1041, 3);
             this.btnScanRedundant.Name = "btnScanRedundant";
             this.btnScanRedundant.Size = new System.Drawing.Size(75, 39);
             this.btnScanRedundant.TabIndex = 0;
@@ -838,7 +859,7 @@
             this.tabPage7.Controls.Add(this.panel24);
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(865, 580);
+            this.tabPage7.Size = new System.Drawing.Size(1124, 580);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Text = "匹配视频磁链";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -850,7 +871,7 @@
             this.panel24.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel24.Location = new System.Drawing.Point(0, 0);
             this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(865, 580);
+            this.panel24.Size = new System.Drawing.Size(1124, 580);
             this.panel24.TabIndex = 2;
             // 
             // panel22
@@ -859,7 +880,7 @@
             this.panel22.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel22.Location = new System.Drawing.Point(0, 48);
             this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(865, 532);
+            this.panel22.Size = new System.Drawing.Size(1124, 532);
             this.panel22.TabIndex = 2;
             // 
             // treeView5
@@ -868,7 +889,7 @@
             this.treeView5.FullRowSelect = true;
             this.treeView5.Location = new System.Drawing.Point(0, 0);
             this.treeView5.Name = "treeView5";
-            this.treeView5.Size = new System.Drawing.Size(865, 532);
+            this.treeView5.Size = new System.Drawing.Size(1124, 532);
             this.treeView5.TabIndex = 0;
             this.treeView5.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView5_NodeMouseClick);
             this.treeView5.Click += new System.EventHandler(this.treeView5_Click);
@@ -881,13 +902,13 @@
             this.panel23.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel23.Location = new System.Drawing.Point(0, 0);
             this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(865, 48);
+            this.panel23.Size = new System.Drawing.Size(1124, 48);
             this.panel23.TabIndex = 1;
             // 
             // btnScanUnmatchedSelect
             // 
             this.btnScanUnmatchedSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnScanUnmatchedSelect.Location = new System.Drawing.Point(701, 5);
+            this.btnScanUnmatchedSelect.Location = new System.Drawing.Point(959, 5);
             this.btnScanUnmatchedSelect.Name = "btnScanUnmatchedSelect";
             this.btnScanUnmatchedSelect.Size = new System.Drawing.Size(75, 34);
             this.btnScanUnmatchedSelect.TabIndex = 2;
@@ -898,7 +919,7 @@
             // btnScanUnmathced
             // 
             this.btnScanUnmathced.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnScanUnmathced.Location = new System.Drawing.Point(782, 5);
+            this.btnScanUnmathced.Location = new System.Drawing.Point(1041, 5);
             this.btnScanUnmathced.Name = "btnScanUnmathced";
             this.btnScanUnmathced.Size = new System.Drawing.Size(75, 34);
             this.btnScanUnmathced.TabIndex = 1;
@@ -912,7 +933,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUnmatched.Location = new System.Drawing.Point(8, 13);
             this.txtUnmatched.Name = "txtUnmatched";
-            this.txtUnmatched.Size = new System.Drawing.Size(680, 21);
+            this.txtUnmatched.Size = new System.Drawing.Size(938, 21);
             this.txtUnmatched.TabIndex = 0;
             // 
             // tabPage5
@@ -920,7 +941,7 @@
             this.tabPage5.Controls.Add(this.panel18);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(865, 580);
+            this.tabPage5.Size = new System.Drawing.Size(1124, 580);
             this.tabPage5.TabIndex = 7;
             this.tabPage5.Text = "去子文件夹";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -932,7 +953,7 @@
             this.panel18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel18.Location = new System.Drawing.Point(0, 0);
             this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(865, 580);
+            this.panel18.Size = new System.Drawing.Size(1124, 580);
             this.panel18.TabIndex = 2;
             // 
             // panel17
@@ -941,7 +962,7 @@
             this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel17.Location = new System.Drawing.Point(0, 48);
             this.panel17.Name = "panel17";
-            this.panel17.Size = new System.Drawing.Size(865, 532);
+            this.panel17.Size = new System.Drawing.Size(1124, 532);
             this.panel17.TabIndex = 1;
             // 
             // richTextBox1
@@ -949,7 +970,7 @@
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(865, 532);
+            this.richTextBox1.Size = new System.Drawing.Size(1124, 532);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -961,7 +982,7 @@
             this.panel16.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel16.Location = new System.Drawing.Point(0, 0);
             this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(865, 48);
+            this.panel16.Size = new System.Drawing.Size(1124, 48);
             this.panel16.TabIndex = 0;
             // 
             // txtRemoveFolderTxt
@@ -971,13 +992,13 @@
             this.txtRemoveFolderTxt.Location = new System.Drawing.Point(8, 15);
             this.txtRemoveFolderTxt.Name = "txtRemoveFolderTxt";
             this.txtRemoveFolderTxt.ReadOnly = true;
-            this.txtRemoveFolderTxt.Size = new System.Drawing.Size(677, 21);
+            this.txtRemoveFolderTxt.Size = new System.Drawing.Size(936, 21);
             this.txtRemoveFolderTxt.TabIndex = 2;
             // 
             // btnRemoveFolderStart
             // 
             this.btnRemoveFolderStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveFolderStart.Location = new System.Drawing.Point(706, 5);
+            this.btnRemoveFolderStart.Location = new System.Drawing.Point(964, 5);
             this.btnRemoveFolderStart.Name = "btnRemoveFolderStart";
             this.btnRemoveFolderStart.Size = new System.Drawing.Size(75, 39);
             this.btnRemoveFolderStart.TabIndex = 1;
@@ -988,7 +1009,7 @@
             // btnRemoveFolderScan
             // 
             this.btnRemoveFolderScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveFolderScan.Location = new System.Drawing.Point(787, 5);
+            this.btnRemoveFolderScan.Location = new System.Drawing.Point(1046, 5);
             this.btnRemoveFolderScan.Name = "btnRemoveFolderScan";
             this.btnRemoveFolderScan.Size = new System.Drawing.Size(75, 39);
             this.btnRemoveFolderScan.TabIndex = 0;
@@ -1001,7 +1022,7 @@
             this.tabPage8.Controls.Add(this.panel27);
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(865, 580);
+            this.tabPage8.Size = new System.Drawing.Size(1124, 580);
             this.tabPage8.TabIndex = 8;
             this.tabPage8.Text = "批量重命名";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -1013,7 +1034,7 @@
             this.panel27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel27.Location = new System.Drawing.Point(0, 0);
             this.panel27.Name = "panel27";
-            this.panel27.Size = new System.Drawing.Size(865, 580);
+            this.panel27.Size = new System.Drawing.Size(1124, 580);
             this.panel27.TabIndex = 2;
             // 
             // panel25
@@ -1022,7 +1043,7 @@
             this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel25.Location = new System.Drawing.Point(0, 51);
             this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(865, 529);
+            this.panel25.Size = new System.Drawing.Size(1124, 529);
             this.panel25.TabIndex = 2;
             // 
             // richTextBox2
@@ -1030,7 +1051,7 @@
             this.richTextBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox2.Location = new System.Drawing.Point(0, 0);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(865, 529);
+            this.richTextBox2.Size = new System.Drawing.Size(1124, 529);
             this.richTextBox2.TabIndex = 0;
             this.richTextBox2.Text = "";
             // 
@@ -1043,13 +1064,13 @@
             this.panel26.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel26.Location = new System.Drawing.Point(0, 0);
             this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(865, 51);
+            this.panel26.Size = new System.Drawing.Size(1124, 51);
             this.panel26.TabIndex = 1;
             // 
             // btnManualRename
             // 
             this.btnManualRename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnManualRename.Location = new System.Drawing.Point(621, 7);
+            this.btnManualRename.Location = new System.Drawing.Point(880, 7);
             this.btnManualRename.Name = "btnManualRename";
             this.btnManualRename.Size = new System.Drawing.Size(75, 39);
             this.btnManualRename.TabIndex = 6;
@@ -1064,13 +1085,13 @@
             this.txtRenameTxt.Location = new System.Drawing.Point(5, 17);
             this.txtRenameTxt.Name = "txtRenameTxt";
             this.txtRenameTxt.ReadOnly = true;
-            this.txtRenameTxt.Size = new System.Drawing.Size(593, 21);
+            this.txtRenameTxt.Size = new System.Drawing.Size(852, 21);
             this.txtRenameTxt.TabIndex = 5;
             // 
             // btnRenameStart
             // 
             this.btnRenameStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRenameStart.Location = new System.Drawing.Point(703, 7);
+            this.btnRenameStart.Location = new System.Drawing.Point(962, 7);
             this.btnRenameStart.Name = "btnRenameStart";
             this.btnRenameStart.Size = new System.Drawing.Size(75, 39);
             this.btnRenameStart.TabIndex = 4;
@@ -1081,7 +1102,7 @@
             // btnRenameScan
             // 
             this.btnRenameScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRenameScan.Location = new System.Drawing.Point(784, 7);
+            this.btnRenameScan.Location = new System.Drawing.Point(1042, 7);
             this.btnRenameScan.Name = "btnRenameScan";
             this.btnRenameScan.Size = new System.Drawing.Size(75, 39);
             this.btnRenameScan.TabIndex = 3;
@@ -1093,9 +1114,9 @@
             // 
             this.tabPage9.Controls.Add(this.panel28);
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
-            this.tabPage9.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(865, 580);
+            this.tabPage9.Size = new System.Drawing.Size(1124, 580);
             this.tabPage9.TabIndex = 9;
             this.tabPage9.Text = "搜磁链";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -1106,9 +1127,9 @@
             this.panel28.Controls.Add(this.panel29);
             this.panel28.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel28.Location = new System.Drawing.Point(0, 0);
-            this.panel28.Margin = new System.Windows.Forms.Padding(2);
+            this.panel28.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(865, 580);
+            this.panel28.Size = new System.Drawing.Size(1124, 580);
             this.panel28.TabIndex = 0;
             // 
             // panel30
@@ -1116,9 +1137,9 @@
             this.panel30.Controls.Add(this.listView3);
             this.panel30.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel30.Location = new System.Drawing.Point(0, 49);
-            this.panel30.Margin = new System.Windows.Forms.Padding(2);
+            this.panel30.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(865, 531);
+            this.panel30.Size = new System.Drawing.Size(1124, 531);
             this.panel30.TabIndex = 1;
             // 
             // listView3
@@ -1133,9 +1154,9 @@
             this.listView3.FullRowSelect = true;
             this.listView3.HideSelection = false;
             this.listView3.Location = new System.Drawing.Point(0, 0);
-            this.listView3.Margin = new System.Windows.Forms.Padding(2);
+            this.listView3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listView3.Name = "listView3";
-            this.listView3.Size = new System.Drawing.Size(865, 531);
+            this.listView3.Size = new System.Drawing.Size(1124, 531);
             this.listView3.TabIndex = 0;
             this.listView3.UseCompatibleStateImageBehavior = false;
             this.listView3.View = System.Windows.Forms.View.Details;
@@ -1174,9 +1195,9 @@
             this.panel29.Controls.Add(this.txtSeedSearchContent);
             this.panel29.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel29.Location = new System.Drawing.Point(0, 0);
-            this.panel29.Margin = new System.Windows.Forms.Padding(2);
+            this.panel29.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel29.Name = "panel29";
-            this.panel29.Size = new System.Drawing.Size(865, 49);
+            this.panel29.Size = new System.Drawing.Size(1124, 49);
             this.panel29.TabIndex = 0;
             // 
             // cbSukebei
@@ -1185,7 +1206,7 @@
             this.cbSukebei.Checked = true;
             this.cbSukebei.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbSukebei.Location = new System.Drawing.Point(82, 31);
-            this.cbSukebei.Margin = new System.Windows.Forms.Padding(2);
+            this.cbSukebei.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbSukebei.Name = "cbSukebei";
             this.cbSukebei.Size = new System.Drawing.Size(66, 16);
             this.cbSukebei.TabIndex = 3;
@@ -1196,7 +1217,7 @@
             // 
             this.cbBtsow.AutoSize = true;
             this.cbBtsow.Location = new System.Drawing.Point(5, 31);
-            this.cbBtsow.Margin = new System.Windows.Forms.Padding(2);
+            this.cbBtsow.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbBtsow.Name = "cbBtsow";
             this.cbBtsow.Size = new System.Drawing.Size(54, 16);
             this.cbBtsow.TabIndex = 2;
@@ -1206,8 +1227,8 @@
             // btnSearchSeed
             // 
             this.btnSearchSeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearchSeed.Location = new System.Drawing.Point(774, 7);
-            this.btnSearchSeed.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSearchSeed.Location = new System.Drawing.Point(1033, 7);
+            this.btnSearchSeed.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnSearchSeed.Name = "btnSearchSeed";
             this.btnSearchSeed.Size = new System.Drawing.Size(80, 33);
             this.btnSearchSeed.TabIndex = 1;
@@ -1220,18 +1241,18 @@
             this.txtSeedSearchContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSeedSearchContent.Location = new System.Drawing.Point(4, 7);
-            this.txtSeedSearchContent.Margin = new System.Windows.Forms.Padding(2);
+            this.txtSeedSearchContent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtSeedSearchContent.Name = "txtSeedSearchContent";
-            this.txtSeedSearchContent.Size = new System.Drawing.Size(752, 21);
+            this.txtSeedSearchContent.Size = new System.Drawing.Size(1010, 21);
             this.txtSeedSearchContent.TabIndex = 0;
             // 
             // tabPage10
             // 
             this.tabPage10.Controls.Add(this.panel31);
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
-            this.tabPage10.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(865, 580);
+            this.tabPage10.Size = new System.Drawing.Size(1124, 580);
             this.tabPage10.TabIndex = 10;
             this.tabPage10.Text = "扫描Jav";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -1242,9 +1263,9 @@
             this.panel31.Controls.Add(this.panel32);
             this.panel31.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel31.Location = new System.Drawing.Point(0, 0);
-            this.panel31.Margin = new System.Windows.Forms.Padding(2);
+            this.panel31.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel31.Name = "panel31";
-            this.panel31.Size = new System.Drawing.Size(865, 580);
+            this.panel31.Size = new System.Drawing.Size(1124, 580);
             this.panel31.TabIndex = 0;
             // 
             // panel33
@@ -1253,18 +1274,18 @@
             this.panel33.Controls.Add(this.listView4);
             this.panel33.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel33.Location = new System.Drawing.Point(0, 74);
-            this.panel33.Margin = new System.Windows.Forms.Padding(2);
+            this.panel33.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(865, 506);
+            this.panel33.Size = new System.Drawing.Size(1124, 506);
             this.panel33.TabIndex = 1;
             // 
             // richTextBox3
             // 
             this.richTextBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox3.Location = new System.Drawing.Point(447, 0);
-            this.richTextBox3.Margin = new System.Windows.Forms.Padding(2);
+            this.richTextBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(418, 506);
+            this.richTextBox3.Size = new System.Drawing.Size(677, 506);
             this.richTextBox3.TabIndex = 1;
             this.richTextBox3.Text = "";
             this.richTextBox3.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.richTextBox3_ContentsResized);
@@ -1278,7 +1299,7 @@
             this.listView4.FullRowSelect = true;
             this.listView4.HideSelection = false;
             this.listView4.Location = new System.Drawing.Point(0, 0);
-            this.listView4.Margin = new System.Windows.Forms.Padding(2);
+            this.listView4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listView4.Name = "listView4";
             this.listView4.Size = new System.Drawing.Size(447, 506);
             this.listView4.TabIndex = 0;
@@ -1311,15 +1332,15 @@
             this.panel32.Controls.Add(this.txtJavScanTitle);
             this.panel32.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel32.Location = new System.Drawing.Point(0, 0);
-            this.panel32.Margin = new System.Windows.Forms.Padding(2);
+            this.panel32.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel32.Name = "panel32";
-            this.panel32.Size = new System.Drawing.Size(865, 74);
+            this.panel32.Size = new System.Drawing.Size(1124, 74);
             this.panel32.TabIndex = 0;
             // 
             // txtPrefix
             // 
             this.txtPrefix.Location = new System.Drawing.Point(291, 49);
-            this.txtPrefix.Margin = new System.Windows.Forms.Padding(2);
+            this.txtPrefix.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPrefix.Name = "txtPrefix";
             this.txtPrefix.Size = new System.Drawing.Size(80, 21);
             this.txtPrefix.TabIndex = 11;
@@ -1328,7 +1349,7 @@
             // 
             this.rbPrefix.AutoSize = true;
             this.rbPrefix.Location = new System.Drawing.Point(233, 50);
-            this.rbPrefix.Margin = new System.Windows.Forms.Padding(2);
+            this.rbPrefix.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbPrefix.Name = "rbPrefix";
             this.rbPrefix.Size = new System.Drawing.Size(59, 16);
             this.rbPrefix.TabIndex = 10;
@@ -1338,8 +1359,8 @@
             // btnJavScanDaily
             // 
             this.btnJavScanDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnJavScanDaily.Location = new System.Drawing.Point(739, 11);
-            this.btnJavScanDaily.Margin = new System.Windows.Forms.Padding(2);
+            this.btnJavScanDaily.Location = new System.Drawing.Point(998, 11);
+            this.btnJavScanDaily.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnJavScanDaily.Name = "btnJavScanDaily";
             this.btnJavScanDaily.Size = new System.Drawing.Size(56, 53);
             this.btnJavScanDaily.TabIndex = 9;
@@ -1370,8 +1391,8 @@
             // btnJavScan
             // 
             this.btnJavScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnJavScan.Location = new System.Drawing.Point(799, 11);
-            this.btnJavScan.Margin = new System.Windows.Forms.Padding(2);
+            this.btnJavScan.Location = new System.Drawing.Point(1058, 11);
+            this.btnJavScan.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnJavScan.Name = "btnJavScan";
             this.btnJavScan.Size = new System.Drawing.Size(56, 53);
             this.btnJavScan.TabIndex = 6;
@@ -1383,7 +1404,7 @@
             // 
             this.rbDir.AutoSize = true;
             this.rbDir.Location = new System.Drawing.Point(175, 50);
-            this.rbDir.Margin = new System.Windows.Forms.Padding(2);
+            this.rbDir.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbDir.Name = "rbDir";
             this.rbDir.Size = new System.Drawing.Size(59, 16);
             this.rbDir.TabIndex = 5;
@@ -1395,7 +1416,7 @@
             // 
             this.rbCom.AutoSize = true;
             this.rbCom.Location = new System.Drawing.Point(118, 49);
-            this.rbCom.Margin = new System.Windows.Forms.Padding(2);
+            this.rbCom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbCom.Name = "rbCom";
             this.rbCom.Size = new System.Drawing.Size(59, 16);
             this.rbCom.TabIndex = 4;
@@ -1407,7 +1428,7 @@
             // 
             this.rbActress.AutoSize = true;
             this.rbActress.Location = new System.Drawing.Point(62, 49);
-            this.rbActress.Margin = new System.Windows.Forms.Padding(2);
+            this.rbActress.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbActress.Name = "rbActress";
             this.rbActress.Size = new System.Drawing.Size(59, 16);
             this.rbActress.TabIndex = 3;
@@ -1420,7 +1441,7 @@
             this.rbCate.AutoSize = true;
             this.rbCate.Checked = true;
             this.rbCate.Location = new System.Drawing.Point(5, 50);
-            this.rbCate.Margin = new System.Windows.Forms.Padding(2);
+            this.rbCate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbCate.Name = "rbCate";
             this.rbCate.Size = new System.Drawing.Size(59, 16);
             this.rbCate.TabIndex = 2;
@@ -1432,7 +1453,7 @@
             // txtJavScanUrl
             // 
             this.txtJavScanUrl.Location = new System.Drawing.Point(4, 28);
-            this.txtJavScanUrl.Margin = new System.Windows.Forms.Padding(2);
+            this.txtJavScanUrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtJavScanUrl.Name = "txtJavScanUrl";
             this.txtJavScanUrl.Size = new System.Drawing.Size(321, 21);
             this.txtJavScanUrl.TabIndex = 1;
@@ -1440,7 +1461,7 @@
             // txtJavScanTitle
             // 
             this.txtJavScanTitle.Location = new System.Drawing.Point(4, 7);
-            this.txtJavScanTitle.Margin = new System.Windows.Forms.Padding(2);
+            this.txtJavScanTitle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtJavScanTitle.Name = "txtJavScanTitle";
             this.txtJavScanTitle.Size = new System.Drawing.Size(321, 21);
             this.txtJavScanTitle.TabIndex = 0;
@@ -1450,7 +1471,7 @@
             this.tabPage11.Controls.Add(this.panel34);
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(865, 580);
+            this.tabPage11.Size = new System.Drawing.Size(1124, 580);
             this.tabPage11.TabIndex = 11;
             this.tabPage11.Text = "刷新匹配";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -1462,7 +1483,7 @@
             this.panel34.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel34.Location = new System.Drawing.Point(0, 0);
             this.panel34.Name = "panel34";
-            this.panel34.Size = new System.Drawing.Size(865, 580);
+            this.panel34.Size = new System.Drawing.Size(1124, 580);
             this.panel34.TabIndex = 0;
             // 
             // panel36
@@ -1471,7 +1492,7 @@
             this.panel36.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel36.Location = new System.Drawing.Point(0, 45);
             this.panel36.Name = "panel36";
-            this.panel36.Size = new System.Drawing.Size(865, 535);
+            this.panel36.Size = new System.Drawing.Size(1124, 535);
             this.panel36.TabIndex = 2;
             // 
             // rtbMatch
@@ -1479,7 +1500,7 @@
             this.rtbMatch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbMatch.Location = new System.Drawing.Point(0, 0);
             this.rtbMatch.Name = "rtbMatch";
-            this.rtbMatch.Size = new System.Drawing.Size(865, 535);
+            this.rtbMatch.Size = new System.Drawing.Size(1124, 535);
             this.rtbMatch.TabIndex = 0;
             this.rtbMatch.Text = "";
             // 
@@ -1489,7 +1510,7 @@
             this.panel35.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel35.Location = new System.Drawing.Point(0, 0);
             this.panel35.Name = "panel35";
-            this.panel35.Size = new System.Drawing.Size(865, 45);
+            this.panel35.Size = new System.Drawing.Size(1124, 45);
             this.panel35.TabIndex = 1;
             // 
             // btnMatch
@@ -1507,7 +1528,7 @@
             this.tabPage14.Controls.Add(this.splitContainer1);
             this.tabPage14.Location = new System.Drawing.Point(4, 22);
             this.tabPage14.Name = "tabPage14";
-            this.tabPage14.Size = new System.Drawing.Size(865, 580);
+            this.tabPage14.Size = new System.Drawing.Size(1124, 580);
             this.tabPage14.TabIndex = 14;
             this.tabPage14.Text = "找视频";
             this.tabPage14.UseVisualStyleBackColor = true;
@@ -1525,8 +1546,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel40);
-            this.splitContainer1.Size = new System.Drawing.Size(865, 580);
-            this.splitContainer1.SplitterDistance = 373;
+            this.splitContainer1.Size = new System.Drawing.Size(1124, 580);
+            this.splitContainer1.SplitterDistance = 537;
             this.splitContainer1.TabIndex = 0;
             // 
             // panel37
@@ -1536,7 +1557,7 @@
             this.panel37.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel37.Location = new System.Drawing.Point(0, 0);
             this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(373, 580);
+            this.panel37.Size = new System.Drawing.Size(537, 580);
             this.panel37.TabIndex = 0;
             // 
             // panel39
@@ -1545,7 +1566,7 @@
             this.panel39.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel39.Location = new System.Drawing.Point(0, 48);
             this.panel39.Name = "panel39";
-            this.panel39.Size = new System.Drawing.Size(373, 532);
+            this.panel39.Size = new System.Drawing.Size(537, 532);
             this.panel39.TabIndex = 2;
             // 
             // lvwFind
@@ -1559,7 +1580,7 @@
             this.lvwFind.HideSelection = false;
             this.lvwFind.Location = new System.Drawing.Point(0, 0);
             this.lvwFind.Name = "lvwFind";
-            this.lvwFind.Size = new System.Drawing.Size(373, 532);
+            this.lvwFind.Size = new System.Drawing.Size(537, 532);
             this.lvwFind.TabIndex = 0;
             this.lvwFind.UseCompatibleStateImageBehavior = false;
             this.lvwFind.View = System.Windows.Forms.View.Details;
@@ -1590,13 +1611,13 @@
             this.panel38.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel38.Location = new System.Drawing.Point(0, 0);
             this.panel38.Name = "panel38";
-            this.panel38.Size = new System.Drawing.Size(373, 48);
+            this.panel38.Size = new System.Drawing.Size(537, 48);
             this.panel38.TabIndex = 1;
             // 
             // btnFind
             // 
             this.btnFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFind.Location = new System.Drawing.Point(295, 14);
+            this.btnFind.Location = new System.Drawing.Point(459, 14);
             this.btnFind.Name = "btnFind";
             this.btnFind.Size = new System.Drawing.Size(75, 23);
             this.btnFind.TabIndex = 1;
@@ -1610,7 +1631,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFind.Location = new System.Drawing.Point(4, 14);
             this.txtFind.Name = "txtFind";
-            this.txtFind.Size = new System.Drawing.Size(285, 21);
+            this.txtFind.Size = new System.Drawing.Size(449, 21);
             this.txtFind.TabIndex = 0;
             this.txtFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFind_KeyDown);
             // 
@@ -1621,7 +1642,7 @@
             this.panel40.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel40.Location = new System.Drawing.Point(0, 0);
             this.panel40.Name = "panel40";
-            this.panel40.Size = new System.Drawing.Size(488, 580);
+            this.panel40.Size = new System.Drawing.Size(583, 580);
             this.panel40.TabIndex = 1;
             // 
             // panel42
@@ -1630,7 +1651,7 @@
             this.panel42.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel42.Location = new System.Drawing.Point(0, 48);
             this.panel42.Name = "panel42";
-            this.panel42.Size = new System.Drawing.Size(488, 532);
+            this.panel42.Size = new System.Drawing.Size(583, 532);
             this.panel42.TabIndex = 2;
             // 
             // lvwRecnet
@@ -1644,7 +1665,7 @@
             this.lvwRecnet.HideSelection = false;
             this.lvwRecnet.Location = new System.Drawing.Point(0, 0);
             this.lvwRecnet.Name = "lvwRecnet";
-            this.lvwRecnet.Size = new System.Drawing.Size(488, 532);
+            this.lvwRecnet.Size = new System.Drawing.Size(583, 532);
             this.lvwRecnet.TabIndex = 1;
             this.lvwRecnet.UseCompatibleStateImageBehavior = false;
             this.lvwRecnet.View = System.Windows.Forms.View.Details;
@@ -1677,15 +1698,15 @@
             this.panel41.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel41.Location = new System.Drawing.Point(0, 0);
             this.panel41.Name = "panel41";
-            this.panel41.Size = new System.Drawing.Size(488, 48);
+            this.panel41.Size = new System.Drawing.Size(583, 48);
             this.panel41.TabIndex = 1;
             // 
             // rbSizeA
             // 
             this.rbSizeA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeA.AutoSize = true;
-            this.rbSizeA.Location = new System.Drawing.Point(407, 5);
-            this.rbSizeA.Margin = new System.Windows.Forms.Padding(2);
+            this.rbSizeA.Location = new System.Drawing.Point(503, 5);
+            this.rbSizeA.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbSizeA.Name = "rbSizeA";
             this.rbSizeA.Size = new System.Drawing.Size(71, 16);
             this.rbSizeA.TabIndex = 12;
@@ -1697,8 +1718,8 @@
             // 
             this.rbSizeD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeD.AutoSize = true;
-            this.rbSizeD.Location = new System.Drawing.Point(407, 26);
-            this.rbSizeD.Margin = new System.Windows.Forms.Padding(2);
+            this.rbSizeD.Location = new System.Drawing.Point(503, 26);
+            this.rbSizeD.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbSizeD.Name = "rbSizeD";
             this.rbSizeD.Size = new System.Drawing.Size(77, 16);
             this.rbSizeD.TabIndex = 11;
@@ -1710,8 +1731,8 @@
             // 
             this.rbDateA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateA.AutoSize = true;
-            this.rbDateA.Location = new System.Drawing.Point(332, 5);
-            this.rbDateA.Margin = new System.Windows.Forms.Padding(2);
+            this.rbDateA.Location = new System.Drawing.Point(428, 5);
+            this.rbDateA.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbDateA.Name = "rbDateA";
             this.rbDateA.Size = new System.Drawing.Size(71, 16);
             this.rbDateA.TabIndex = 10;
@@ -1724,8 +1745,8 @@
             this.rbDateD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateD.AutoSize = true;
             this.rbDateD.Checked = true;
-            this.rbDateD.Location = new System.Drawing.Point(332, 26);
-            this.rbDateD.Margin = new System.Windows.Forms.Padding(2);
+            this.rbDateD.Location = new System.Drawing.Point(428, 26);
+            this.rbDateD.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbDateD.Name = "rbDateD";
             this.rbDateD.Size = new System.Drawing.Size(77, 16);
             this.rbDateD.TabIndex = 9;
@@ -1737,8 +1758,8 @@
             // btnRecent
             // 
             this.btnRecent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRecent.Location = new System.Drawing.Point(279, 12);
-            this.btnRecent.Margin = new System.Windows.Forms.Padding(2);
+            this.btnRecent.Location = new System.Drawing.Point(375, 12);
+            this.btnRecent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnRecent.Name = "btnRecent";
             this.btnRecent.Size = new System.Drawing.Size(43, 25);
             this.btnRecent.TabIndex = 8;
@@ -1751,9 +1772,9 @@
             this.txtRecent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRecent.Location = new System.Drawing.Point(2, 14);
-            this.txtRecent.Margin = new System.Windows.Forms.Padding(2);
+            this.txtRecent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtRecent.Name = "txtRecent";
-            this.txtRecent.Size = new System.Drawing.Size(273, 21);
+            this.txtRecent.Size = new System.Drawing.Size(368, 21);
             this.txtRecent.TabIndex = 7;
             this.txtRecent.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtRecent_MouseClick);
             // 
@@ -1763,10 +1784,10 @@
             this.tabPage1.Controls.Add(this.panel4);
             this.tabPage1.Controls.Add(this.panel2);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(865, 580);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Size = new System.Drawing.Size(1124, 580);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "手动合并视频";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1776,9 +1797,9 @@
             this.panel6.Controls.Add(this.listView1);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(2, 43);
-            this.panel6.Margin = new System.Windows.Forms.Padding(2);
+            this.panel6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(861, 438);
+            this.panel6.Size = new System.Drawing.Size(1120, 438);
             this.panel6.TabIndex = 8;
             // 
             // listView1
@@ -1793,7 +1814,7 @@
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(861, 438);
+            this.listView1.Size = new System.Drawing.Size(1120, 438);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -1824,9 +1845,9 @@
             this.panel4.Controls.Add(this.pb);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(2, 481);
-            this.panel4.Margin = new System.Windows.Forms.Padding(2);
+            this.panel4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(861, 97);
+            this.panel4.Size = new System.Drawing.Size(1120, 97);
             this.panel4.TabIndex = 7;
             // 
             // cbMove
@@ -1842,7 +1863,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(779, 29);
+            this.btnSave.Location = new System.Drawing.Point(1038, 29);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 4;
@@ -1877,7 +1898,7 @@
             this.txtSave.Location = new System.Drawing.Point(137, 30);
             this.txtSave.Name = "txtSave";
             this.txtSave.ReadOnly = true;
-            this.txtSave.Size = new System.Drawing.Size(637, 21);
+            this.txtSave.Size = new System.Drawing.Size(896, 21);
             this.txtSave.TabIndex = 3;
             // 
             // pb
@@ -1886,7 +1907,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pb.Location = new System.Drawing.Point(137, 70);
             this.pb.Name = "pb";
-            this.pb.Size = new System.Drawing.Size(636, 23);
+            this.pb.Size = new System.Drawing.Size(895, 23);
             this.pb.TabIndex = 5;
             // 
             // panel2
@@ -1895,9 +1916,9 @@
             this.panel2.Controls.Add(this.btnImport);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(2, 2);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(861, 41);
+            this.panel2.Size = new System.Drawing.Size(1120, 41);
             this.panel2.TabIndex = 6;
             // 
             // txtHopeName
@@ -1905,15 +1926,15 @@
             this.txtHopeName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtHopeName.Location = new System.Drawing.Point(10, 11);
-            this.txtHopeName.Margin = new System.Windows.Forms.Padding(2);
+            this.txtHopeName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHopeName.Name = "txtHopeName";
-            this.txtHopeName.Size = new System.Drawing.Size(759, 21);
+            this.txtHopeName.Size = new System.Drawing.Size(1018, 21);
             this.txtHopeName.TabIndex = 9;
             // 
             // btnImport
             // 
             this.btnImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnImport.Location = new System.Drawing.Point(779, 9);
+            this.btnImport.Location = new System.Drawing.Point(1038, 9);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(75, 23);
             this.btnImport.TabIndex = 1;
@@ -1926,9 +1947,9 @@
             this.tabPage13.Controls.Add(this.panel46);
             this.tabPage13.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage13.Location = new System.Drawing.Point(4, 22);
-            this.tabPage13.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage13.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(865, 580);
+            this.tabPage13.Size = new System.Drawing.Size(1124, 580);
             this.tabPage13.TabIndex = 16;
             this.tabPage13.Text = "补齐缺失";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -1939,9 +1960,9 @@
             this.panel46.Controls.Add(this.panel47);
             this.panel46.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel46.Location = new System.Drawing.Point(0, 0);
-            this.panel46.Margin = new System.Windows.Forms.Padding(2);
+            this.panel46.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel46.Name = "panel46";
-            this.panel46.Size = new System.Drawing.Size(865, 580);
+            this.panel46.Size = new System.Drawing.Size(1124, 580);
             this.panel46.TabIndex = 0;
             // 
             // panel48
@@ -1949,9 +1970,9 @@
             this.panel48.Controls.Add(this.lvwMissing);
             this.panel48.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel48.Location = new System.Drawing.Point(0, 103);
-            this.panel48.Margin = new System.Windows.Forms.Padding(2);
+            this.panel48.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel48.Name = "panel48";
-            this.panel48.Size = new System.Drawing.Size(865, 477);
+            this.panel48.Size = new System.Drawing.Size(1124, 477);
             this.panel48.TabIndex = 2;
             // 
             // lvwMissing
@@ -1965,9 +1986,9 @@
             this.lvwMissing.FullRowSelect = true;
             this.lvwMissing.HideSelection = false;
             this.lvwMissing.Location = new System.Drawing.Point(0, 0);
-            this.lvwMissing.Margin = new System.Windows.Forms.Padding(2);
+            this.lvwMissing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lvwMissing.Name = "lvwMissing";
-            this.lvwMissing.Size = new System.Drawing.Size(865, 477);
+            this.lvwMissing.Size = new System.Drawing.Size(1124, 477);
             this.lvwMissing.TabIndex = 0;
             this.lvwMissing.UseCompatibleStateImageBehavior = false;
             this.lvwMissing.View = System.Windows.Forms.View.Details;
@@ -2007,16 +2028,16 @@
             this.panel47.Controls.Add(this.txtMissing);
             this.panel47.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel47.Location = new System.Drawing.Point(0, 0);
-            this.panel47.Margin = new System.Windows.Forms.Padding(2);
+            this.panel47.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel47.Name = "panel47";
-            this.panel47.Size = new System.Drawing.Size(865, 103);
+            this.panel47.Size = new System.Drawing.Size(1124, 103);
             this.panel47.TabIndex = 1;
             // 
             // btnMissing115
             // 
             this.btnMissing115.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMissing115.Location = new System.Drawing.Point(777, 72);
-            this.btnMissing115.Margin = new System.Windows.Forms.Padding(2);
+            this.btnMissing115.Location = new System.Drawing.Point(1036, 72);
+            this.btnMissing115.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnMissing115.Name = "btnMissing115";
             this.btnMissing115.Size = new System.Drawing.Size(65, 24);
             this.btnMissing115.TabIndex = 8;
@@ -2029,16 +2050,16 @@
             this.pbMissing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbMissing.Location = new System.Drawing.Point(61, 75);
-            this.pbMissing.Margin = new System.Windows.Forms.Padding(2);
+            this.pbMissing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbMissing.Name = "pbMissing";
-            this.pbMissing.Size = new System.Drawing.Size(697, 21);
+            this.pbMissing.Size = new System.Drawing.Size(956, 21);
             this.pbMissing.TabIndex = 7;
             // 
             // btMissingSearch
             // 
             this.btMissingSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btMissingSearch.Location = new System.Drawing.Point(777, 41);
-            this.btMissingSearch.Margin = new System.Windows.Forms.Padding(2);
+            this.btMissingSearch.Location = new System.Drawing.Point(1036, 41);
+            this.btMissingSearch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btMissingSearch.Name = "btMissingSearch";
             this.btMissingSearch.Size = new System.Drawing.Size(65, 24);
             this.btMissingSearch.TabIndex = 6;
@@ -2058,8 +2079,8 @@
             // btMissing
             // 
             this.btMissing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btMissing.Location = new System.Drawing.Point(777, 7);
-            this.btMissing.Margin = new System.Windows.Forms.Padding(2);
+            this.btMissing.Location = new System.Drawing.Point(1036, 7);
+            this.btMissing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btMissing.Name = "btMissing";
             this.btMissing.Size = new System.Drawing.Size(65, 24);
             this.btMissing.TabIndex = 4;
@@ -2072,7 +2093,7 @@
             this.rbMissingPrefix.AutoSize = true;
             this.rbMissingPrefix.Checked = true;
             this.rbMissingPrefix.Location = new System.Drawing.Point(4, 47);
-            this.rbMissingPrefix.Margin = new System.Windows.Forms.Padding(2);
+            this.rbMissingPrefix.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbMissingPrefix.Name = "rbMissingPrefix";
             this.rbMissingPrefix.Size = new System.Drawing.Size(50, 21);
             this.rbMissingPrefix.TabIndex = 3;
@@ -2084,7 +2105,7 @@
             // 
             this.rbMissingActress.AutoSize = true;
             this.rbMissingActress.Location = new System.Drawing.Point(4, 25);
-            this.rbMissingActress.Margin = new System.Windows.Forms.Padding(2);
+            this.rbMissingActress.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbMissingActress.Name = "rbMissingActress";
             this.rbMissingActress.Size = new System.Drawing.Size(50, 21);
             this.rbMissingActress.TabIndex = 2;
@@ -2095,7 +2116,7 @@
             // 
             this.rbMissingCate.AutoSize = true;
             this.rbMissingCate.Location = new System.Drawing.Point(4, 3);
-            this.rbMissingCate.Margin = new System.Windows.Forms.Padding(2);
+            this.rbMissingCate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbMissingCate.Name = "rbMissingCate";
             this.rbMissingCate.Size = new System.Drawing.Size(50, 21);
             this.rbMissingCate.TabIndex = 1;
@@ -2107,10 +2128,123 @@
             this.txtMissing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMissing.Location = new System.Drawing.Point(61, 25);
-            this.txtMissing.Margin = new System.Windows.Forms.Padding(2);
+            this.txtMissing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtMissing.Name = "txtMissing";
-            this.txtMissing.Size = new System.Drawing.Size(697, 23);
+            this.txtMissing.Size = new System.Drawing.Size(956, 23);
             this.txtMissing.TabIndex = 0;
+            // 
+            // tabPage15
+            // 
+            this.tabPage15.Controls.Add(this.panel49);
+            this.tabPage15.Location = new System.Drawing.Point(4, 22);
+            this.tabPage15.Name = "tabPage15";
+            this.tabPage15.Size = new System.Drawing.Size(1124, 580);
+            this.tabPage15.TabIndex = 17;
+            this.tabPage15.Text = "日常更新";
+            this.tabPage15.UseVisualStyleBackColor = true;
+            // 
+            // panel49
+            // 
+            this.panel49.Controls.Add(this.panel51);
+            this.panel49.Controls.Add(this.panel50);
+            this.panel49.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel49.Location = new System.Drawing.Point(0, 0);
+            this.panel49.Name = "panel49";
+            this.panel49.Size = new System.Drawing.Size(1124, 580);
+            this.panel49.TabIndex = 0;
+            // 
+            // panel51
+            // 
+            this.panel51.Controls.Add(this.lwDaily);
+            this.panel51.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel51.Location = new System.Drawing.Point(0, 51);
+            this.panel51.Name = "panel51";
+            this.panel51.Size = new System.Drawing.Size(1124, 529);
+            this.panel51.TabIndex = 2;
+            // 
+            // lwDaily
+            // 
+            this.lwDaily.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lwDaily.HideSelection = false;
+            this.lwDaily.LargeImageList = this.ilDaily;
+            this.lwDaily.Location = new System.Drawing.Point(0, 0);
+            this.lwDaily.Name = "lwDaily";
+            this.lwDaily.Size = new System.Drawing.Size(1124, 529);
+            this.lwDaily.TabIndex = 0;
+            this.lwDaily.UseCompatibleStateImageBehavior = false;
+            this.lwDaily.SelectedIndexChanged += new System.EventHandler(this.lwDaily_SelectedIndexChanged);
+            this.lwDaily.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lwDaily_MouseClick);
+            // 
+            // ilDaily
+            // 
+            this.ilDaily.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.ilDaily.ImageSize = new System.Drawing.Size(250, 200);
+            this.ilDaily.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // panel50
+            // 
+            this.panel50.Controls.Add(this.pbDaily);
+            this.panel50.Controls.Add(this.btnDaily);
+            this.panel50.Controls.Add(this.cbDailyOnly);
+            this.panel50.Controls.Add(this.txtDailyPage);
+            this.panel50.Controls.Add(this.label3);
+            this.panel50.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel50.Location = new System.Drawing.Point(0, 0);
+            this.panel50.Name = "panel50";
+            this.panel50.Size = new System.Drawing.Size(1124, 51);
+            this.panel50.TabIndex = 1;
+            // 
+            // pbDaily
+            // 
+            this.pbDaily.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbDaily.Location = new System.Drawing.Point(266, 12);
+            this.pbDaily.Name = "pbDaily";
+            this.pbDaily.Size = new System.Drawing.Size(752, 23);
+            this.pbDaily.TabIndex = 4;
+            this.pbDaily.Click += new System.EventHandler(this.pbDaily_Click);
+            // 
+            // btnDaily
+            // 
+            this.btnDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDaily.Location = new System.Drawing.Point(1039, 7);
+            this.btnDaily.Name = "btnDaily";
+            this.btnDaily.Size = new System.Drawing.Size(75, 38);
+            this.btnDaily.TabIndex = 3;
+            this.btnDaily.Text = "搜索";
+            this.btnDaily.UseVisualStyleBackColor = true;
+            this.btnDaily.Click += new System.EventHandler(this.btnDaily_Click);
+            // 
+            // cbDailyOnly
+            // 
+            this.cbDailyOnly.AutoSize = true;
+            this.cbDailyOnly.Checked = true;
+            this.cbDailyOnly.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbDailyOnly.Enabled = false;
+            this.cbDailyOnly.Location = new System.Drawing.Point(177, 17);
+            this.cbDailyOnly.Name = "cbDailyOnly";
+            this.cbDailyOnly.Size = new System.Drawing.Size(72, 16);
+            this.cbDailyOnly.TabIndex = 2;
+            this.cbDailyOnly.Text = "包含匹配";
+            this.cbDailyOnly.UseVisualStyleBackColor = true;
+            this.cbDailyOnly.CheckedChanged += new System.EventHandler(this.cbDailyOnly_CheckedChanged);
+            // 
+            // txtDailyPage
+            // 
+            this.txtDailyPage.Location = new System.Drawing.Point(44, 14);
+            this.txtDailyPage.Name = "txtDailyPage";
+            this.txtDailyPage.Size = new System.Drawing.Size(100, 21);
+            this.txtDailyPage.TabIndex = 1;
+            this.txtDailyPage.Text = "15";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(9, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(29, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "页数";
             // 
             // tabPage12
             // 
@@ -2118,7 +2252,7 @@
             this.tabPage12.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage12.Location = new System.Drawing.Point(4, 22);
             this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(865, 580);
+            this.tabPage12.Size = new System.Drawing.Size(1124, 580);
             this.tabPage12.TabIndex = 15;
             this.tabPage12.Text = "生成报表";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -2130,7 +2264,7 @@
             this.panel43.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel43.Location = new System.Drawing.Point(0, 0);
             this.panel43.Name = "panel43";
-            this.panel43.Size = new System.Drawing.Size(865, 580);
+            this.panel43.Size = new System.Drawing.Size(1124, 580);
             this.panel43.TabIndex = 0;
             // 
             // panel45
@@ -2139,7 +2273,7 @@
             this.panel45.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel45.Location = new System.Drawing.Point(0, 46);
             this.panel45.Name = "panel45";
-            this.panel45.Size = new System.Drawing.Size(865, 534);
+            this.panel45.Size = new System.Drawing.Size(1124, 534);
             this.panel45.TabIndex = 2;
             // 
             // rtbReport
@@ -2147,7 +2281,7 @@
             this.rtbReport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbReport.Location = new System.Drawing.Point(0, 0);
             this.rtbReport.Name = "rtbReport";
-            this.rtbReport.Size = new System.Drawing.Size(865, 534);
+            this.rtbReport.Size = new System.Drawing.Size(1124, 534);
             this.rtbReport.TabIndex = 0;
             this.rtbReport.Text = "";
             // 
@@ -2157,7 +2291,7 @@
             this.panel44.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel44.Location = new System.Drawing.Point(0, 0);
             this.panel44.Name = "panel44";
-            this.panel44.Size = new System.Drawing.Size(865, 46);
+            this.panel44.Size = new System.Drawing.Size(1124, 46);
             this.panel44.TabIndex = 1;
             // 
             // btnReport
@@ -2203,121 +2337,164 @@
             this.treeView3.TabIndex = 0;
             this.treeView3.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView3_AfterSelect);
             // 
-            // tabPage15
+            // tabPage16
             // 
-            this.tabPage15.Controls.Add(this.panel49);
-            this.tabPage15.Location = new System.Drawing.Point(4, 22);
-            this.tabPage15.Name = "tabPage15";
-            this.tabPage15.Size = new System.Drawing.Size(1006, 580);
-            this.tabPage15.TabIndex = 17;
-            this.tabPage15.Text = "日常更新";
-            this.tabPage15.UseVisualStyleBackColor = true;
+            this.tabPage16.Controls.Add(this.panel52);
+            this.tabPage16.Location = new System.Drawing.Point(4, 22);
+            this.tabPage16.Name = "tabPage16";
+            this.tabPage16.Size = new System.Drawing.Size(1124, 580);
+            this.tabPage16.TabIndex = 18;
+            this.tabPage16.Text = "视频播放器";
+            this.tabPage16.UseVisualStyleBackColor = true;
             // 
-            // panel49
+            // panel52
             // 
-            this.panel49.Controls.Add(this.panel51);
-            this.panel49.Controls.Add(this.panel50);
-            this.panel49.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel49.Location = new System.Drawing.Point(0, 0);
-            this.panel49.Name = "panel49";
-            this.panel49.Size = new System.Drawing.Size(1006, 580);
-            this.panel49.TabIndex = 0;
+            this.panel52.Controls.Add(this.panel54);
+            this.panel52.Controls.Add(this.panel53);
+            this.panel52.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel52.Location = new System.Drawing.Point(0, 0);
+            this.panel52.Name = "panel52";
+            this.panel52.Size = new System.Drawing.Size(1124, 580);
+            this.panel52.TabIndex = 0;
             // 
-            // panel50
+            // panel53
             // 
-            this.panel50.Controls.Add(this.pbDaily);
-            this.panel50.Controls.Add(this.btnDaily);
-            this.panel50.Controls.Add(this.cbDailyOnly);
-            this.panel50.Controls.Add(this.txtDailyPage);
-            this.panel50.Controls.Add(this.label3);
-            this.panel50.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel50.Location = new System.Drawing.Point(0, 0);
-            this.panel50.Name = "panel50";
-            this.panel50.Size = new System.Drawing.Size(1006, 51);
-            this.panel50.TabIndex = 1;
+            this.panel53.Controls.Add(this.btnPlayRefresh);
+            this.panel53.Controls.Add(this.lbPlayStatus);
+            this.panel53.Controls.Add(this.btnPlay);
+            this.panel53.Controls.Add(this.label6);
+            this.panel53.Controls.Add(this.cbPlayPrefix);
+            this.panel53.Controls.Add(this.label5);
+            this.panel53.Controls.Add(this.cbPlayCategory);
+            this.panel53.Controls.Add(this.label4);
+            this.panel53.Controls.Add(this.cbPlayActress);
+            this.panel53.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel53.Location = new System.Drawing.Point(0, 0);
+            this.panel53.Name = "panel53";
+            this.panel53.Size = new System.Drawing.Size(242, 580);
+            this.panel53.TabIndex = 1;
             // 
-            // panel51
+            // panel54
             // 
-            this.panel51.Controls.Add(this.lwDaily);
-            this.panel51.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel51.Location = new System.Drawing.Point(0, 51);
-            this.panel51.Name = "panel51";
-            this.panel51.Size = new System.Drawing.Size(1006, 529);
-            this.panel51.TabIndex = 2;
+            this.panel54.Controls.Add(this.lvPlay);
+            this.panel54.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel54.Location = new System.Drawing.Point(242, 0);
+            this.panel54.Name = "panel54";
+            this.panel54.Size = new System.Drawing.Size(882, 580);
+            this.panel54.TabIndex = 2;
             // 
-            // label3
+            // cbPlayActress
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 19);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 12);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "页数";
-            // 
-            // txtDailyPage
-            // 
-            this.txtDailyPage.Location = new System.Drawing.Point(44, 14);
-            this.txtDailyPage.Name = "txtDailyPage";
-            this.txtDailyPage.Size = new System.Drawing.Size(100, 21);
-            this.txtDailyPage.TabIndex = 1;
-            // 
-            // cbDailyOnly
-            // 
-            this.cbDailyOnly.AutoSize = true;
-            this.cbDailyOnly.Checked = true;
-            this.cbDailyOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDailyOnly.Location = new System.Drawing.Point(177, 17);
-            this.cbDailyOnly.Name = "cbDailyOnly";
-            this.cbDailyOnly.Size = new System.Drawing.Size(72, 16);
-            this.cbDailyOnly.TabIndex = 2;
-            this.cbDailyOnly.Text = "包含匹配";
-            this.cbDailyOnly.UseVisualStyleBackColor = true;
-            // 
-            // btnDaily
-            // 
-            this.btnDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDaily.Location = new System.Drawing.Point(921, 7);
-            this.btnDaily.Name = "btnDaily";
-            this.btnDaily.Size = new System.Drawing.Size(75, 38);
-            this.btnDaily.TabIndex = 3;
-            this.btnDaily.Text = "搜索";
-            this.btnDaily.UseVisualStyleBackColor = true;
-            this.btnDaily.Click += new System.EventHandler(this.btnDaily_Click);
-            // 
-            // lwDaily
-            // 
-            this.lwDaily.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lwDaily.HideSelection = false;
-            this.lwDaily.LargeImageList = this.ilDaily;
-            this.lwDaily.Location = new System.Drawing.Point(0, 0);
-            this.lwDaily.Name = "lwDaily";
-            this.lwDaily.Size = new System.Drawing.Size(1006, 529);
-            this.lwDaily.TabIndex = 0;
-            this.lwDaily.UseCompatibleStateImageBehavior = false;
-            this.lwDaily.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lwDaily_MouseClick);
-            // 
-            // ilDaily
-            // 
-            this.ilDaily.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.ilDaily.ImageSize = new System.Drawing.Size(250, 200);
-            this.ilDaily.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // pbDaily
-            // 
-            this.pbDaily.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cbPlayActress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbDaily.Location = new System.Drawing.Point(266, 12);
-            this.pbDaily.Name = "pbDaily";
-            this.pbDaily.Size = new System.Drawing.Size(634, 23);
-            this.pbDaily.TabIndex = 4;
-            this.pbDaily.Click += new System.EventHandler(this.pbDaily_Click);
+            this.cbPlayActress.FormattingEnabled = true;
+            this.cbPlayActress.Location = new System.Drawing.Point(44, 22);
+            this.cbPlayActress.Name = "cbPlayActress";
+            this.cbPlayActress.Size = new System.Drawing.Size(178, 20);
+            this.cbPlayActress.TabIndex = 0;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(9, 25);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 12);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "演员";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(9, 51);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(29, 12);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "类别";
+            // 
+            // cbPlayCategory
+            // 
+            this.cbPlayCategory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbPlayCategory.FormattingEnabled = true;
+            this.cbPlayCategory.Location = new System.Drawing.Point(44, 48);
+            this.cbPlayCategory.Name = "cbPlayCategory";
+            this.cbPlayCategory.Size = new System.Drawing.Size(178, 20);
+            this.cbPlayCategory.TabIndex = 2;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(9, 77);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(29, 12);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "前缀";
+            // 
+            // cbPlayPrefix
+            // 
+            this.cbPlayPrefix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbPlayPrefix.FormattingEnabled = true;
+            this.cbPlayPrefix.Location = new System.Drawing.Point(44, 74);
+            this.cbPlayPrefix.Name = "cbPlayPrefix";
+            this.cbPlayPrefix.Size = new System.Drawing.Size(178, 20);
+            this.cbPlayPrefix.TabIndex = 4;
+            // 
+            // btnPlay
+            // 
+            this.btnPlay.Location = new System.Drawing.Point(8, 532);
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.Size = new System.Drawing.Size(75, 40);
+            this.btnPlay.TabIndex = 6;
+            this.btnPlay.Text = "搜索";
+            this.btnPlay.UseVisualStyleBackColor = true;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            // 
+            // lbPlayStatus
+            // 
+            this.lbPlayStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbPlayStatus.AutoSize = true;
+            this.lbPlayStatus.Location = new System.Drawing.Point(177, 559);
+            this.lbPlayStatus.Name = "lbPlayStatus";
+            this.lbPlayStatus.Size = new System.Drawing.Size(35, 12);
+            this.lbPlayStatus.TabIndex = 7;
+            this.lbPlayStatus.Text = "0 / 0";
+            // 
+            // lvPlay
+            // 
+            this.lvPlay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvPlay.HideSelection = false;
+            this.lvPlay.LargeImageList = this.ilPlay;
+            this.lvPlay.Location = new System.Drawing.Point(0, 0);
+            this.lvPlay.Name = "lvPlay";
+            this.lvPlay.Size = new System.Drawing.Size(882, 580);
+            this.lvPlay.TabIndex = 0;
+            this.lvPlay.UseCompatibleStateImageBehavior = false;
+            this.lvPlay.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvPlay_MouseClick);
+            this.lvPlay.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvPlay_MouseDoubleClick);
+            // 
+            // ilPlay
+            // 
+            this.ilPlay.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.ilPlay.ImageSize = new System.Drawing.Size(250, 200);
+            this.ilPlay.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // btnPlayRefresh
+            // 
+            this.btnPlayRefresh.Location = new System.Drawing.Point(8, 486);
+            this.btnPlayRefresh.Name = "btnPlayRefresh";
+            this.btnPlayRefresh.Size = new System.Drawing.Size(75, 40);
+            this.btnPlayRefresh.TabIndex = 8;
+            this.btnPlayRefresh.Text = "刷新";
+            this.btnPlayRefresh.UseVisualStyleBackColor = true;
+            this.btnPlayRefresh.Click += new System.EventHandler(this.btnPlayRefresh_Click);
             // 
             // Main
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1014, 606);
+            this.ClientSize = new System.Drawing.Size(1132, 606);
             this.Controls.Add(this.panel1);
             this.KeyPreview = true;
             this.Name = "Main";
@@ -2404,15 +2581,20 @@
             this.panel48.ResumeLayout(false);
             this.panel47.ResumeLayout(false);
             this.panel47.PerformLayout();
+            this.tabPage15.ResumeLayout(false);
+            this.panel49.ResumeLayout(false);
+            this.panel51.ResumeLayout(false);
+            this.panel50.ResumeLayout(false);
+            this.panel50.PerformLayout();
             this.tabPage12.ResumeLayout(false);
             this.panel43.ResumeLayout(false);
             this.panel45.ResumeLayout(false);
             this.panel44.ResumeLayout(false);
-            this.tabPage15.ResumeLayout(false);
-            this.panel49.ResumeLayout(false);
-            this.panel50.ResumeLayout(false);
-            this.panel50.PerformLayout();
-            this.panel51.ResumeLayout(false);
+            this.tabPage16.ResumeLayout(false);
+            this.panel52.ResumeLayout(false);
+            this.panel53.ResumeLayout(false);
+            this.panel53.PerformLayout();
+            this.panel54.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2613,6 +2795,21 @@
         private System.Windows.Forms.ListView lwDaily;
         private System.Windows.Forms.ImageList ilDaily;
         private System.Windows.Forms.ProgressBar pbDaily;
+        private System.Windows.Forms.TabPage tabPage16;
+        private System.Windows.Forms.Panel panel52;
+        private System.Windows.Forms.Panel panel54;
+        private System.Windows.Forms.Panel panel53;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox cbPlayActress;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cbPlayPrefix;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox cbPlayCategory;
+        private System.Windows.Forms.Button btnPlay;
+        private System.Windows.Forms.Label lbPlayStatus;
+        private System.Windows.Forms.ListView lvPlay;
+        private System.Windows.Forms.ImageList ilPlay;
+        private System.Windows.Forms.Button btnPlayRefresh;
     }
 }
 

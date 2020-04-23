@@ -3,23 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavLibraryDownloader", "JavLibraryDownloader\JavLibraryDownloader.csproj", "{E4C70E94-C30A-4788-AFBF-23E374B4B17F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseManager", "DataBaseManager\DataBaseManager.csproj", "{4C6184D9-D4AE-42EE-8270-3401ADB22FE0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{144C6554-CF3B-49AF-9A8C-926A99E633BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{85E3D89D-603E-4992-B266-E2CD3C8B4209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SisDownload", "SisDownload\SisDownload.csproj", "{77D7D986-D72E-4968-91DD-3369348E4112}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowseAndDownload", "BrowseAndDownload\BrowseAndDownload\BrowseAndDownload.csproj", "{57AC8E4A-2AC8-49C2-A7C7-96F47D2362DE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScanAllAndMatch", "ScanAllAndMatch\ScanAllAndMatch.csproj", "{6C4F002E-10BA-4E3F-850D-677455A0DB7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{936B306A-F276-42DA-8B76-3E8672D73D7D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvPlayer", "AvPlayer\AvPlayer.csproj", "{217F6333-FF6C-4A2A-9A0B-8F98CDF908A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateReport", "GenerateReport\GenerateReport.csproj", "{59D4210F-FC29-441A-9549-EE95D470FC04}"
 EndProject
@@ -43,10 +35,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E4C70E94-C30A-4788-AFBF-23E374B4B17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4C70E94-C30A-4788-AFBF-23E374B4B17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4C70E94-C30A-4788-AFBF-23E374B4B17F}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4C70E94-C30A-4788-AFBF-23E374B4B17F}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{4C6184D9-D4AE-42EE-8270-3401ADB22FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C6184D9-D4AE-42EE-8270-3401ADB22FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C6184D9-D4AE-42EE-8270-3401ADB22FE0}.Release|Any CPU.ActiveCfg = Debug|Any CPU
@@ -59,14 +47,6 @@ Global
 		{85E3D89D-603E-4992-B266-E2CD3C8B4209}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85E3D89D-603E-4992-B266-E2CD3C8B4209}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{85E3D89D-603E-4992-B266-E2CD3C8B4209}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{77D7D986-D72E-4968-91DD-3369348E4112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77D7D986-D72E-4968-91DD-3369348E4112}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77D7D986-D72E-4968-91DD-3369348E4112}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{77D7D986-D72E-4968-91DD-3369348E4112}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{57AC8E4A-2AC8-49C2-A7C7-96F47D2362DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57AC8E4A-2AC8-49C2-A7C7-96F47D2362DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57AC8E4A-2AC8-49C2-A7C7-96F47D2362DE}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{57AC8E4A-2AC8-49C2-A7C7-96F47D2362DE}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{6C4F002E-10BA-4E3F-850D-677455A0DB7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C4F002E-10BA-4E3F-850D-677455A0DB7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C4F002E-10BA-4E3F-850D-677455A0DB7E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
@@ -75,10 +55,6 @@ Global
 		{936B306A-F276-42DA-8B76-3E8672D73D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{936B306A-F276-42DA-8B76-3E8672D73D7D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{936B306A-F276-42DA-8B76-3E8672D73D7D}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{217F6333-FF6C-4A2A-9A0B-8F98CDF908A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{217F6333-FF6C-4A2A-9A0B-8F98CDF908A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{217F6333-FF6C-4A2A-9A0B-8F98CDF908A6}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{217F6333-FF6C-4A2A-9A0B-8F98CDF908A6}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{59D4210F-FC29-441A-9549-EE95D470FC04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59D4210F-FC29-441A-9549-EE95D470FC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59D4210F-FC29-441A-9549-EE95D470FC04}.Release|Any CPU.ActiveCfg = Release|Any CPU

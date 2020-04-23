@@ -33,6 +33,8 @@ namespace CombineEpisode
         private static readonly string combineFilePath = "c:\\setting\\combinefile\\";
         private static List<Model.ScanModels.Match> matchesAV = new List<Model.ScanModels.Match>();
         private static List<FileInfo> recentFi = new List<FileInfo>();
+        private static List<RefreshModel> refreshModel = new List<RefreshModel>();
+        private static List<ScanResult> scanResult = new List<ScanResult>();
         private Process p;
         private bool OkToStart = true;
         private string[] ImportedFiles = null;
@@ -40,6 +42,7 @@ namespace CombineEpisode
 
         public delegate void ProcessPb(ProgressBar pb, int value);
         public delegate void ProcessListView(ListView lv, ListViewItem lvi, int column, string content, List<SeedMagnetSearchModel> model);
+        public delegate void ProcessListViewItem(ListView lv, ListViewItem lvi);
 
         #endregion
 
@@ -487,6 +490,31 @@ namespace CombineEpisode
                     }
                 }
             }
+
+            if (e.KeyCode == Keys.Space && tabControl1.SelectedTab.Name == "tabPage16")
+            {
+                if (lvPlay.SelectedItems != null && lvPlay.SelectedItems.Count > 0)
+                {
+                    if (lvPlay.SelectedItems.Count == 1)
+                    {
+                        Play(lvPlay.SelectedItems[0]);
+                    }
+                    else
+                    {
+                        List<string> list = new List<string>();
+
+                        foreach (ListViewItem item in lvPlay.SelectedItems)
+                        {
+                            list.Add(item.Tag.ToString());
+
+                            item.BackColor = Color.Green;
+                            ScanDataBaseManager.InsertViewHistory(FileUtility.ReplaceInvalidChar(item.Tag + ""));
+                        }
+
+                        PlayPlist(PlayerHelper.GeneratePotPlayerPlayList(list));
+                    }
+                }
+            }
         }
 
         private void btnRecent_Click(object sender, EventArgs e)
@@ -636,6 +664,77 @@ namespace CombineEpisode
                 DoDailyRefesh(txtDailyPage.Text);
             }
         }
+
+        private void pbDaily_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lwDaily_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && lwDaily.SelectedItems.Count > 0)
+            {
+                List<SeedMagnetSearchModel> list = (List<SeedMagnetSearchModel>)lwDaily.SelectedItems[0].Tag;
+
+                if (list != null && list.Count > 0)
+                {
+                    SeedList sl = new SeedList(list);
+                    sl.ShowDialog();
+                }
+            }
+
+            if (e.Button == MouseButtons.Left && lwDaily.SelectedItems.Count > 0)
+            {
+                Clipboard.SetDataObject(lwDaily.SelectedItems[0].SubItems[1].Text);
+            }
+        }
+
+        private void lwDaily_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbDailyOnly_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            if (scanResult == null || scanResult.Count <= 0)
+            {
+                scanResult = ScanDataBaseManager.GetMatchScanResult();
+            }
+
+            BtnPlayClick();
+        }
+
+        private void btnPlayRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshPlayUi();
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabPage16)
+            {
+                RefreshPlayUi();
+            }
+        }
+
+        private void lvPlay_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void lvPlay_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && lvPlay.SelectedItems.Count > 0)
+            {
+                Play(lvPlay.SelectedItems[0]);
+            }
+        }
+
         #endregion
 
         #region 方法
@@ -834,6 +933,18 @@ namespace CombineEpisode
                 lvi.SubItems[column].Text = content;
                 ((MissingCheckModel)lvi.Tag).Seeds = model;
                 lvi.BackColor = Color.Green;
+            }
+        }
+
+        private void ListViewItemUpdate2(ListView lv, ListViewItem lvi)
+        {
+            if (lv.InvokeRequired)
+            {
+                lv.Invoke(new ProcessListViewItem(ListViewItemUpdate2), lv, lvi);
+            }
+            else
+            {
+                lv.Items.Add(lvi);
             }
         }
 
@@ -2548,6 +2659,7 @@ namespace CombineEpisode
 
         private async void DoDailyRefesh(string pageStr)
         {
+            refreshModel = new List<RefreshModel>();
             int page = 15;
             int.TryParse(pageStr, out page);
             var arg = " refresh " + page;
@@ -2555,6 +2667,54 @@ namespace CombineEpisode
             pbDaily.Maximum = page * 20;
 
             await StartJavRefresh("", arg, OutputJavRefresh);
+
+            await Task.Run(() => UpdateRefreshUi());
+        }
+
+        private void UpdateRefreshUi()
+        {
+            Parallel.ForEach(refreshModel, new ParallelOptions { MaxDegreeOfParallelism = 10 }, rm =>
+            {
+                if (File.Exists(imageFolder + rm.Id + rm.Name + ".jpg"))
+                {
+                    ilDaily.Images.Add(rm.Name, Image.FromFile(imageFolder + rm.Id + rm.Name + ".jpg"));
+                }
+                else
+                {
+                    ilDaily.Images.Add(rm.Name, Image.FromStream(WebRequest.Create(rm.Url).GetResponse().GetResponseStream()));
+                }
+            });
+
+            Parallel.ForEach(refreshModel, new ParallelOptions { MaxDegreeOfParallelism = 5 }, rm =>
+            {
+                ListViewItem lvi = new ListViewItem(rm.Id + " " + rm.Name);
+                lvi.ImageIndex = ilDaily.Images.IndexOfKey(rm.Name);
+                lvi.SubItems.Add(rm.Id);
+
+                var list = SearchSeedHelper.SearchSukebei(rm.Id);
+
+                if (list != null && list.Count > 0)
+                {
+                    lvi.Tag = list;
+                    lvi.BackColor = Color.Green;
+
+                    ScanDataBaseManager.DeleteMagUrlById(rm.Id);
+
+                    foreach (var seed in list)
+                    {
+                        ScanDataBaseManager.InsertMagUrl(rm.Id, seed.MagUrl, seed.Title, 1);
+                    }
+                }
+                else
+                {
+                    lvi.Tag = new List<SeedMagnetSearchModel>();
+                    lvi.BackColor = Color.Red;
+                }
+
+                ListViewItemUpdate2(lwDaily, lvi);
+
+                JDuBar(pbDaily, lwDaily.Items.Count);
+            });
         }
 
         private async Task StartJavRefresh(string exe, string arg, DataReceivedEventHandler output)
@@ -2586,58 +2746,107 @@ namespace CombineEpisode
 
                 RefreshModel rm = JsonConvert.DeserializeObject<RefreshModel>(jsonStr);
 
-                lwDaily.BeginUpdate();
+                refreshModel.Add(rm);
+            }
+        }
 
-                if (File.Exists(imageFolder + rm.Id + rm.Name + ".jpg"))
+        private void RefreshPlayUi()
+        {                    
+            var actress = JavDataBaseManager.GetSimilarContent("actress").Select(x => x.Name).ToArray();
+            var category = JavDataBaseManager.GetSimilarContent("category").Select(x => x.Name).ToArray();
+
+            cbPlayActress.DataSource = actress;
+            cbPlayCategory.DataSource = category;
+
+            cbPlayActress.Text = "";
+            cbPlayCategory.Text = "";
+        }
+
+        private async void BtnPlayClick()
+        {
+            if (scanResult == null || scanResult.Count <= 0)
+            {
+                scanResult = ScanDataBaseManager.GetMatchScanResult();
+            }
+
+            List<ScanResult> toBePlay = scanResult;
+            List<ScanResult> actressPlay = new List<ScanResult>();
+            List<ScanResult> categoryPlay = new List<ScanResult>();
+            List<ScanResult> prefixPlay = new List<ScanResult>();
+
+            if (!string.IsNullOrEmpty(cbPlayActress.Text))
+            {
+                foreach (var r in scanResult)
                 {
-                    ilDaily.Images.Add(rm.Name, Image.FromFile(imageFolder + rm.Id + rm.Name + ".jpg"));
+                    foreach (var actress in r.ActressList)
+                    {
+                        if (actress.Contains(cbPlayActress.Text))
+                        {
+                            actressPlay.Add(r);
+                        }
+                    }
                 }
-                else
+
+                toBePlay = toBePlay.Intersect(actressPlay).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(cbPlayCategory.Text))
+            {
+                foreach (var r in scanResult)
                 {
-                    ilDaily.Images.Add(rm.Name, Image.FromStream(WebRequest.Create(rm.Url).GetResponse().GetResponseStream()));
+                    foreach (var category in r.CategoryList)
+                    {
+                        if (category.Contains(cbPlayCategory.Text))
+                        {
+                            categoryPlay.Add(r);
+                        }
+                    }
                 }
 
-                ListViewItem lvi = new ListViewItem(rm.Id + " " + rm.Name);
-                lvi.ImageIndex = ilDaily.Images.IndexOfKey(rm.Name);
+                toBePlay = toBePlay.Intersect(categoryPlay).ToList();
+            }
 
-                lwDaily.Items.Add(lvi);
+            if (!string.IsNullOrEmpty(cbPlayPrefix.Text))
+            {
+                var text = cbPlayPrefix.Text.ToUpper();
 
-                var list = SearchSeedHelper.SearchSukebei(rm.Id);
-
-                if (list != null && list.Count > 0)
+                foreach (var r in scanResult)
                 {
-                    lvi.Tag = list;
-                    lvi.BackColor = Color.Green;
+                    if (r.Prefix == text)
+                    {
+                        prefixPlay.Add(r);
+                    }
                 }
-                else
+
+                toBePlay = toBePlay.Intersect(prefixPlay).OrderBy(x => x.AvId).ToList();
+            }
+
+            await Task.Run(() => ShowPlayContent(toBePlay));
+        }
+
+        private void ShowPlayContent(List<ScanResult> list)
+        {
+            foreach (var l in list)
+            {
+                var pic = imageFolder + l.AvId + l.AvName + ".jpg";
+
+                if (File.Exists(pic))
                 {
-                    lvi.Tag = new List<SeedMagnetSearchModel>();
-                    lvi.BackColor = Color.Red;
+                    ilPlay.Images.Add(l.AvName, Image.FromFile(pic));
                 }
+            }
 
-                JDuBar(pbDaily, lwDaily.Items.Count);
+            foreach (var l in list)
+            {
+                ListViewItem lvi = new ListViewItem(l.AvId + " " + l.AvName);
+                lvi.ImageIndex = ilPlay.Images.IndexOfKey(l.AvName);
+                lvi.Tag = l.AvFilePath;
 
-                lwDaily.EndUpdate();
+                ListViewItemUpdate2(lvPlay, lvi);
             }
         }
 
         #endregion
-
-        private void pbDaily_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lwDaily_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right && lwDaily.SelectedItems.Count > 0)
-            {
-                List<SeedMagnetSearchModel> list = (List<SeedMagnetSearchModel>)lwDaily.SelectedItems[0].Tag;
-
-                SeedList sl = new SeedList(list);
-                sl.ShowDialog();
-            }
-        }
     }
 
     #region 扩展方法
