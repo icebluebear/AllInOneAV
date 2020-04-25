@@ -146,6 +146,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AVApiController.cs" />
+    <Compile Include="Controllers\ComicController.cs" />
     <Compile Include="Controllers\WebAvController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -184,6 +185,7 @@
     <Folder Include="fonts\" />
     <Folder Include="Models\" />
     <Folder Include="Scripts\" />
+    <Folder Include="Views\Comic\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -2305,6 +2305,8 @@ namespace CombineEpisode
 
         private void DoFindMovie()
         {
+            lvwFind.Items.Clear();
+
             if (cbFindOnly.Checked)
             {
                 if (matchesAV == null || matchesAV.Count <= 0)

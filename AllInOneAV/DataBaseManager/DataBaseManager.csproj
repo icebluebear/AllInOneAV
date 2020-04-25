@@ -55,6 +55,7 @@
     <Compile Include="Common\SQLHelper.cs" />
     <Compile Include="LogHelper\JavLibraryLog.cs" />
     <Compile Include="LogHelper\JavLoggerManager.cs" />
+    <Compile Include="MangaDataBaseHelper\MangaDatabaseHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanDataBaseHelper\ScanDataBaseManager.cs" />
     <Compile Include="SisDataBaseHelper\SisDataBaseManager.cs" />

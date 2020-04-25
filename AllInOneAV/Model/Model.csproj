@@ -76,6 +76,7 @@
     <Compile Include="JavModels\RunType.cs" />
     <Compile Include="JavModels\ScanURL.cs" />
     <Compile Include="JavModels\SecondTry.cs" />
+    <Compile Include="MangaModel\MangaCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanModels\DuplicateJSON.cs" />
     <Compile Include="ScanModels\Finish.cs" />
@@ -92,6 +93,12 @@
     <Compile Include="SisModels\LastOperationEndDate.cs" />
     <Compile Include="SisModels\ScanThread.cs" />
     <Compile Include="SisModels\SisLogger.cs" />
+    <Compile Include="WebModel\MangaCategoryListVM.cs" />
+    <Compile Include="WebModel\MangaCategoryVM.cs" />
+    <Compile Include="WebModel\MangaDetailVM.cs" />
+    <Compile Include="WebModel\MangaPicturesVM.cs" />
+    <Compile Include="WebModel\MangaSourceVM.cs" />
+    <Compile Include="WebModel\VMResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

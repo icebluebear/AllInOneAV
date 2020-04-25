@@ -101,6 +101,10 @@
       <Project>{85E3D89D-603E-4992-B266-E2CD3C8B4209}</Project>
       <Name>Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WebService\WebService.csproj">
+      <Project>{38EE6063-533B-4882-B67A-F2F919E13905}</Project>
+      <Name>WebService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net45\System.Data.SQLite.Core.targets')" />

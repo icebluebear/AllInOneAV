@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Ulog;
 using Utils;
+using WebService;
 
 namespace UnitTest
 {
@@ -50,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            TestEverything();
+            WebService.MangaService.GetMangaCategoryList(Model.MangaModel.MangaCategorySourceType.憨憨漫画, "riben,rexue", 1);
 
             Console.ReadKey();
         }

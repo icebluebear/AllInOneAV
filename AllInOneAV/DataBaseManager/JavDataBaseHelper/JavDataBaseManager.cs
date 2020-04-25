@@ -19,7 +19,7 @@ namespace DataBaseManager.JavDataBaseHelper
 
         static JavDataBaseManager()
         {
-            con = string.Format("Server={0};Database={1};User=readonly;password=123456789", JavINIClass.IniReadValue("Jav", "server"), JavINIClass.IniReadValue("Jav", "db"));
+            con = string.Format("Server={0};Database={1};User=sa;password=19880118Qs123!", JavINIClass.IniReadValue("Jav", "server"), JavINIClass.IniReadValue("Jav", "db"));
             mycon = new SqlConnection(con);
         }
 
