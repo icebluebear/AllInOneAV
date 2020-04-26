@@ -2728,6 +2728,11 @@ namespace CombineEpisode
 
                 var list = SearchSeedHelper.SearchSukebei(rm.Id);
 
+                if (list == null || list.Count <= 0)
+                {
+                    list = SearchSeedHelper.SearchBtsow(rm.Id);
+                }
+
                 if (list != null && list.Count > 0)
                 {
                     lvi.Tag = list;
