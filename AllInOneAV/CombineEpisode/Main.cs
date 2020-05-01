@@ -579,7 +579,7 @@ namespace CombineEpisode
             pbMissing.Value = 0;
             BtnMissingClick();
         }
-
+        
         private void btMissingSearch_Click(object sender, EventArgs e)
         {
             btnMissingSearchClick();
@@ -702,10 +702,11 @@ namespace CombineEpisode
         private void btnPlay_Click(object sender, EventArgs e)
         {
             if (scanResult == null || scanResult.Count <= 0)
-            {
+            {             
                 scanResult = ScanDataBaseManager.GetMatchScanResult();
             }
 
+            lvPlay.Items.Clear();
             BtnPlayClick();
         }
 
@@ -732,6 +733,17 @@ namespace CombineEpisode
             if (e.Button == MouseButtons.Left && lvPlay.SelectedItems.Count > 0)
             {
                 Play(lvPlay.SelectedItems[0]);
+            }
+        }
+
+        private void lwDaily_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && lwDaily.SelectedItems.Count > 0)
+            {
+                if (lwDaily.SelectedItems[0].BackColor == Color.Blue || lwDaily.SelectedItems[0].BackColor == Color.Yellow)
+                {
+                    Process.Start(@"" + lwDaily.SelectedItems[0].SubItems[2].Text);
+                }
             }
         }
 
@@ -830,7 +842,7 @@ namespace CombineEpisode
 
             return "";
         }
-
+        
         private string GenerateCombineFile()
         {
             var fileName = combineFilePath + "combine" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".txt";
@@ -855,7 +867,7 @@ namespace CombineEpisode
 
             return fileName;
         }
-
+        
         private int CalculateTotalTime()
         {
             int ret = 0;
@@ -867,7 +879,7 @@ namespace CombineEpisode
 
             return ret;
         }
-
+        
         private void Output(object sendProcess, DataReceivedEventArgs output)
         {
             if (!String.IsNullOrEmpty(output.Data))
@@ -2726,6 +2738,8 @@ namespace CombineEpisode
                 lvi.ImageIndex = ilDaily.Images.IndexOfKey(rm.Name);
                 lvi.SubItems.Add(rm.Id);
 
+                var matchFiles = new EverythingHelper().SearchFile(rm.Id + " | " + rm.Id.Replace("-", ""), EverythingSearchEnum.Video);
+
                 var list = SearchSeedHelper.SearchSukebei(rm.Id);
 
                 if (list == null || list.Count <= 0)
@@ -2744,22 +2758,32 @@ namespace CombineEpisode
                         ScanDataBaseManager.InsertMagUrl(rm.Id, seed.MagUrl, seed.Title, 1);
                     }
 
-                    if (new EverythingHelper().SearchFile(rm.Id, EverythingSearchEnum.Video).Count > 0)
+                    if (matchFiles.Count > 0)
                     {
                         lvi.BackColor = Color.Blue;
+
+                        lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
                     }
                     else
                     {
                         lvi.BackColor = Color.Green;
-                    }
-
-                    ListViewItemUpdate2(lwDaily, lvi);
+                    }                    
                 }
                 else
                 {
-                    pbDaily.Maximum--;
+                    if (matchFiles.Count > 0)
+                    {
+                        lvi.BackColor = Color.Yellow;
+                        lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
+                    }
+                    else
+                    {
+                        lvi.BackColor = Color.Gray;
+                    }
                 }
-              
+
+                ListViewItemUpdate2(lwDaily, lvi);
+
                 JDuBar(pbDaily, lwDaily.Items.Count);
 
                 Thread.Sleep(100 * ran.Next(5));

@@ -152,6 +152,7 @@
             this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel38 = new System.Windows.Forms.Panel();
+            this.cbFindOnly = new System.Windows.Forms.CheckBox();
             this.btnFind = new System.Windows.Forms.Button();
             this.txtFind = new System.Windows.Forms.TextBox();
             this.panel40 = new System.Windows.Forms.Panel();
@@ -238,7 +239,6 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnCheckISO = new System.Windows.Forms.Button();
             this.treeView3 = new System.Windows.Forms.TreeView();
-            this.cbFindOnly = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -1616,6 +1616,18 @@
             this.panel38.Size = new System.Drawing.Size(537, 48);
             this.panel38.TabIndex = 1;
             // 
+            // cbFindOnly
+            // 
+            this.cbFindOnly.AutoSize = true;
+            this.cbFindOnly.Checked = true;
+            this.cbFindOnly.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbFindOnly.Location = new System.Drawing.Point(379, 17);
+            this.cbFindOnly.Name = "cbFindOnly";
+            this.cbFindOnly.Size = new System.Drawing.Size(72, 16);
+            this.cbFindOnly.TabIndex = 2;
+            this.cbFindOnly.Text = "只找匹配";
+            this.cbFindOnly.UseVisualStyleBackColor = true;
+            // 
             // btnFind
             // 
             this.btnFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -2167,15 +2179,18 @@
             // lwDaily
             // 
             this.lwDaily.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lwDaily.FullRowSelect = true;
             this.lwDaily.HideSelection = false;
             this.lwDaily.LargeImageList = this.ilDaily;
             this.lwDaily.Location = new System.Drawing.Point(0, 0);
+            this.lwDaily.MultiSelect = false;
             this.lwDaily.Name = "lwDaily";
             this.lwDaily.Size = new System.Drawing.Size(1124, 529);
             this.lwDaily.TabIndex = 0;
             this.lwDaily.UseCompatibleStateImageBehavior = false;
             this.lwDaily.SelectedIndexChanged += new System.EventHandler(this.lwDaily_SelectedIndexChanged);
             this.lwDaily.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lwDaily_MouseClick);
+            this.lwDaily.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lwDaily_MouseDoubleClick);
             // 
             // ilDaily
             // 
@@ -2373,6 +2388,7 @@
             // 
             // btnPlayRefresh
             // 
+            this.btnPlayRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnPlayRefresh.Location = new System.Drawing.Point(8, 486);
             this.btnPlayRefresh.Name = "btnPlayRefresh";
             this.btnPlayRefresh.Size = new System.Drawing.Size(75, 40);
@@ -2383,7 +2399,7 @@
             // 
             // lbPlayStatus
             // 
-            this.lbPlayStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbPlayStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPlayStatus.AutoSize = true;
             this.lbPlayStatus.Location = new System.Drawing.Point(177, 559);
             this.lbPlayStatus.Name = "lbPlayStatus";
@@ -2393,6 +2409,7 @@
             // 
             // btnPlay
             // 
+            this.btnPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnPlay.Location = new System.Drawing.Point(8, 532);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(75, 40);
@@ -2490,18 +2507,6 @@
             this.treeView3.Size = new System.Drawing.Size(865, 478);
             this.treeView3.TabIndex = 0;
             this.treeView3.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView3_AfterSelect);
-            // 
-            // cbFindOnly
-            // 
-            this.cbFindOnly.AutoSize = true;
-            this.cbFindOnly.Checked = true;
-            this.cbFindOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFindOnly.Location = new System.Drawing.Point(379, 17);
-            this.cbFindOnly.Name = "cbFindOnly";
-            this.cbFindOnly.Size = new System.Drawing.Size(72, 16);
-            this.cbFindOnly.TabIndex = 2;
-            this.cbFindOnly.Text = "只找匹配";
-            this.cbFindOnly.UseVisualStyleBackColor = true;
             // 
             // Main
             // 

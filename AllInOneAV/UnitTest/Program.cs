@@ -51,8 +51,6 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            WebService.MangaService.GetMangaCategoryList(Model.MangaModel.MangaCategorySourceType.憨憨漫画, "riben,rexue", 1);
-
             Console.ReadKey();
         }
 

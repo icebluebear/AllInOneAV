@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace Utils
 {
     public class ImageHelper
     {
-        public static void CombinePics(string destPath, List<string> pics, bool keepOld)
+        public static void CombinePics(string destPath, List<string> pics, string oriFolder, bool keepOld)
         {
             int width = 0;
             int height = 0;
@@ -24,6 +25,7 @@ namespace Utils
                 if (File.Exists(pStr))
                 {
                     Image tempImg = Image.FromFile(pStr);
+
                     Bitmap tempBm = new Bitmap(tempImg);
 
                     width = Math.Max(width, tempImg.Width);
@@ -46,16 +48,20 @@ namespace Utils
                 g1.DrawImage(img.Bitmap, drawWidth, drawHeight, img.Image.Width, img.Image.Height);
 
                 drawHeight += img.Image.Height;
+
+                img.Bitmap.Dispose();
+                img.Image.Dispose();
             }
 
-            Image finalImg = bitMap;
-            finalImg.Save(destPath);
+            bitMap.Save(destPath, ImageFormat.Jpeg);
+
+            g1.Dispose();
 
             if (!keepOld)
             {
-                foreach (var p in pics)
+                foreach (var pStr in pics)
                 {
-                    File.Delete(p);
+                    File.Delete(pStr);
                 }
             }
         }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ using Utils;
 
 namespace MangaDownloaderGUI
 {
-   
+
 
     public partial class Main : Form
     {
@@ -92,7 +93,7 @@ namespace MangaDownloaderGUI
         }
 
         private void btnMainSearch_Click(object sender, EventArgs e)
-        {         
+        {
             Search();
             AddAdditionalInfo(si);
             ShowManga(si);
@@ -103,6 +104,11 @@ namespace MangaDownloaderGUI
             Download();
         }
 
+        private void rcbLog_ContentsResized(object sender, ContentsResizedEventArgs e)
+        {
+            rcbLog.SelectionStart = rcbLog.Text.Length;
+            rcbLog.ScrollToCaret();
+        }
         #endregion
 
         #endregion
@@ -406,7 +412,17 @@ namespace MangaDownloaderGUI
             {
                 if (setting.IsZip)
                 {
-                    var targerFile = setting.ZipFolder + mi.MangaName + ".zip";
+                    var targerFile = "";
+
+                    if (rbCombine.Checked)
+                    {
+                        targerFile = setting.ZipFolder + mi.MangaName + "_长图版.zip";
+                    }
+                    else
+                    {
+                        targerFile = setting.ZipFolder + mi.MangaName + ".zip";
+                    }
+
                     rcbLog.AppendText("准备压缩文件夹 " + root + " 到文件 " + targerFile + Environment.NewLine);
 
                     var res = ZipHelper.Zip(root, targerFile);
@@ -1021,9 +1037,50 @@ namespace MangaDownloaderGUI
             lvwMainList.Focus();
         }
 
+        private void CombinePics(string root, string title, string sub)
+        {
+            if (rbCombine.Checked)
+            {
+                UpdateRtb(rcbLog, "合并图片");
+
+                var totalPics = Directory.GetFiles(sub).ToList();
+                int index = 1;
+
+                while (totalPics.Count > 0)
+                {
+                    int height = 0;
+                    int take = 0;
+
+                    for (int i = 0; i < totalPics.Count; i++)
+                    {
+                        Image tempImg = Image.FromFile(totalPics[i]);
+   
+                        if (height + tempImg.Height < 63000)
+                        {
+                            height += tempImg.Height;
+                            take++;
+
+                            tempImg.Dispose();
+                        }
+                        else
+                        {
+                            tempImg.Dispose();
+                            break;
+                        }
+                    }
+
+                    var batchPics = totalPics.Take(take).ToList();
+                    ImageHelper.CombinePics(sub + title + "_" + index + ".jpg", batchPics, sub, false);
+                    totalPics = totalPics.Skip(take).ToList();
+
+                    index++;
+                }
+            }
+        }
+
         private string DownloadHmb(Dictionary<string, string> dic, SettingModel setting)
         {
-            var mangaRoot = GenerateFolder(setting.MangaFolder + mi.MangaName + "\\");
+            var mangaRoot = GenerateFolder(setting.MangaFolder + si.SourceName + "_" + mi.MangaName + "\\");
 
             Dictionary<string, string> downloadUrls = dic;
 
@@ -1106,6 +1163,9 @@ namespace MangaDownloaderGUI
 
                                     UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
                                 });
+
+
+                                CombinePics(mangaRoot, url.Value, subFolder);
                             }
                             else
                             {
@@ -1138,7 +1198,7 @@ namespace MangaDownloaderGUI
 
         private string DownloadHanhan(Dictionary<string, string> dic, SettingModel setting)
         {
-            var mangaRoot = GenerateFolder(setting.MangaFolder + mi.MangaName + "\\");
+            var mangaRoot = GenerateFolder(setting.MangaFolder + si.SourceName + "_" + mi.MangaName + "\\");
 
             Dictionary<string, string> downloadUrls = dic;
 
@@ -1214,6 +1274,9 @@ namespace MangaDownloaderGUI
 
                                 UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
                             });
+
+
+                            CombinePics(mangaRoot, url.Value, subFolder);
                         }
                         else
                         {
@@ -1241,7 +1304,7 @@ namespace MangaDownloaderGUI
 
         private string DownloadWuwu(Dictionary<string, string> dic, SettingModel setting)
         {
-            var mangaRoot = GenerateFolder(setting.MangaFolder + mi.MangaName + "\\");
+            var mangaRoot = GenerateFolder(setting.MangaFolder + si.SourceName + "_" + mi.MangaName + "\\");
 
             Dictionary<string, string> downloadUrls = dic;
 
@@ -1301,6 +1364,8 @@ namespace MangaDownloaderGUI
 
                                 UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
                             });
+
+                            CombinePics(mangaRoot, url.Value, subFolder);
                         }
                         else
                         {
@@ -1328,7 +1393,7 @@ namespace MangaDownloaderGUI
 
         private string DownloadZhiyinmanke(Dictionary<string, string> dic, SettingModel setting)
         {
-            var mangaRoot = GenerateFolder(setting.MangaFolder + FileUtility.ReplaceInvalidChar(mi.MangaName).Replace(".","") + "\\");
+            var mangaRoot = GenerateFolder(setting.MangaFolder + si.SourceName + "_" + FileUtility.ReplaceInvalidChar(mi.MangaName).Replace(".","") + "\\");
 
             Dictionary<string, string> downloadUrls = dic;
 
@@ -1388,6 +1453,8 @@ namespace MangaDownloaderGUI
 
                                 UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
                             });
+
+                            CombinePics(mangaRoot, url.Value, subFolder);
                         }
                         else
                         {

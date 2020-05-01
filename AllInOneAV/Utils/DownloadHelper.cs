@@ -48,12 +48,11 @@ namespace Utils
                     wc.Headers.Add(HttpRequestHeader.CacheControl, "no-cache");
                     wc.Headers.Add(HttpRequestHeader.Host, host);
                     wc.Headers.Add(HttpRequestHeader.Referer, reffer);
-                    if (shaque)
-                    {
-                        wc.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
-                        wc.Headers.Add(HttpRequestHeader.Accept, "image/webp,image/apng,image/*,*/*;q=0.8");
-                    }
+                    wc.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+                    wc.Headers.Add(HttpRequestHeader.Accept, "image/webp,image/apng,image/*,*/*;q=0.8");
                     wc.DownloadFile(url, path);
+
+                    wc.Dispose();
                 }
                 catch (Exception ee)
                 {
