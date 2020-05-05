@@ -240,6 +240,7 @@
             this.btnCheckISO = new System.Windows.Forms.Button();
             this.treeView3 = new System.Windows.Forms.TreeView();
             this.btnDailyFav = new System.Windows.Forms.Button();
+            this.btnDailyGenerateFav = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -2270,6 +2271,7 @@
             // 
             // panel50
             // 
+            this.panel50.Controls.Add(this.btnDailyGenerateFav);
             this.panel50.Controls.Add(this.btnDailyFav);
             this.panel50.Controls.Add(this.pbDaily);
             this.panel50.Controls.Add(this.btnDaily);
@@ -2287,17 +2289,17 @@
             // 
             this.pbDaily.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbDaily.Location = new System.Drawing.Point(488, 21);
+            this.pbDaily.Location = new System.Drawing.Point(382, 23);
             this.pbDaily.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.pbDaily.Name = "pbDaily";
-            this.pbDaily.Size = new System.Drawing.Size(1425, 40);
+            this.pbDaily.Size = new System.Drawing.Size(1381, 40);
             this.pbDaily.TabIndex = 4;
             this.pbDaily.Click += new System.EventHandler(this.pbDaily_Click);
             // 
             // btnDaily
             // 
             this.btnDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDaily.Location = new System.Drawing.Point(1925, 10);
+            this.btnDaily.Location = new System.Drawing.Point(1775, 8);
             this.btnDaily.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.btnDaily.Name = "btnDaily";
             this.btnDaily.Size = new System.Drawing.Size(138, 66);
@@ -2312,7 +2314,7 @@
             this.cbDailyOnly.Checked = true;
             this.cbDailyOnly.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbDailyOnly.Enabled = false;
-            this.cbDailyOnly.Location = new System.Drawing.Point(325, 30);
+            this.cbDailyOnly.Location = new System.Drawing.Point(262, 30);
             this.cbDailyOnly.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.cbDailyOnly.Name = "cbDailyOnly";
             this.cbDailyOnly.Size = new System.Drawing.Size(120, 25);
@@ -2323,7 +2325,7 @@
             // 
             // txtDailyPage
             // 
-            this.txtDailyPage.Location = new System.Drawing.Point(81, 24);
+            this.txtDailyPage.Location = new System.Drawing.Point(70, 28);
             this.txtDailyPage.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.txtDailyPage.Name = "txtDailyPage";
             this.txtDailyPage.Size = new System.Drawing.Size(180, 31);
@@ -2616,6 +2618,18 @@
             this.btnDailyFav.Text = "搜索书签";
             this.btnDailyFav.UseVisualStyleBackColor = true;
             this.btnDailyFav.Click += new System.EventHandler(this.btnDailyFav_Click);
+            // 
+            // btnDailyGenerateFav
+            // 
+            this.btnDailyGenerateFav.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDailyGenerateFav.Location = new System.Drawing.Point(1925, 10);
+            this.btnDailyGenerateFav.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            this.btnDailyGenerateFav.Name = "btnDailyGenerateFav";
+            this.btnDailyGenerateFav.Size = new System.Drawing.Size(138, 66);
+            this.btnDailyGenerateFav.TabIndex = 6;
+            this.btnDailyGenerateFav.Text = "生成书签";
+            this.btnDailyGenerateFav.UseVisualStyleBackColor = true;
+            this.btnDailyGenerateFav.Click += new System.EventHandler(this.btnDailyGenerateFav_Click);
             // 
             // Main
             // 
@@ -2941,6 +2955,7 @@
         private System.Windows.Forms.Button btnPlayRefresh;
         private System.Windows.Forms.CheckBox cbFindOnly;
         private System.Windows.Forms.Button btnDailyFav;
+        private System.Windows.Forms.Button btnDailyGenerateFav;
     }
 }
 

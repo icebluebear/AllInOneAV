@@ -2949,6 +2949,11 @@ namespace CombineEpisode
         {
 
         }
+
+        private void btnDailyGenerateFav_Click(object sender, EventArgs e)
+        {
+            var title = "boxtitle";
+        }
     }
 
     #region 扩展方法
