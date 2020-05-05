@@ -51,6 +51,25 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
+            var favi = "c:\\setting\\Favi.txt";
+            List<string> urls = new List<string>();
+
+            if (File.Exists(favi))
+            {
+                using (StreamReader sr = new StreamReader(favi))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        var url = sr.ReadLine();
+                        urls.Add(url + "&page=1");
+                    }
+                }
+            }
+
+            if (urls.Count > 0)
+            {
+                JavLibraryHelper.DoFavRefresh(urls, false);
+            }
             Console.ReadKey();
         }
 

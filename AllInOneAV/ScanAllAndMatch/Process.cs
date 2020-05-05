@@ -9,6 +9,7 @@ using System.Text;
 using Utils;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ScanAllAndMatch
 {
@@ -81,8 +82,16 @@ namespace ScanAllAndMatch
 
                 foreach (var match in matches)
                 {
-                    //Console.WriteLine("保存 " + match.AvID);
-                    ScanDataBaseManager.SaveMatch(match);
+                    try
+                    {
+                        //Console.WriteLine("保存 " + match.AvID);
+                        ScanDataBaseManager.SaveMatch(match);
+                    }
+                    catch (Exception ee)
+                    {
+                        //MessageBox.Show(match.Location + match.Name);
+                        //MessageBox.Show(ee.ToString());
+                    }
                 }
             }
             catch (Exception e)

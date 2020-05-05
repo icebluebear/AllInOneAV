@@ -19,8 +19,8 @@ namespace MangaDownloaderGUI
 
     public partial class Main : Form
     {
-        private delegate void UpdatePB(ProgressBar pbBar, int value, int max);
-        private delegate void UpdateLog(RichTextBox rtb, string content);
+        public delegate void UpdatePB(ProgressBar pbBar, int value, int max);
+        public delegate void UpdateLog(RichTextBox rtb, string content);
         private string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
         private List<SourceInfo> sourceList = new List<SourceInfo>();
         private SourceInfo si;
@@ -1393,7 +1393,7 @@ namespace MangaDownloaderGUI
 
         private string DownloadZhiyinmanke(Dictionary<string, string> dic, SettingModel setting)
         {
-            var mangaRoot = GenerateFolder(setting.MangaFolder + si.SourceName + "_" + FileUtility.ReplaceInvalidChar(mi.MangaName).Replace(".","") + "\\");
+            var mangaRoot = GenerateFolder(setting.MangaFolder + si.SourceName + "_" + mi.MangaName.Replace(".","") + "\\");
 
             Dictionary<string, string> downloadUrls = dic;
 

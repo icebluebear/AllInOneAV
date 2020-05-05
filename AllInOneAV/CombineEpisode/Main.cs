@@ -579,7 +579,7 @@ namespace CombineEpisode
             pbMissing.Value = 0;
             BtnMissingClick();
         }
-        
+
         private void btMissingSearch_Click(object sender, EventArgs e)
         {
             btnMissingSearchClick();
@@ -702,7 +702,7 @@ namespace CombineEpisode
         private void btnPlay_Click(object sender, EventArgs e)
         {
             if (scanResult == null || scanResult.Count <= 0)
-            {             
+            {
                 scanResult = ScanDataBaseManager.GetMatchScanResult();
             }
 
@@ -842,7 +842,7 @@ namespace CombineEpisode
 
             return "";
         }
-        
+
         private string GenerateCombineFile()
         {
             var fileName = combineFilePath + "combine" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".txt";
@@ -867,7 +867,7 @@ namespace CombineEpisode
 
             return fileName;
         }
-        
+
         private int CalculateTotalTime()
         {
             int ret = 0;
@@ -879,7 +879,7 @@ namespace CombineEpisode
 
             return ret;
         }
-        
+
         private void Output(object sendProcess, DataReceivedEventArgs output)
         {
             if (!String.IsNullOrEmpty(output.Data))
@@ -2591,7 +2591,7 @@ namespace CombineEpisode
                         ListViewItem lvi = new ListViewItem(r.Av.ID);
                         lvi.SubItems.Add(r.IsMatch ? "有匹配" : "无匹配");
                         lvi.SubItems.Add(r.IsMatch ? FileSize.GetAutoSizeString(r.Fi.Max(x => x.Length), 1) : "-");
-                        
+
                         lvi.Tag = r;
 
                         var magUrls = ScanDataBaseManager.GetAllMagUrlById(r.Av.ID);
@@ -2728,7 +2728,14 @@ namespace CombineEpisode
                 }
                 else
                 {
-                    ilDaily.Images.Add(rm.Name, Image.FromStream(WebRequest.Create(rm.Url).GetResponse().GetResponseStream()));
+                    if (rm.Url == "http://" || rm.Url == "http:")
+                    {
+
+                    }
+                    else
+                    {
+                        ilDaily.Images.Add(rm.Name, Image.FromStream(WebRequest.Create(rm.Url).GetResponse().GetResponseStream()));
+                    }
                 }
             });
 
@@ -2767,7 +2774,7 @@ namespace CombineEpisode
                     else
                     {
                         lvi.BackColor = Color.Green;
-                    }                    
+                    }
                 }
                 else
                 {
@@ -2824,7 +2831,7 @@ namespace CombineEpisode
         }
 
         private void RefreshPlayUi()
-        {                    
+        {
             var actress = JavDataBaseManager.GetSimilarContent("actress").Select(x => x.Name).ToArray();
             var category = JavDataBaseManager.GetSimilarContent("category").Select(x => x.Name).ToArray();
 
@@ -2919,7 +2926,29 @@ namespace CombineEpisode
             }
         }
 
+        private async void DoDailyFav(string pageStr)
+        {
+            lwDaily.Items.Clear();
+
+            refreshModel = new List<RefreshModel>();
+            int page = 15;
+            int.TryParse(pageStr, out page);
+            var arg = " refresh " + page;
+
+            pbDaily.Value = 0;
+            pbDaily.Maximum = page * 20;
+
+            await StartJavRefresh("", arg, OutputJavRefresh);
+
+            await Task.Run(() => UpdateRefreshUi());
+        }
+
         #endregion
+
+        private void btnDailyFav_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     #region 扩展方法

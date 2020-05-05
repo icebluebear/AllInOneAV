@@ -56,6 +56,7 @@
             this.panelInfoPic = new System.Windows.Forms.Panel();
             this.picManga = new System.Windows.Forms.PictureBox();
             this.panelMainTop = new System.Windows.Forms.Panel();
+            this.rbCombine = new System.Windows.Forms.RadioButton();
             this.btnMainDownload = new System.Windows.Forms.Button();
             this.btnMainSearch = new System.Windows.Forms.Button();
             this.txtMainSearch = new System.Windows.Forms.TextBox();
@@ -64,7 +65,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cbSource = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.rbCombine = new System.Windows.Forms.RadioButton();
             this.menuStrip1.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.panelMainLog.SuspendLayout();
@@ -105,7 +105,7 @@
             // settingToolStrip
             // 
             this.settingToolStrip.Name = "settingToolStrip";
-            this.settingToolStrip.Size = new System.Drawing.Size(180, 22);
+            this.settingToolStrip.Size = new System.Drawing.Size(126, 22);
             this.settingToolStrip.Text = "目录设置";
             this.settingToolStrip.Click += new System.EventHandler(this.settingToolStrip_Click);
             // 
@@ -354,6 +354,18 @@
             this.panelMainTop.Size = new System.Drawing.Size(800, 38);
             this.panelMainTop.TabIndex = 0;
             // 
+            // rbCombine
+            // 
+            this.rbCombine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.rbCombine.AutoSize = true;
+            this.rbCombine.Location = new System.Drawing.Point(579, 13);
+            this.rbCombine.Name = "rbCombine";
+            this.rbCombine.Size = new System.Drawing.Size(47, 16);
+            this.rbCombine.TabIndex = 8;
+            this.rbCombine.TabStop = true;
+            this.rbCombine.Text = "合并";
+            this.rbCombine.UseVisualStyleBackColor = true;
+            // 
             // btnMainDownload
             // 
             this.btnMainDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -380,7 +392,7 @@
             // 
             this.txtMainSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMainSearch.Location = new System.Drawing.Point(406, 9);
+            this.txtMainSearch.Location = new System.Drawing.Point(405, 11);
             this.txtMainSearch.Name = "txtMainSearch";
             this.txtMainSearch.Size = new System.Drawing.Size(167, 21);
             this.txtMainSearch.TabIndex = 5;
@@ -431,17 +443,6 @@
             this.label1.Size = new System.Drawing.Size(29, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "来源";
-            // 
-            // rbCombine
-            // 
-            this.rbCombine.AutoSize = true;
-            this.rbCombine.Location = new System.Drawing.Point(579, 11);
-            this.rbCombine.Name = "rbCombine";
-            this.rbCombine.Size = new System.Drawing.Size(47, 16);
-            this.rbCombine.TabIndex = 8;
-            this.rbCombine.TabStop = true;
-            this.rbCombine.Text = "合并";
-            this.rbCombine.UseVisualStyleBackColor = true;
             // 
             // Main
             // 

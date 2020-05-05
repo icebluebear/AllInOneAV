@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using DataBaseManager.JavDataBaseHelper;
-using DataBaseManager.ScanDataBaseHelper;
 using HtmlAgilityPack;
 using Model.Common;
 using Model.JavModels;
@@ -171,7 +170,7 @@ namespace Service
 
                     if (genreDetailhtmlRes.Success)
                     {
-                        HtmlAgilityPack.HtmlDocument detailHtmlDocument = new HtmlAgilityPack.HtmlDocument();
+                        HtmlDocument detailHtmlDocument = new HtmlDocument();
                         detailHtmlDocument.LoadHtml(genreDetailhtmlRes.Content);
 
                         var lastPagePath = "//a[@class='page last']";
@@ -211,6 +210,51 @@ namespace Service
                     }
                 });
             }
+
+            return ret;
+        }
+
+        private static List<string> FillInCertainUrl(List<string> list)
+        {
+            List<string> ret = new List<string>();
+
+            Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 10 }, url =>
+            {
+                string genreSubUrl = url + "&page=";
+                List<string> allPages = new List<string>();
+                int lastPage = 1;
+
+                var genreDetailhtmlRes = JavCookieContanierHelper(url);
+
+                if (genreDetailhtmlRes.Success)
+                {
+                    HtmlDocument detailHtmlDocument = new HtmlDocument();
+                    detailHtmlDocument.LoadHtml(genreDetailhtmlRes.Content);
+
+                    var lastPagePath = "//a[@class='page last']";
+
+                    var lastPageNode = detailHtmlDocument.DocumentNode.SelectSingleNode(lastPagePath);
+
+                    if (lastPageNode != null)
+                    {
+                        var pageStr = lastPageNode.Attributes["href"].Value.Trim();
+
+                        if (!string.IsNullOrEmpty(pageStr))
+                        {
+                            pageStr = pageStr.Substring(pageStr.LastIndexOf("=") + 1);
+
+                            int.TryParse(pageStr, out lastPage);
+                        }
+                    }
+
+                    for (int i = 1; i <= lastPage; i++)
+                    {
+                        allPages.Add(genreSubUrl + i);
+                    }
+
+                    ret.AddRange(allPages);
+                }
+            });
 
             return ret;
         }
@@ -301,7 +345,7 @@ namespace Service
             }
         }
 
-        private static List<AV> ScanAndReturnAv(string url, string cate, int current, int total, List<string> scans = null)
+        private static List<AV> ScanAndReturnAv(string url)
         {
             List<AV> ret = new List<AV>();
             var htmlRes = JavCookieContanierHelper(url);
@@ -349,57 +393,6 @@ namespace Service
             }
 
             return ret;
-        }
-
-        private static void ScanDailyCategoryPageUrl(string url, string cate, int current, int total)
-        {
-            var htmlRes = JavCookieContanierHelper(url);
-
-            if (htmlRes.Success)
-            {
-                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
-                htmlDocument.LoadHtml(htmlRes.Content);
-
-                var videoPath = "//div[@class='video']";
-
-                var videoNodes = htmlDocument.DocumentNode.SelectNodes(videoPath);
-
-                if (videoNodes != null)
-                {
-                    int unScanCount = 0;
-
-                    foreach (var node in videoNodes)
-                    {
-                        var urlAndTitle = node.ChildNodes[0];
-                        if (urlAndTitle != null && urlAndTitle.ChildNodes.Count >= 3)
-                        {
-                            var id = urlAndTitle.ChildNodes[0].InnerText.Trim();
-                            var name = FileUtility.ReplaceInvalidChar(urlAndTitle.ChildNodes[2].InnerText.Trim());
-                            var avUrl = urlAndTitle.Attributes["href"].Value.Trim().Replace("./", "http://www.javlibrary.com/cn/");
-
-                            if (!string.IsNullOrEmpty(avUrl) && !string.IsNullOrEmpty(name) && !string.IsNullOrWhiteSpace(id))
-                            {
-                                ScanURL scan = new ScanURL
-                                {
-                                    Category = url,
-                                    ID = id,
-                                    IsDownload = false,
-                                    Title = name,
-                                    URL = avUrl
-                                };
-
-                                if (!JavDataBaseManager.HasScan(scan))
-                                {
-                                    unScanCount++;
-                                    JavDataBaseManager.InsertScanURL(scan);
-                                }
-                            }
-                        }
-                    }
-
-                    Console.WriteLine(cate + " " + url + " 扫描了 " + unScanCount + " 未扫描, 进度" + current + " / " + total);
-                }
-            }
         }
 
         private static void ScanCategoryPageUrlSingleThread(Dictionary<string, string> urls)
@@ -531,6 +524,14 @@ namespace Service
 
                         Console.WriteLine("线程 " + Thread.CurrentThread.ManagedThreadId.ToString() + " => 插入AV => " + av.ID + " - " + av.Name + " " + status);
                         JavDataBaseManager.UpdateScanURL(url.URL);
+
+                        Console.WriteLine("AV:" + JsonConvert.SerializeObject(new RefreshModel
+                            {
+                                Id = av.ID,
+                                Name = av.Name,
+                                Url = av.PictureURL
+                            })
+                        );
                     }
 
                     string result = "";
@@ -790,30 +791,6 @@ namespace Service
             return av;
         }
 
-        private static void WriteScanFile(List<string> allUrl)
-        {
-            var jsonStr = JsonConvert.SerializeObject(allUrl.Distinct());
-
-            var file = "c:\\setting\\scan" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".json";
-            File.Create(file).Close();
-
-            StreamWriter sw = new StreamWriter(file);
-            sw.WriteLine(jsonStr);
-            sw.Close();
-        }
-
-        private static void WriteDownloadFile(List<AV> allAv)
-        {
-            var jsonStr = JsonConvert.SerializeObject(allAv);
-
-            var file = "c:\\setting\\download" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".json";
-            File.Create(file).Close();
-
-            StreamWriter sw = new StreamWriter(file);
-            sw.WriteLine(jsonStr);
-            sw.Close();
-        }
-
         private static Utils.HtmlResponse JavCookieContanierHelper(string url)
         {
             var htmlRes = HtmlManager.GetHtmlWebClientWithRenewCC("http://www.javlibrary.com/cn/", url, cc);
@@ -831,6 +808,50 @@ namespace Service
 
                 Console.WriteLine("*********************更新Cookie*********************");
             }
+        }
+
+        private static List<MissingCheckModel> DoAllRelatedJav(string table, string content)
+        {
+            List<MissingCheckModel> ret = new List<MissingCheckModel>();
+            var avs = JavDataBaseManager.GetAllAV();
+
+            switch (table)
+            {
+                case "category":
+                    avs = avs.Where(x => x.Category.Contains(content)).ToList();
+                    break;
+                case "actress":
+                    avs = avs.Where(x => x.Actress.Contains(content)).ToList();
+                    break;
+                case "prefix":
+                    avs = avs.Where(x => x.ID.StartsWith(content.ToUpper() + "-")).ToList();
+                    break;
+            }
+
+            foreach (var av in avs)
+            {
+                MissingCheckModel temp = new MissingCheckModel();
+                temp.IsMatch = false;
+                temp.Av = av;
+                temp.Fi = new List<FileInfo>();
+                temp.Seeds = new List<SeedMagnetSearchModel>();
+
+                var matches = new EverythingHelper().SearchFile(av.ID + " | " + av.ID.Replace("-", ""), EverythingSearchEnum.Video);
+
+                if (matches != null && matches.Count > 0)
+                {
+                    temp.IsMatch = true;
+
+                    foreach (var m in matches)
+                    {
+                        temp.Fi.Add(m);
+                    }
+                }
+
+                ret.Add(temp);
+            }
+
+            return ret.OrderBy(x => x.Av.ID).ToList();
         }
 
         public static void DoDownloadOnly(bool showConsole = true)
@@ -899,7 +920,7 @@ namespace Service
             Parallel.ForEach(updatePages, new ParallelOptions { MaxDegreeOfParallelism = 100 }, url =>
             {
                 index++;
-                ScanAndReturnAv(url.Key, url.Value, index, page, urls);
+                ScanAndReturnAv(url.Key);
             });
         }
 
@@ -945,53 +966,16 @@ namespace Service
             ScanAvList(list, force);
         }
 
+        public static void DoFavRefresh(List<string> urls, bool showConsole = true)
+        {
+            GetJavCookie(showConsole);
+
+            var allList = FillInCertainUrl(urls);
+        }
+
         public async static Task<List<MissingCheckModel>> GetAllRelatedJav(string table, string content)
         {
             return await Task.Run(() => DoAllRelatedJav(table, content));
-        }
-
-        public static List<MissingCheckModel> DoAllRelatedJav(string table, string content)
-        {
-            List<MissingCheckModel> ret = new List<MissingCheckModel>();
-            var avs = JavDataBaseManager.GetAllAV();
-
-            switch (table)
-            {
-                case "category":
-                    avs = avs.Where(x => x.Category.Contains(content)).ToList();
-                    break;
-                case "actress":
-                    avs = avs.Where(x => x.Actress.Contains(content)).ToList();
-                    break;
-                case "prefix":
-                    avs = avs.Where(x => x.ID.StartsWith(content.ToUpper() + "-")).ToList();
-                    break;
-            }
-
-            foreach (var av in avs)
-            {
-                MissingCheckModel temp = new MissingCheckModel();
-                temp.IsMatch = false;
-                temp.Av = av;
-                temp.Fi = new List<FileInfo>();
-                temp.Seeds = new List<SeedMagnetSearchModel>();
-
-                var matches = new EverythingHelper().SearchFile(av.ID + " | " + av.ID.Replace("-", ""), EverythingSearchEnum.Video);
-
-                if (matches != null && matches.Count > 0)
-                {
-                    temp.IsMatch = true;
-
-                    foreach (var m in matches)
-                    {
-                        temp.Fi.Add(m);
-                    }
-                }
-
-                ret.Add(temp);
-            }
-
-            return ret.OrderBy(x=>x.Av.ID).ToList();
         }
     }
 

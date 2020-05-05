@@ -4,6 +4,7 @@ using Model.JavModels;
 using Service;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -41,6 +42,27 @@ namespace BatchJavScanerAndMacthMagUrl
                 int.TryParse(args[1], out page);
 
                 JavLibraryHelper.DoDailyRefresh(page, true);
+            }
+
+            if (args[0] == "fav")
+            {
+                var favi = "c:\\setting\\Favi.txt";
+                List<string> urls = new List<string>();
+
+                if (File.Exists(favi))
+                {
+                    using (StreamReader sr = new StreamReader(favi))
+                    {
+                        var url = sr.ReadLine();
+
+                        urls.Add(url + "&page=1");
+                    }
+                }
+
+                if (urls.Count > 0)
+                {
+                    JavLibraryHelper.DoListSearch(urls, false, false);
+                }
             }
 
             if (args[0] == "certain")
