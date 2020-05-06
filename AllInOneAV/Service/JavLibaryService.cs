@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using DataBaseManager.JavDataBaseHelper;
+using DataBaseManager.ScanDataBaseHelper;
 using HtmlAgilityPack;
 using Model.Common;
 using Model.JavModels;
@@ -830,28 +831,73 @@ namespace Service
 
             foreach (var av in avs)
             {
-                MissingCheckModel temp = new MissingCheckModel();
-                temp.IsMatch = false;
-                temp.Av = av;
-                temp.Fi = new List<FileInfo>();
-                temp.Seeds = new List<SeedMagnetSearchModel>();
-
-                var matches = new EverythingHelper().SearchFile(av.ID + " | " + av.ID.Replace("-", ""), EverythingSearchEnum.Video);
-
-                if (matches != null && matches.Count > 0)
+                MissingCheckModel mcm = new MissingCheckModel
                 {
-                    temp.IsMatch = true;
+                    Av = av,
+                    Fi = new List<FileInfo>(),
+                    IsMatch = false,
+                    Seeds = new List<SeedMagnetSearchModel>()
+                };
 
-                    foreach (var m in matches)
-                    {
-                        temp.Fi.Add(m);
-                    }
-                }
-
-                ret.Add(temp);
+                ret.Add(mcm);
             }
 
             return ret.OrderBy(x => x.Av.ID).ToList();
+        }
+
+        private static void FaviScan(List<string> urls)
+        {
+            ScanDataBaseManager.DeleteFaviScan();
+
+            Parallel.ForEach(urls, new ParallelOptions { MaxDegreeOfParallelism = 10 }, url =>
+            {
+                var htmlRes = JavCookieContanierHelper(url);
+
+                if (htmlRes.Success)
+                {
+                    HtmlDocument htmlDocument = new HtmlDocument();
+                    htmlDocument.LoadHtml(htmlRes.Content);
+
+                    var titlePath = "//div[@class='boxtitle']";
+
+                    var titleNode = htmlDocument.DocumentNode.SelectSingleNode(titlePath);
+
+                    if (titleNode != null)
+                    {
+                        var textArray = titleNode.InnerHtml.Trim().Split(' ');
+
+                        var category = "";
+                        var name = textArray[0].Replace("&quot;", "");
+
+                        if (textArray[1] == "所执导的影片")
+                        {
+                            category = "director";
+                        }
+                        else if (textArray[1] == "识别码搜寻结果")
+                        {
+                            category = "prfix";
+                        }
+                        else if (textArray[1] == "相关的影片")
+                        {
+                            category = "category";
+                        }
+                        else
+                        {
+                            category = "actress";
+                        }
+
+                        FaviScan fs = new FaviScan
+                        {
+                            Url = url,
+                            Name = name,
+                            Category = category
+                        };
+
+                        Console.WriteLine("扫描 " + url + " 分类 " + category + " 名称 " + name);
+                        ScanDataBaseManager.InsertFaviScan(fs);
+                    }
+                }
+            });
         }
 
         public static void DoDownloadOnly(bool showConsole = true)
@@ -949,28 +995,23 @@ namespace Service
             ScanEachAvSingleThread();
         }
 
-        public static void DoListSearch(List<string> urls, bool force, bool showConsole = true)
-        {
-            GetJavCookie(showConsole);
-
-            List<ScanURL> list = new List<ScanURL>();
-
-            foreach (var url in urls)
-            {
-                list.Add(new ScanURL
-                {
-                    URL = url
-                });
-            }
-
-            ScanAvList(list, force);
-        }
-
-        public static void DoFavRefresh(List<string> urls, bool showConsole = true)
+        public static void DoListSearch(List<string> urls, bool showConsole = true)
         {
             GetJavCookie(showConsole);
 
             var allList = FillInCertainUrl(urls);
+
+            Parallel.ForEach(allList, new ParallelOptions { MaxDegreeOfParallelism = 12 }, url =>
+            {
+                ScanAndReturnAv(url);
+            });
+        }
+
+        public static void DoFaviScan(List<string> urls, bool showConsole = true)
+        {
+            GetJavCookie(showConsole);
+
+            FaviScan(urls);
         }
 
         public async static Task<List<MissingCheckModel>> GetAllRelatedJav(string table, string content)

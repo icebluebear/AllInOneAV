@@ -51,25 +51,29 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            var favi = "c:\\setting\\Favi.txt";
-            List<string> urls = new List<string>();
+            JavLibraryHelper.DoListSearch("http://www.javlibrary.com/cn/vl_star.php?s=ae2tm,http://www.javlibrary.com/cn/vl_star.php?&mode=&s=l4ea,http://www.javlibrary.com/cn/vl_star.php?s=aewu2,http://www.javlibrary.com/cn/vl_star.php?s=pjjq,http://www.javlibrary.com/cn/vl_star.php?s=aerrg,http://www.javlibrary.com/cn/vl_star.php?s=aelqc,http://www.javlibrary.com/cn/vl_star.php?s=ayias,http://www.javlibrary.com/cn/vl_star.php?s=aznf2,http://www.javlibrary.com/cn/vl_star.php?s=azgcg,http://www.javlibrary.com/cn/vl_star.php?s=afib6".Split(',').ToList(), false);
 
-            if (File.Exists(favi))
-            {
-                using (StreamReader sr = new StreamReader(favi))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        var url = sr.ReadLine();
-                        urls.Add(url + "&page=1");
-                    }
-                }
-            }
+            //var favi = "c:\\setting\\Favi.txt";
+            //List<string> urls = new List<string>();
 
-            if (urls.Count > 0)
-            {
-                JavLibraryHelper.DoFavRefresh(urls, false);
-            }
+            //if (File.Exists(favi))
+            //{
+            //    using (StreamReader sr = new StreamReader(favi))
+            //    {
+            //        while (!sr.EndOfStream)
+            //        {
+            //            var url = sr.ReadLine();
+
+            //            urls.Add(url);
+            //        }
+            //    }
+            //}
+
+            //if (urls.Count > 0)
+            //{
+            //    JavLibraryHelper.DoFaviScan(urls, false);
+            //}
+
             Console.ReadKey();
         }
 

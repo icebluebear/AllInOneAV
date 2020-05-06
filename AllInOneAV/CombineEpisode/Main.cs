@@ -34,12 +34,14 @@ namespace CombineEpisode
         private static List<Model.ScanModels.Match> matchesAV = new List<Model.ScanModels.Match>();
         private static List<FileInfo> recentFi = new List<FileInfo>();
         private static List<RefreshModel> refreshModel = new List<RefreshModel>();
+        private static List<MissingCheckModel> missingCheckForFavi = new List<MissingCheckModel>();
         private static List<ScanResult> scanResult = new List<ScanResult>();
         private Process p;
         private bool OkToStart = true;
         private string[] ImportedFiles = null;
         private Font font = new Font("微软雅黑", 10);
 
+        public static List<string> FaviUrls = new List<string>();
         public delegate void ProcessPb(ProgressBar pb, int value);
         public delegate void ProcessListView(ListView lv, ListViewItem lvi, int column, string content, List<SeedMagnetSearchModel> model);
         public delegate void ProcessListViewItem(ListView lv, ListViewItem lvi);
@@ -210,11 +212,6 @@ namespace CombineEpisode
             ScanRedundantClick();
         }
 
-        private void treeView4_BeforeCheck(object sender, TreeViewCancelEventArgs e)
-        {
-
-        }
-
         private void treeView4_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (e.Action == TreeViewAction.ByMouse && e.Node.Parent == null)
@@ -245,11 +242,6 @@ namespace CombineEpisode
         private void btnScanUnmatchedSelect_Click(object sender, EventArgs e)
         {
             SelectAllUnmatchedSubTreeNode();
-        }
-
-        private void treeView5_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void treeView5_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -575,42 +567,28 @@ namespace CombineEpisode
 
         private void btMissing_Click(object sender, EventArgs e)
         {
-            lvwMissing.Items.Clear();
+            lvMissing.Items.Clear();
             pbMissing.Value = 0;
-            BtnMissingClick();
-        }
 
-        private void btMissingSearch_Click(object sender, EventArgs e)
-        {
-            btnMissingSearchClick();
+            MissingSearch();
         }
 
         private void lvwMissing_MouseClick(object sender, MouseEventArgs e)
         {
-            StringBuilder sb = new StringBuilder();
-
-            if (e.Button == MouseButtons.Right && lvwMissing.SelectedItems.Count > 0)
+            if (e.Button == MouseButtons.Right && lvMissing.SelectedItems.Count > 0)
             {
-                foreach (ListViewItem lvi in lvwMissing.SelectedItems)
-                {
-                    var seeds = ((MissingCheckModel)lvi.Tag);
-                    if (seeds != null && seeds.Seeds.Count > 0)
-                    {
-                        foreach (var seed in seeds.Seeds)
-                        {
-                            sb.AppendLine(seed.MagUrl);
-                        }
-                    }
-                }
+                List<SeedMagnetSearchModel> list = (List<SeedMagnetSearchModel>)lvMissing.SelectedItems[0].Tag;
 
-                Clipboard.SetDataObject(sb.ToString());
-                Message ms = new Message();
-                ms.ShowDialog();
+                if (list != null && list.Count > 0)
+                {
+                    SeedList sl = new SeedList(list);
+                    sl.ShowDialog();
+                }
             }
 
-            if (e.Button == MouseButtons.Left && lvwMissing.SelectedItems.Count > 0)
+            if (e.Button == MouseButtons.Left && lvMissing.SelectedItems.Count > 0)
             {
-                Clipboard.SetDataObject(lvwMissing.SelectedItems[0].SubItems[0].Text);
+                Clipboard.SetDataObject(lvMissing.SelectedItems[0].SubItems[1].Text);
             }
         }
 
@@ -620,29 +598,11 @@ namespace CombineEpisode
             Process.Start(@"" + ((FileInfo)tn.Tag).FullName);
         }
 
-        private void lvwMissing_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == 's')
-            {
-                e.Handled = true;
-                var model = ((MissingCheckModel)lvwMissing.SelectedItems[0].Tag);
-
-                var picPath = imageFolder + model.Av.ID + model.Av.Name + ".jpg";
-
-                if (File.Exists(picPath))
-                {
-                    Pic pic = new Pic(picPath);
-                    pic.Location = this.PointToClient(MousePosition);
-                    var rs = pic.ShowDialog();
-                }
-            }
-        }
-
         private void btnMissing115_Click(object sender, EventArgs e)
         {
             List<MissingCheckModel> list = new List<MissingCheckModel>();
 
-            foreach (ListViewItem item in lvwMissing.Items)
+            foreach (ListViewItem item in lvMissing.Items)
             {
                 MissingCheckModel temp = (MissingCheckModel)item.Tag;
 
@@ -665,11 +625,6 @@ namespace CombineEpisode
             }
         }
 
-        private void pbDaily_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void lwDaily_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right && lwDaily.SelectedItems.Count > 0)
@@ -687,16 +642,6 @@ namespace CombineEpisode
             {
                 Clipboard.SetDataObject(lwDaily.SelectedItems[0].SubItems[1].Text);
             }
-        }
-
-        private void lwDaily_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cbDailyOnly_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
@@ -723,11 +668,6 @@ namespace CombineEpisode
             }
         }
 
-        private void lvPlay_MouseClick(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private void lvPlay_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && lvPlay.SelectedItems.Count > 0)
@@ -743,6 +683,38 @@ namespace CombineEpisode
                 if (lwDaily.SelectedItems[0].BackColor == Color.Blue || lwDaily.SelectedItems[0].BackColor == Color.Yellow)
                 {
                     Process.Start(@"" + lwDaily.SelectedItems[0].SubItems[2].Text);
+                }
+            }
+        }
+
+        private void btnDailyGenerateFav_Click_1(object sender, EventArgs e)
+        {
+            JavFaviScan();
+        }
+
+        private void btnDailyFav_Click_1(object sender, EventArgs e)
+        {
+            FaviUrls = new List<string>();
+
+            FaviList fl = new FaviList();
+
+            var rs = fl.ShowDialog();
+
+            if (rs == DialogResult.Yes)
+            {
+                rbMissingFavi.Checked = true;
+
+                txtMissing.Text = string.Join(",", FaviUrls);
+            }
+        }
+
+        private void lvMissing_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && lvMissing.SelectedItems.Count > 0)
+            {
+                if (lvMissing.SelectedItems[0].BackColor == Color.Blue || lvMissing.SelectedItems[0].BackColor == Color.Yellow)
+                {
+                    Process.Start(@"" + lvMissing.SelectedItems[0].SubItems[2].Text);
                 }
             }
         }
@@ -958,26 +930,6 @@ namespace CombineEpisode
             {
                 lv.Items.Add(lvi);
             }
-        }
-
-        private void DeleteOriFile()
-        {
-            foreach (ListViewItem lvi in listView1.Items)
-            {
-                try
-                {
-                    File.Delete(lvi.Tag.ToString());
-                }
-                catch (Exception ee)
-                {
-                    MessageBox.Show(ee.ToString());
-                }
-            }
-        }
-
-        private void MoveNew()
-        {
-
         }
 
         private void GetFilesToGenerateCombineFile()
@@ -2564,139 +2516,114 @@ namespace CombineEpisode
         {
             if (!string.IsNullOrEmpty(txtMissing.Text))
             {
-                int lessThan = 0;
-                int greaterThen = 0;
+                List<MissingCheckModel> list = new List<MissingCheckModel>();
+                ilMissing.Images.Clear();
+                lvMissing.LargeImageList = ilMissing;
+                Random ran = new Random();
 
-                List<MissingCheckModel> ret = new List<MissingCheckModel>();
+                if (rbMissingFavi.Checked)
+                {
+                    missingCheckForFavi = new List<MissingCheckModel>();
+                    var arg = " dolist " + txtMissing.Text;
 
-                if (rbMissingActress.Checked)
-                {
-                    ret = await JavLibraryHelper.GetAllRelatedJav("actress", txtMissing.Text);
-                }
-                else if (rbMissingCate.Checked)
-                {
-                    ret = await JavLibraryHelper.GetAllRelatedJav("category", txtMissing.Text);
+                    await StartJavRefresh("", arg, OutputJavFaviRefresh);
+
+                    list = missingCheckForFavi;
                 }
                 else
                 {
-                    ret = await JavLibraryHelper.GetAllRelatedJav("prefix", txtMissing.Text);
+                    var table = "";
+                    var content = txtMissing.Text;
+
+                    if (rbMissingActress.Checked)
+                    {
+                        table = "actress";
+                    }
+                    else if (rbMissingCate.Checked)
+                    {
+                        table = "category";
+                    }
+                    else if(rbMissingPrefix.Checked)
+                    {
+                        table = "prefix";
+                    }
+
+                    list = JavLibraryHelper.GetAllRelatedJav(table, content).Result;
                 }
 
-                lvwMissing.BeginUpdate();
-
-                foreach (var r in ret)
+                foreach (var l in list)
                 {
-                    try
+                    var pic = imageFolder + l.Av.ID + l.Av.Name + ".jpg";
+
+                    if (File.Exists(pic))
                     {
-                        ListViewItem lvi = new ListViewItem(r.Av.ID);
-                        lvi.SubItems.Add(r.IsMatch ? "有匹配" : "无匹配");
-                        lvi.SubItems.Add(r.IsMatch ? FileSize.GetAutoSizeString(r.Fi.Max(x => x.Length), 1) : "-");
+                        ilMissing.Images.Add(l.Av.Name, Image.FromFile(pic));
+                    }
+                }
 
-                        lvi.Tag = r;
+                Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 5 }, rm =>
+                {
+                    ListViewItem lvi = new ListViewItem(rm.Av.ID + " " + rm.Av.Name);
+                    lvi.ImageIndex = ilMissing.Images.IndexOfKey(rm.Av.Name);
+                    lvi.SubItems.Add(rm.Av.ID);
 
-                        var magUrls = ScanDataBaseManager.GetAllMagUrlById(r.Av.ID);
+                    var matchFiles = new EverythingHelper().SearchFile(rm.Av.ID + " | " + rm.Av.ID.Replace("-", ""), EverythingSearchEnum.Video);
+                    rm.Fi = matchFiles;
 
-                        if (magUrls != null && magUrls.Count > 0)
+                    var seedList = SearchSeedHelper.SearchSukebei(rm.Av.ID);
+
+                    if (seedList == null || seedList.Count <= 0)
+                    {
+                        seedList = SearchSeedHelper.SearchBtsow(rm.Av.ID);
+                    }
+
+                    if (seedList != null && seedList.Count > 0)
+                    {
+                        lvi.Tag = seedList;
+
+                        ScanDataBaseManager.DeleteMagUrlById(rm.Av.ID);
+
+                        foreach (var seed in seedList)
                         {
-                            lvi.SubItems.Add(magUrls.Count + "");
+                            ScanDataBaseManager.InsertMagUrl(rm.Av.ID, seed.MagUrl, seed.Title, 1);
+                        }
 
-                            List<SeedMagnetSearchModel> tempList = new List<SeedMagnetSearchModel>();
+                        if (matchFiles.Count > 0)
+                        {
+                            lvi.BackColor = Color.Blue;
 
-                            foreach (var m in magUrls)
-                            {
-                                tempList.Add(new SeedMagnetSearchModel
-                                {
-                                    MagUrl = m.MagUrl,
-                                    Title = m.MagTitle
-                                });
-                            }
-
-                            r.Seeds = tempList;
+                            lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
                         }
                         else
                         {
-                            lvi.SubItems.Add("无磁链");
+                            lvi.BackColor = Color.Green;
                         }
-
-                        if (r.IsMatch == false)
+                    }
+                    else
+                    {
+                        if (matchFiles.Count > 0)
                         {
                             lvi.BackColor = Color.Yellow;
+                            lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
                         }
                         else
                         {
-                            if (r.Fi.Max(x => x.Length) <= 1024 * 1024 * 2000)
-                            {
-                                lvi.BackColor = Color.LightBlue;
-                            }
-
-                            foreach (var f in r.Fi)
-                            {
-                                if (f.Length <= 1024 * 1024 * 2000)
-                                {
-                                    lessThan++;
-                                }
-                                else
-                                {
-                                    greaterThen++;
-                                }
-                            }
-                        }
-
-                        ListViewItemUpdate2(lvwMissing, lvi);
-                    }
-                    catch (Exception ee)
-                    {
-
-                    }
-                }
-
-                lvwMissing.EndUpdate();
-
-                labelMissing.Text = "拥有: " + ret.Where(x => x.IsMatch).Count() + " / 总共: " + ret.Count + " 大于2GB的有: " + greaterThen + " 小于2GB的有: " + lessThan;
-            }
-        }
-
-        private async void btnMissingSearchClick()
-        {
-            Dictionary<ListViewItem, MissingCheckModel> list = new Dictionary<ListViewItem, MissingCheckModel>();
-
-            foreach (ListViewItem item in lvwMissing.Items)
-            {
-                list.Add(item, (MissingCheckModel)item.Tag);
-            }
-
-            await Task.Run(() => DoMissingSearch(list));
-        }
-
-        private void DoMissingSearch(Dictionary<ListViewItem, MissingCheckModel> list)
-        {
-            int index = 1;
-            pbMissing.Maximum = list.Count;
-            Random ran = new Random();
-
-            Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 5 }, missing =>
-            {
-                if (missing.Value.IsMatch == false && missing.Value.Seeds.Count <= 0)
-                {
-                    missing.Value.Seeds = SearchSeedHelper.SearchSukebei(missing.Value.Av.ID);
-
-                    if (missing.Value.Seeds.Count > 0)
-                    {
-                        ScanDataBaseManager.DeleteMagUrlById(missing.Value.Av.ID);
-
-                        foreach (var m in missing.Value.Seeds)
-                        {
-                            ScanDataBaseManager.InsertMagUrl(missing.Value.Av.ID, m.MagUrl, m.Title, 1);
+                            lvi.BackColor = Color.Gray;
                         }
                     }
+
+                    ListViewItemUpdate2(lvMissing, lvi);
+
+                    JDuBar(pbMissing, lvMissing.Items.Count);
 
                     Thread.Sleep(100 * ran.Next(5));
+                });
+            }
+        }
 
-                    ListViewItemUpdate(lvwMissing, missing.Key, 3, missing.Value.Seeds.Count + "", missing.Value.Seeds);
-                }
-
-                JDuBar(pbMissing, index++);
-            });
+        private async void MissingSearch()
+        {
+            await Task.Run(() => BtnMissingClick());
         }
 
         private async void DoDailyRefesh(string pageStr)
@@ -2830,6 +2757,57 @@ namespace CombineEpisode
             }
         }
 
+        private void OutputJavFaviRefresh(object sendProcess, DataReceivedEventArgs output)
+        {
+            if (!string.IsNullOrEmpty(output.Data) && output.Data.StartsWith("AV:"))
+            {
+                var jsonStr = output.Data.Replace("AV:", "");
+
+                RefreshModel rm = JsonConvert.DeserializeObject<RefreshModel>(jsonStr);
+
+                missingCheckForFavi.Add(new MissingCheckModel
+                {
+                    Av = new AV()
+                    {
+                        ID = rm.Id,
+                        Name = rm.Name,
+                        URL = rm.Url
+                    },
+                    Fi = new List<FileInfo>(),
+                    IsMatch = false,
+                    Seeds = new List<SeedMagnetSearchModel>()
+                });
+            }
+        }
+
+        private async void JavFaviScan()
+        {
+            await StartJavFaviScan(null);
+
+            MessageBox.Show("操作完毕");
+        }
+
+        private async Task StartJavFaviScan(DataReceivedEventHandler output)
+        {
+            var exe = "G:\\Github\\AllInOneAV\\AllInOneAV\\BatchJavScanerAndMacthMagUrl\\bin\\Debug\\BatchJavScanerAndMacthMagUrl.exe";
+
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = exe;
+                p.StartInfo.Arguments = "faviscan";
+
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.RedirectStandardOutput = true;
+
+                p.OutputDataReceived += output;
+
+                p.Start();
+                p.BeginOutputReadLine();
+                await p.WaitForExitAsync();
+            }
+        }
+
         private void RefreshPlayUi()
         {
             var actress = JavDataBaseManager.GetSimilarContent("actress").Select(x => x.Name).ToArray();
@@ -2926,34 +2904,7 @@ namespace CombineEpisode
             }
         }
 
-        private async void DoDailyFav(string pageStr)
-        {
-            lwDaily.Items.Clear();
-
-            refreshModel = new List<RefreshModel>();
-            int page = 15;
-            int.TryParse(pageStr, out page);
-            var arg = " refresh " + page;
-
-            pbDaily.Value = 0;
-            pbDaily.Maximum = page * 20;
-
-            await StartJavRefresh("", arg, OutputJavRefresh);
-
-            await Task.Run(() => UpdateRefreshUi());
-        }
-
         #endregion
-
-        private void btnDailyFav_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnDailyGenerateFav_Click(object sender, EventArgs e)
-        {
-            var title = "boxtitle";
-        }
     }
 
     #region 扩展方法

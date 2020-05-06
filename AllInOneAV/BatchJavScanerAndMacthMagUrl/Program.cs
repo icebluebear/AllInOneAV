@@ -44,7 +44,7 @@ namespace BatchJavScanerAndMacthMagUrl
                 JavLibraryHelper.DoDailyRefresh(page, true);
             }
 
-            if (args[0] == "fav")
+            if (args[0] == "faviscan")
             {
                 var favi = "c:\\setting\\Favi.txt";
                 List<string> urls = new List<string>();
@@ -53,15 +53,28 @@ namespace BatchJavScanerAndMacthMagUrl
                 {
                     using (StreamReader sr = new StreamReader(favi))
                     {
-                        var url = sr.ReadLine();
+                        while (!sr.EndOfStream)
+                        {
+                            var url = sr.ReadLine();
 
-                        urls.Add(url + "&page=1");
+                            urls.Add(url);
+                        }
                     }
                 }
 
                 if (urls.Count > 0)
                 {
-                    JavLibraryHelper.DoListSearch(urls, false, false);
+                    JavLibraryHelper.DoFaviScan(urls, false);
+                }
+            }
+
+            if (args[0] == "dolist")
+            {
+                var urlList = args[1].Split(',').ToList();
+
+                if (urlList.Count > 0)
+                {
+                    JavLibraryHelper.DoListSearch(urlList, false);
                 }
             }
 

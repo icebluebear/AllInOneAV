@@ -208,5 +208,26 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ScanResult>();
         }
+
+        public static int DeleteFaviScan()
+        {
+            var sql = "TRUNCATE TABLE FaviScan";
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int InsertFaviScan(FaviScan favi)
+        {
+            var sql = "INSERT INTO FaviScan (Category, Url, Name) VALUES ('" + favi.Category + "', '" + favi.Url + "', '" + favi.Name + "')";
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static List<FaviScan> GetFaviScan()
+        {
+            var sql = "SELECT * FROM FaviScan ORDER BY Category";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<FaviScan>();
+        }
     }
 }

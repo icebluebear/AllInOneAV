@@ -83,6 +83,12 @@
       <DependentUpon>115Search.cs</DependentUpon>
     </Compile>
     <Compile Include="BtsowSearchModel.cs" />
+    <Compile Include="FaviList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FaviList.Designer.cs">
+      <DependentUpon>FaviList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +117,9 @@
     </Compile>
     <EmbeddedResource Include="115Search.resx">
       <DependentUpon>115Search.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FaviList.resx">
+      <DependentUpon>FaviList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
