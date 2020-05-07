@@ -69,6 +69,12 @@ namespace MangaDownloaderGUI
                         request.Host = "tu.jiayouzhibo.com";
                         imageList1.Images.Add(m.MangeUrl, Image.FromStream(request.GetResponse().GetResponseStream()));
                     }
+                    else if (si.SourceName == "漫画DB")
+                    {
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(m.MangaPic);
+                        request.Host = "media.manhuadb.com";
+                        imageList1.Images.Add(m.MangeUrl, Image.FromStream(request.GetResponse().GetResponseStream()));
+                    }
                 }
                 catch (Exception ee)
                 {

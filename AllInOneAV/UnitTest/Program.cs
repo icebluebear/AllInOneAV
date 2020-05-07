@@ -51,28 +51,9 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            JavLibraryHelper.DoListSearch("http://www.javlibrary.com/cn/vl_star.php?s=ae2tm,http://www.javlibrary.com/cn/vl_star.php?&mode=&s=l4ea,http://www.javlibrary.com/cn/vl_star.php?s=aewu2,http://www.javlibrary.com/cn/vl_star.php?s=pjjq,http://www.javlibrary.com/cn/vl_star.php?s=aerrg,http://www.javlibrary.com/cn/vl_star.php?s=aelqc,http://www.javlibrary.com/cn/vl_star.php?s=ayias,http://www.javlibrary.com/cn/vl_star.php?s=aznf2,http://www.javlibrary.com/cn/vl_star.php?s=azgcg,http://www.javlibrary.com/cn/vl_star.php?s=afib6".Split(',').ToList(), false);
+            var base64Str = "W3siaW1nIjoiMV91cXJ0dmRlcS5qcGciLCJpbWdfd2VicCI6IjFfdXFydHZkZXEud2VicCIsInAiOjF9LHsiaW1nIjoiMl9tbXd4emVsZC5qcGciLCJpbWdfd2VicCI6IjJfbW13eHplbGQud2VicCIsInAiOjJ9LHsiaW1nIjoiM191dnVtZmh1cy5qcGciLCJpbWdfd2VicCI6IjNfdXZ1bWZodXMud2VicCIsInAiOjN9LHsiaW1nIjoiNF90dWJmYnBvaS5qcGciLCJpbWdfd2VicCI6IjRfdHViZmJwb2kud2VicCIsInAiOjR9LHsiaW1nIjoiNV9tcmx1cWhkbS5qcGciLCJpbWdfd2VicCI6IjVfbXJsdXFoZG0ud2VicCIsInAiOjV9LHsiaW1nIjoiNl91Z3dsYnZ1di5qcGciLCJpbWdfd2VicCI6IjZfdWd3bGJ2dXYud2VicCIsInAiOjZ9LHsiaW1nIjoiN19wcXJlY3Ftci5qcGciLCJpbWdfd2VicCI6IjdfcHFyZWNxbXIud2VicCIsInAiOjd9LHsiaW1nIjoiOF9za2FmanhjYi5qcGciLCJpbWdfd2VicCI6Ijhfc2thZmp4Y2Iud2VicCIsInAiOjh9LHsiaW1nIjoiOV9pZHJzcGd5ZC5qcGciLCJpbWdfd2VicCI6IjlfaWRyc3BneWQud2VicCIsInAiOjl9LHsiaW1nIjoiMTBfcnh3aHpoeXouanBnIiwiaW1nX3dlYnAiOiIxMF9yeHdoemh5ei53ZWJwIiwicCI6MTB9LHsiaW1nIjoiMTFfZmt3aHRjdmEuanBnIiwiaW1nX3dlYnAiOiIxMV9ma3dodGN2YS53ZWJwIiwicCI6MTF9LHsiaW1nIjoiMTJfYnpsY3JtYmIuanBnIiwiaW1nX3dlYnAiOiIxMl9iemxjcm1iYi53ZWJwIiwicCI6MTJ9LHsiaW1nIjoiMTNfanRrcWR4d2ouanBnIiwiaW1nX3dlYnAiOiIxM19qdGtxZHh3ai53ZWJwIiwicCI6MTN9LHsiaW1nIjoiMTRfZnNoa2t5ZmsuanBnIiwiaW1nX3dlYnAiOiIxNF9mc2hra3lmay53ZWJwIiwicCI6MTR9LHsiaW1nIjoiMTVfeG52dmZqemsuanBnIiwiaW1nX3dlYnAiOiIxNV94bnZ2Zmp6ay53ZWJwIiwicCI6MTV9LHsiaW1nIjoiMTZfb2htZWhydnUuanBnIiwiaW1nX3dlYnAiOiIxNl9vaG1laHJ2dS53ZWJwIiwicCI6MTZ9LHsiaW1nIjoiMTdfemR4eW55ZGYuanBnIiwiaW1nX3dlYnAiOiIxN196ZHh5bnlkZi53ZWJwIiwicCI6MTd9LHsiaW1nIjoiMThfZ2J4bm1ycmsuanBnIiwiaW1nX3dlYnAiOiIxOF9nYnhubXJyay53ZWJwIiwicCI6MTh9LHsiaW1nIjoiMTlfcXBtbHRicHouanBnIiwiaW1nX3dlYnAiOiIxOV9xcG1sdGJwei53ZWJwIiwicCI6MTl9LHsiaW1nIjoiMjBfcm9uaHJhd2guanBnIiwiaW1nX3dlYnAiOiIyMF9yb25ocmF3aC53ZWJwIiwicCI6MjB9XQ==";
 
-            //var favi = "c:\\setting\\Favi.txt";
-            //List<string> urls = new List<string>();
-
-            //if (File.Exists(favi))
-            //{
-            //    using (StreamReader sr = new StreamReader(favi))
-            //    {
-            //        while (!sr.EndOfStream)
-            //        {
-            //            var url = sr.ReadLine();
-
-            //            urls.Add(url);
-            //        }
-            //    }
-            //}
-
-            //if (urls.Count > 0)
-            //{
-            //    JavLibraryHelper.DoFaviScan(urls, false);
-            //}
+            var test = DecryptHelper.Base64Decode(base64Str);
 
             Console.ReadKey();
         }
