@@ -2394,9 +2394,9 @@
             this.lbPlayStatus.AutoSize = true;
             this.lbPlayStatus.Location = new System.Drawing.Point(177, 559);
             this.lbPlayStatus.Name = "lbPlayStatus";
-            this.lbPlayStatus.Size = new System.Drawing.Size(35, 12);
+            this.lbPlayStatus.Size = new System.Drawing.Size(29, 12);
             this.lbPlayStatus.TabIndex = 7;
-            this.lbPlayStatus.Text = "0 / 0";
+            this.lbPlayStatus.Text = "0 条";
             // 
             // btnPlay
             // 

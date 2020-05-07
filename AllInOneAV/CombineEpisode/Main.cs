@@ -2561,6 +2561,8 @@ namespace CombineEpisode
                     }
                 }
 
+                pbMissing.Maximum = list.Count;
+
                 Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 5 }, rm =>
                 {
                     ListViewItem lvi = new ListViewItem(rm.Av.ID + " " + rm.Av.Name);
@@ -2878,6 +2880,8 @@ namespace CombineEpisode
 
                 toBePlay = toBePlay.Intersect(prefixPlay).OrderBy(x => x.AvId).ToList();
             }
+
+            lbPlayStatus.Text = toBePlay.Count + " 条";
 
             await Task.Run(() => ShowPlayContent(toBePlay));
         }
