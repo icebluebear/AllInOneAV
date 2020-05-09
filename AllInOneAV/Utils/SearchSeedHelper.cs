@@ -13,9 +13,9 @@ namespace Utils
     {
         public static List<SeedMagnetSearchModel> SearchBtsow(string id)
         {
-            var c = HtmlManager.GetCookies("https://btsow.club/search/");
-            CookieContainer cc = new CookieContainer();
-            cc.Add(c);
+            //var c = HtmlManager.GetCookies("https://btsow.club/search/");
+            //CookieContainer cc = new CookieContainer();
+            //cc.Add(c);
 
             List<SeedMagnetSearchModel> ret = new List<SeedMagnetSearchModel>();
 

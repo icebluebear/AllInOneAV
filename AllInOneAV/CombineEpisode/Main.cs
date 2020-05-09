@@ -2574,10 +2574,10 @@ namespace CombineEpisode
 
                     var seedList = SearchSeedHelper.SearchSukebei(rm.Av.ID);
 
-                    if (seedList == null || seedList.Count <= 0)
-                    {
-                        seedList = SearchSeedHelper.SearchBtsow(rm.Av.ID);
-                    }
+                    //if (seedList == null || seedList.Count <= 0)
+                    //{
+                    //    seedList = SearchSeedHelper.SearchBtsow(rm.Av.ID);
+                    //}
 
                     if (seedList != null && seedList.Count > 0)
                     {

@@ -2,6 +2,7 @@
 using MangaDownloaderGUI.Service;
 using Model.MangaModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -183,6 +184,15 @@ namespace MangaDownloaderGUI
             mhdb.SourceHost = "https://www.manhuadb.com/";
 
             sourceList.Add(mhdb);
+
+            SourceInfo mh123 = new SourceInfo();
+            mh123.SourceName = "漫画123";
+            mh123.SourceUrl = "https://www.manhua123.net/";
+            mh123.SourceSearch = "https://www.manhua123.net/search.html";
+            mh123.SourceReffer = "";
+            mh123.SourceHost = "https://www.manhua123.net/";
+
+            sourceList.Add(mh123);
         }
 
         private void InitCbSource()
@@ -333,6 +343,11 @@ namespace MangaDownloaderGUI
                 return SearchManhuadb(content);
             }
 
+            if (type == "漫画123")
+            {
+                return SearchManhua123(content);
+            }
+
             return new List<MangaInfo>();
         }
 
@@ -360,6 +375,10 @@ namespace MangaDownloaderGUI
                 {
                     AddAdditionalInfoManhuadb();
                 }
+                else if (si.SourceName == "漫画123")
+                {
+                    AddAdditionalInfoManhua123();
+                }
             }
         }
 
@@ -386,6 +405,10 @@ namespace MangaDownloaderGUI
                 else if (si.SourceName == "漫画DB")
                 {
                     ShowMangeManhuadb();
+                }
+                else if (si.SourceName == "漫画123")
+                {
+                    ShowMangeManhua123();
                 }
             }
             else
@@ -434,6 +457,11 @@ namespace MangaDownloaderGUI
             if (type == "漫画DB")
             {
                 root = await Task.Run(() => DownloadManhuadb(downloadUrls, setting));
+            }
+
+            if (type == "漫画123")
+            {
+                root = await Task.Run(() => DownloadManhua123(downloadUrls, setting));
             }
 
             if (!string.IsNullOrEmpty(root))
@@ -765,6 +793,57 @@ namespace MangaDownloaderGUI
             return ret;
         }
 
+        private List<MangaInfo> SearchManhua123(string content)
+        {
+            List<MangaInfo> ret = new List<MangaInfo>();
+            CookieContainer cc = new CookieContainer();
+            cc.Add(HtmlManager.GetCookies(si.SourceUrl));
+
+            rcbLog.AppendText("开始搜索漫画123" + Environment.NewLine);
+
+            var searchUrl = si.SourceSearch;
+            content = HttpUtility.UrlEncode(content, Encoding.UTF8);
+
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            dic.Add("keyword", content);
+
+            var htmlRet = HtmlManager.Post(si.SourceSearch, dic);
+
+            //暂时只搜第一页
+            HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+            htmlDocument.LoadHtml(htmlRet);
+
+            var itemPath = "//ul[@id='list_img']//li";
+
+            var itemNodes = htmlDocument.DocumentNode.SelectNodes(itemPath);
+
+            if (itemNodes != null)
+            {
+                foreach (var item in itemNodes)
+                {
+                    MangaInfo cmi = new MangaInfo();
+                    cmi.Urls = new List<string>();
+                    cmi.Cc = cc;
+                    var urlNode = item.ChildNodes.FindFirst("a");
+                    var picNode = item.ChildNodes.FindFirst("img");
+                    var nameNode = item.ChildNodes.FindFirst("p");
+
+                    if (nameNode != null && picNode != null && urlNode != null)
+                    {
+                        cmi.MangeUrl = "https://www.manhua123.net" + urlNode.Attributes["href"].Value.Trim();
+                        cmi.MangaName = FileUtility.ReplaceInvalidChar(nameNode.InnerHtml.Trim());
+                        cmi.MangaPic = picNode.Attributes["src"].Value.Trim();
+
+                        ret.Add(cmi);
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+
         private void AddAdditionalInfoWuwu()
         {
             var setting = SettingSevice.ReadSetting();
@@ -827,6 +906,70 @@ namespace MangaDownloaderGUI
 
                     txtMainChapters.Text = count + "章";
                     txtMainStatus.Text = updateNode.InnerHtml.Trim();
+                    txtMainLastChapter.Text = history.DownloadedChapters.Count + "章";
+                }
+            }
+        }
+
+        private void AddAdditionalInfoManhua123()
+        {
+            var setting = SettingSevice.ReadSetting();
+
+            if (string.IsNullOrEmpty(setting.HistoryFolder) || string.IsNullOrEmpty(setting.ZipFolder) || string.IsNullOrEmpty(setting.MangaFolder))
+            {
+                MessageBox.Show("请先去设置页面完成设置");
+                return;
+            }
+
+            var history = HistoryService.ReadHistory(si.SourceName, mi.MangaName, setting.HistoryFolder);
+
+            var htmlRet = HtmlManager.GetHtmlWebClient(si.SourceHost, mi.MangeUrl, mi.Cc);
+
+            if (htmlRet.Success)
+            {
+                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                htmlDocument.LoadHtml(htmlRet.Content);
+                var chapterPath = "//ul[@class='jslist01']//li";
+
+                var chapterNodes = htmlDocument.DocumentNode.SelectNodes(chapterPath);
+
+                if (chapterNodes != null)
+                {
+                    lvwMainList.BeginUpdate();
+                    int count = 1;
+                    foreach (var node in chapterNodes.Reverse())
+                    {
+                        var aTag = node.ChildNodes.FindFirst("a");
+
+                        if (aTag != null)
+                        {
+                            var subUrl = aTag.Attributes["href"].Value.Trim();
+                            var title = aTag.InnerHtml.Trim();
+
+                            mi.Urls.Add("https://www.manhua123.net/" + subUrl);
+
+                            ListViewItem lvi = new ListViewItem(title);
+                            lvi.Tag = "https://www.manhua123.net/" + subUrl;
+
+                            if (count % 2 == 0)
+                            {
+                                lvi.BackColor = Color.LightGray;
+                            }
+
+                            if (!history.DownloadedChapters.Contains(subUrl))
+                            {
+                                lvi.Selected = true;
+                            }
+
+                            lvwMainList.Items.Add(lvi);
+                            count++;
+                        }
+                    }
+
+                    mi.MangaChapters = count;
+                    lvwMainList.EndUpdate();
+
+                    txtMainChapters.Text = count + "章";
                     txtMainLastChapter.Text = history.DownloadedChapters.Count + "章";
                 }
             }
@@ -1187,6 +1330,26 @@ namespace MangaDownloaderGUI
 
             lvwMainList.Focus();
         }
+
+        private void ShowMangeManhua123()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(mi.MangaPic);
+            request.Host = "img.detatu.com";
+
+            try
+            {
+                picManga.Image = Image.FromStream(request.GetResponse().GetResponseStream());
+            }
+            catch (Exception ee)
+            {
+
+            }
+
+            txtMainUrl.Text = mi.MangeUrl;
+
+            lvwMainList.Focus();
+        }
+
 
         private void ShowMangeHmb()
         {
@@ -1735,6 +1898,88 @@ namespace MangaDownloaderGUI
 
             return mangaRoot;
         }
+
+        private string DownloadManhua123(Dictionary<string, string> dic, SettingModel setting)
+        {
+            var mangaRoot = GenerateFolder(setting.MangaFolder + si.SourceName + "_" + mi.MangaName.Replace(".", "") + "\\");
+
+            Dictionary<string, string> downloadUrls = dic;
+
+            var history = HistoryService.ReadHistory(si.SourceName, mi.MangaName, setting.HistoryFolder);
+
+            int currentChapert = 1;
+
+            foreach (var url in downloadUrls)
+            {
+                DialogResult rs = DialogResult.No;
+
+                if (history.DownloadedChapters.Contains(url.Key))
+                {
+                    rs = MessageBox.Show("之前已经下载过该章节是否要跳过", "提示", MessageBoxButtons.YesNo);
+                }
+
+                if (rs == DialogResult.Yes)
+                {
+                    UpdateRtb(rcbLog, url.Value + " 已经下载过,跳过");
+                    continue;
+                }
+                else
+                {
+                    var htmlRet = HtmlManager.GetHtmlWebClient(si.SourceHost, url.Key, mi.Cc);
+
+                    if (htmlRet.Success)
+                    {
+                        var downloadExcep = "";
+                        var subFolder = GenerateFolder(mangaRoot + FileUtility.ReplaceInvalidChar(url.Value) + "\\");
+
+                        var picUrls = htmlRet.Content.Substring(htmlRet.Content.IndexOf("z_img='") + "z_img='".Length);
+                        picUrls = picUrls.Substring(0, picUrls.IndexOf("'"));
+
+                        var pics = JsonConvert.DeserializeObject<List<string>>(picUrls);
+
+                        Dictionary<int, string> picToBeDownloaded = new Dictionary<int, string>();
+
+                        var index = 1;
+
+                        foreach (var p in pics)
+                        {
+                            picToBeDownloaded.Add(index++, "https://img.detatu.com/" + p);
+                        }
+
+                        int finish = 0;
+
+                        Parallel.ForEach(picToBeDownloaded, new ParallelOptions { MaxDegreeOfParallelism = setting.ThreadCount }, node =>
+                        {
+                            downloadExcep = "";
+                            string host = "img.detatu.com";
+                            var pic = node.Value;
+
+                            downloadExcep += DownloadHelper.DownloadHttpsWithHost(pic, subFolder + node.Key + ".jpg", host, url.Key, false);
+
+                            UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
+                        });
+
+                        CombinePics(mangaRoot, url.Value, subFolder);
+
+                        if (string.IsNullOrEmpty(downloadExcep))
+                        {
+                            HistoryService.WriteHistory(si.SourceName, mi.MangaName, setting.HistoryFolder, url.Key, mi.MangeUrl);
+                            UpdateRtb(rcbLog, "下载" + url.Value + " 成功");
+                        }
+                        else
+                        {
+                            UpdateRtb(rcbLog, "下载" + url.Value + " 部分有重试下载，可能有部分失败");
+                        }
+
+                        UpdatePb(pbMain, currentChapert, downloadUrls.Count);
+                        currentChapert++;
+                    }
+                }
+            }
+
+            return mangaRoot;
+        }
+
 
         private string GenerateFolder(string path)
         {

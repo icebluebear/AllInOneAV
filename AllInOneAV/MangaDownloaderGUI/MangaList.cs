@@ -75,6 +75,12 @@ namespace MangaDownloaderGUI
                         request.Host = "media.manhuadb.com";
                         imageList1.Images.Add(m.MangeUrl, Image.FromStream(request.GetResponse().GetResponseStream()));
                     }
+                    else if (si.SourceName == "漫画123")
+                    {
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(m.MangaPic);
+                        request.Host = "img.detatu.com";
+                        imageList1.Images.Add(m.MangeUrl, Image.FromStream(request.GetResponse().GetResponseStream()));
+                    }
                 }
                 catch (Exception ee)
                 {

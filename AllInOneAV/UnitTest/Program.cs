@@ -51,11 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-
-            dic.Add("http://www.javlibrary.com/cn/vl_searchbyid.php?&page=1&keyword=xrw", "xrw");
-
-            JavLibraryHelper.DoCertainCategory(dic);
+            var res = SearchSeedHelper.SearchBtsow("vdd-100");
 
             Console.ReadKey();
         }
