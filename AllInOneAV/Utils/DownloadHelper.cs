@@ -39,7 +39,8 @@ namespace Utils
 
         public static string DownloadHttpsWithHost(string url, string path, string host, string reffer, bool shaque = false, int retry = 3, int current = 1)
         {
-            string ret = "";
+            string ret = "下载失败";
+
             if (current <= retry)
             {
                 try
@@ -48,18 +49,17 @@ namespace Utils
                     wc.Headers.Add(HttpRequestHeader.CacheControl, "no-cache");
                     wc.Headers.Add(HttpRequestHeader.Host, host);
                     wc.Headers.Add(HttpRequestHeader.Referer, reffer);
-                    wc.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+                    wc.Proxy = null;
+                    wc.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate, br");
                     wc.Headers.Add(HttpRequestHeader.Accept, "image/webp,image/apng,image/*,*/*;q=0.8");
                     wc.DownloadFile(url, path);
 
-                    wc.Dispose();
+                    ret = "";
                 }
                 catch (Exception ee)
                 {
                     Console.WriteLine("下载 " + url + " 失败, 重试");
-                    DownloadHttps(url, path, host, retry, current + 1);
-
-                    ret = "下载 " + url + " 失败, 重试";
+                    DownloadHttpsWithHost(url, path, host, reffer, false, 3, current + 1);
                 }
             }
 

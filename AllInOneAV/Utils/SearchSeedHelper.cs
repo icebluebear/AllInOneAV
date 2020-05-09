@@ -85,12 +85,12 @@ namespace Utils
 
         public static List<SeedMagnetSearchModel> SearchSukebei(string id, CookieContainer cc = null)
         {
-            if (cc == null)
-            {
-                var c = HtmlManager.GetCookies("https://sukebei.nyaa.si/");
-                cc = new CookieContainer();
-                cc.Add(c);
-            }
+            //if (cc == null)
+            //{
+            //    var c = HtmlManager.GetCookies("https://sukebei.nyaa.si/");
+            //    cc = new CookieContainer();
+            //    cc.Add(c);
+            //}
 
             List<SeedMagnetSearchModel> ret = new List<SeedMagnetSearchModel>();
 

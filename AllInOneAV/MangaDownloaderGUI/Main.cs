@@ -1710,7 +1710,7 @@ namespace MangaDownloaderGUI
                             string host = "i1.manhuadb.com";
                             var pic = node.Value;
 
-                            downloadExcep += DownloadHelper.DownloadHttpsWithHost(pic, subFolder + node.Key + ".jpg", host, "", false);
+                            downloadExcep += DownloadHelper.DownloadHttpsWithHost(pic, subFolder + node.Key + ".jpg", host, url.Key, false);
 
                             UpdatePb(pbSub, ++finish, picToBeDownloaded.Count);
                         });

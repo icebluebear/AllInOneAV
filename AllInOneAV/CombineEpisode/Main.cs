@@ -2657,14 +2657,7 @@ namespace CombineEpisode
                 }
                 else
                 {
-                    if (rm.Url == "http://" || rm.Url == "http:")
-                    {
-
-                    }
-                    else
-                    {
-                        ilDaily.Images.Add(rm.Name, Image.FromStream(WebRequest.Create(rm.Url).GetResponse().GetResponseStream()));
-                    }
+                    ilDaily.Images.Add(rm.Name, Image.FromFile(imageFolder + "noimage.gif"));
                 }
             });
 

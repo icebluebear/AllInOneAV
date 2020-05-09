@@ -50,7 +50,7 @@ namespace Service
             {
                 driver.Navigate().GoToUrl("http://www.javlibrary.com/cn/");
 
-                Thread.Sleep(12 * 1000);
+                Thread.Sleep(15 * 1000);
 
                 ret = driver.Manage().Cookies.AllCookies.Where(x => x.Domain == ".javlibrary.com").ToList();
 
@@ -76,7 +76,7 @@ namespace Service
             }
             else
             {
-                cc = null;
+                GetJavCookie(showConsole);
             }
         }
 
@@ -670,10 +670,18 @@ namespace Service
             av.ID = id;
 
             var release = htmlDocument.DocumentNode.SelectSingleNode(releasdPath);
+            DateTime rDate = new DateTime(2050, 1, 1);
             if (release != null && !string.IsNullOrEmpty(release.InnerText))
             {
-                av.ReleaseDate = DateTime.Parse(release.InnerText.Trim());
+                DateTime.TryParse(release.InnerText.Trim(), out rDate);
+
+                if (rDate <= DateTime.MinValue)
+                {
+                    rDate = new DateTime(2050, 1, 1);
+                }
             }
+            
+            av.ReleaseDate = rDate;
 
             var length = htmlDocument.DocumentNode.SelectSingleNode(lengthPath);
             if (length != null && !string.IsNullOrEmpty(length.InnerText))

@@ -321,7 +321,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1049, 606);
+            this.panel1.Size = new System.Drawing.Size(1169, 606);
             this.panel1.TabIndex = 0;
             // 
             // panel3
@@ -330,7 +330,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1049, 606);
+            this.panel3.Size = new System.Drawing.Size(1169, 606);
             this.panel3.TabIndex = 1;
             // 
             // panel5
@@ -339,7 +339,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1049, 606);
+            this.panel5.Size = new System.Drawing.Size(1169, 606);
             this.panel5.TabIndex = 2;
             // 
             // tabControl1
@@ -365,7 +365,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1049, 606);
+            this.tabControl1.Size = new System.Drawing.Size(1169, 606);
             this.tabControl1.TabIndex = 6;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -378,7 +378,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(1041, 580);
+            this.tabPage2.Size = new System.Drawing.Size(1161, 580);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "生成合并任务";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -390,7 +390,7 @@
             this.panel9.Location = new System.Drawing.Point(2, 43);
             this.panel9.Margin = new System.Windows.Forms.Padding(2);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(1037, 485);
+            this.panel9.Size = new System.Drawing.Size(1157, 485);
             this.panel9.TabIndex = 2;
             // 
             // treeView1
@@ -399,7 +399,7 @@
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(1037, 485);
+            this.treeView1.Size = new System.Drawing.Size(1157, 485);
             this.treeView1.TabIndex = 0;
             // 
             // panel8
@@ -411,13 +411,13 @@
             this.panel8.Location = new System.Drawing.Point(2, 528);
             this.panel8.Margin = new System.Windows.Forms.Padding(2);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(1037, 50);
+            this.panel8.Size = new System.Drawing.Size(1157, 50);
             this.panel8.TabIndex = 1;
             // 
             // btnDelete
             // 
             this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelete.Location = new System.Drawing.Point(875, 13);
+            this.btnDelete.Location = new System.Drawing.Point(995, 13);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(71, 26);
@@ -433,13 +433,13 @@
             this.pb2.Location = new System.Drawing.Point(9, 13);
             this.pb2.Margin = new System.Windows.Forms.Padding(2);
             this.pb2.Name = "pb2";
-            this.pb2.Size = new System.Drawing.Size(857, 26);
+            this.pb2.Size = new System.Drawing.Size(977, 26);
             this.pb2.TabIndex = 3;
             // 
             // btnGenerate
             // 
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.Location = new System.Drawing.Point(953, 13);
+            this.btnGenerate.Location = new System.Drawing.Point(1073, 13);
             this.btnGenerate.Margin = new System.Windows.Forms.Padding(2);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(71, 26);
@@ -456,13 +456,13 @@
             this.panel7.Location = new System.Drawing.Point(2, 2);
             this.panel7.Margin = new System.Windows.Forms.Padding(2);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(1037, 41);
+            this.panel7.Size = new System.Drawing.Size(1157, 41);
             this.panel7.TabIndex = 0;
             // 
             // btnLook
             // 
             this.btnLook.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLook.Location = new System.Drawing.Point(953, 5);
+            this.btnLook.Location = new System.Drawing.Point(1073, 5);
             this.btnLook.Margin = new System.Windows.Forms.Padding(2);
             this.btnLook.Name = "btnLook";
             this.btnLook.Size = new System.Drawing.Size(71, 26);
@@ -478,7 +478,7 @@
             this.txtLook.Location = new System.Drawing.Point(9, 10);
             this.txtLook.Margin = new System.Windows.Forms.Padding(2);
             this.txtLook.Name = "txtLook";
-            this.txtLook.Size = new System.Drawing.Size(931, 21);
+            this.txtLook.Size = new System.Drawing.Size(1051, 21);
             this.txtLook.TabIndex = 0;
             // 
             // tabPage3
@@ -2153,7 +2153,7 @@
             this.tabPage15.Controls.Add(this.panel49);
             this.tabPage15.Location = new System.Drawing.Point(4, 22);
             this.tabPage15.Name = "tabPage15";
-            this.tabPage15.Size = new System.Drawing.Size(1041, 580);
+            this.tabPage15.Size = new System.Drawing.Size(1161, 580);
             this.tabPage15.TabIndex = 17;
             this.tabPage15.Text = "日常更新";
             this.tabPage15.UseVisualStyleBackColor = true;
@@ -2165,7 +2165,7 @@
             this.panel49.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel49.Location = new System.Drawing.Point(0, 0);
             this.panel49.Name = "panel49";
-            this.panel49.Size = new System.Drawing.Size(1041, 580);
+            this.panel49.Size = new System.Drawing.Size(1161, 580);
             this.panel49.TabIndex = 0;
             // 
             // panel51
@@ -2174,7 +2174,7 @@
             this.panel51.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel51.Location = new System.Drawing.Point(0, 51);
             this.panel51.Name = "panel51";
-            this.panel51.Size = new System.Drawing.Size(1041, 529);
+            this.panel51.Size = new System.Drawing.Size(1161, 529);
             this.panel51.TabIndex = 2;
             // 
             // lwDaily
@@ -2186,7 +2186,7 @@
             this.lwDaily.Location = new System.Drawing.Point(0, 0);
             this.lwDaily.MultiSelect = false;
             this.lwDaily.Name = "lwDaily";
-            this.lwDaily.Size = new System.Drawing.Size(1041, 529);
+            this.lwDaily.Size = new System.Drawing.Size(1161, 529);
             this.lwDaily.TabIndex = 0;
             this.lwDaily.UseCompatibleStateImageBehavior = false;
             this.lwDaily.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lwDaily_MouseClick);
@@ -2202,7 +2202,7 @@
             this.panel50.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel50.Location = new System.Drawing.Point(0, 0);
             this.panel50.Name = "panel50";
-            this.panel50.Size = new System.Drawing.Size(1041, 51);
+            this.panel50.Size = new System.Drawing.Size(1161, 51);
             this.panel50.TabIndex = 1;
             // 
             // pbDaily
@@ -2211,13 +2211,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbDaily.Location = new System.Drawing.Point(214, 14);
             this.pbDaily.Name = "pbDaily";
-            this.pbDaily.Size = new System.Drawing.Size(740, 23);
+            this.pbDaily.Size = new System.Drawing.Size(860, 23);
             this.pbDaily.TabIndex = 4;
             // 
             // btnDaily
             // 
             this.btnDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDaily.Location = new System.Drawing.Point(960, 6);
+            this.btnDaily.Location = new System.Drawing.Point(1080, 6);
             this.btnDaily.Name = "btnDaily";
             this.btnDaily.Size = new System.Drawing.Size(75, 38);
             this.btnDaily.TabIndex = 3;
@@ -2261,7 +2261,7 @@
             this.tabPage12.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage12.Location = new System.Drawing.Point(4, 22);
             this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(1041, 580);
+            this.tabPage12.Size = new System.Drawing.Size(1161, 580);
             this.tabPage12.TabIndex = 15;
             this.tabPage12.Text = "生成报表";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -2273,7 +2273,7 @@
             this.panel43.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel43.Location = new System.Drawing.Point(0, 0);
             this.panel43.Name = "panel43";
-            this.panel43.Size = new System.Drawing.Size(1041, 580);
+            this.panel43.Size = new System.Drawing.Size(1161, 580);
             this.panel43.TabIndex = 0;
             // 
             // panel45
@@ -2282,7 +2282,7 @@
             this.panel45.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel45.Location = new System.Drawing.Point(0, 46);
             this.panel45.Name = "panel45";
-            this.panel45.Size = new System.Drawing.Size(1041, 534);
+            this.panel45.Size = new System.Drawing.Size(1161, 534);
             this.panel45.TabIndex = 2;
             // 
             // rtbReport
@@ -2290,7 +2290,7 @@
             this.rtbReport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbReport.Location = new System.Drawing.Point(0, 0);
             this.rtbReport.Name = "rtbReport";
-            this.rtbReport.Size = new System.Drawing.Size(1041, 534);
+            this.rtbReport.Size = new System.Drawing.Size(1161, 534);
             this.rtbReport.TabIndex = 0;
             this.rtbReport.Text = "";
             // 
@@ -2300,7 +2300,7 @@
             this.panel44.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel44.Location = new System.Drawing.Point(0, 0);
             this.panel44.Name = "panel44";
-            this.panel44.Size = new System.Drawing.Size(1041, 46);
+            this.panel44.Size = new System.Drawing.Size(1161, 46);
             this.panel44.TabIndex = 1;
             // 
             // btnReport
@@ -2318,7 +2318,7 @@
             this.tabPage16.Controls.Add(this.panel52);
             this.tabPage16.Location = new System.Drawing.Point(4, 22);
             this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Size = new System.Drawing.Size(1041, 580);
+            this.tabPage16.Size = new System.Drawing.Size(1161, 580);
             this.tabPage16.TabIndex = 18;
             this.tabPage16.Text = "视频播放器";
             this.tabPage16.UseVisualStyleBackColor = true;
@@ -2330,7 +2330,7 @@
             this.panel52.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel52.Location = new System.Drawing.Point(0, 0);
             this.panel52.Name = "panel52";
-            this.panel52.Size = new System.Drawing.Size(1041, 580);
+            this.panel52.Size = new System.Drawing.Size(1161, 580);
             this.panel52.TabIndex = 0;
             // 
             // panel54
@@ -2339,7 +2339,7 @@
             this.panel54.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel54.Location = new System.Drawing.Point(242, 0);
             this.panel54.Name = "panel54";
-            this.panel54.Size = new System.Drawing.Size(799, 580);
+            this.panel54.Size = new System.Drawing.Size(919, 580);
             this.panel54.TabIndex = 2;
             // 
             // lvPlay
@@ -2349,7 +2349,7 @@
             this.lvPlay.LargeImageList = this.ilPlay;
             this.lvPlay.Location = new System.Drawing.Point(0, 0);
             this.lvPlay.Name = "lvPlay";
-            this.lvPlay.Size = new System.Drawing.Size(799, 580);
+            this.lvPlay.Size = new System.Drawing.Size(919, 580);
             this.lvPlay.TabIndex = 0;
             this.lvPlay.UseCompatibleStateImageBehavior = false;
             this.lvPlay.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvPlay_MouseDoubleClick);
@@ -2510,7 +2510,7 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1049, 606);
+            this.ClientSize = new System.Drawing.Size(1169, 606);
             this.Controls.Add(this.panel1);
             this.KeyPreview = true;
             this.Name = "Main";
