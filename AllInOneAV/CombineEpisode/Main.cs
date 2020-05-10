@@ -719,6 +719,11 @@ namespace CombineEpisode
             }
         }
 
+        private void btnScanBatch_Click(object sender, EventArgs e)
+        {
+            JavBatchScanAsync("certain");
+        }
+
         #endregion
 
         #region 方法
@@ -2193,6 +2198,19 @@ namespace CombineEpisode
             }
             else
             {
+                await StartJavScan("", " " + command + " " + titleStr + " " + urlStr, OutputJavScan);
+            }
+
+            MessageBox.Show("操作完毕");
+        }
+
+        private async void JavBatchScanAsync(string command)
+        {
+            foreach (ListViewItem lvi in listView4.SelectedItems)
+            {
+                var titleStr = lvi.SubItems[0].Text;
+                var urlStr = lvi.SubItems[1].Text;
+
                 await StartJavScan("", " " + command + " " + titleStr + " " + urlStr, OutputJavScan);
             }
 
