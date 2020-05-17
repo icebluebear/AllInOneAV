@@ -25,6 +25,34 @@ namespace Service
         private static readonly string ImgFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
         private static readonly string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
 
+        private static void GetJavCookieOld(bool showConsole = true)
+        { 
+            var ua = JavINIClass.IniReadValue("Jav", "userAgent");
+            var cookie = JavINIClass.IniReadValue("Jav", "cookie");
+
+            while (string.IsNullOrEmpty(cookie) || string.IsNullOrEmpty(ua))
+            {
+                Thread.Sleep(1000 * 60);
+            }
+
+            cc = new CookieContainer();
+            var cookieStr = cookie.Split(';');
+
+            foreach (var c in cookieStr)
+            {
+                if (c.Split('=')[0].Contains("cf"))
+                {
+                    System.Net.Cookie coo = new System.Net.Cookie();
+
+                    coo.Name = c.Split('=')[0].Trim();
+                    coo.Value = c.Split('=')[1].Trim();
+                    coo.Domain = "www.javlibrary.com";
+
+                    cc.Add(coo);
+                }
+            }
+        }
+
         private static void GetJavCookie(bool showConsole = true)
         {
             ChromeOptions options = new ChromeOptions();
@@ -942,6 +970,8 @@ namespace Service
             List<string> urls = new List<string>();
 
             GetJavCookie(showConsole);
+
+            var htmlRes = HtmlManager.GetHtmlWebClientWithRenewCC("http://www.javlibrary.com/cn/", "http://www.javlibrary.com/cn/vl_update.php?&mode=&page=1", cc);
 
             for (int i = 1; i <= page; i++)
             {

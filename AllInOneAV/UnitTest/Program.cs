@@ -51,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            var res = SearchSeedHelper.SearchBtsow("vdd-100");
+            JavLibraryHelper.DoDailyUpdate(200, true);
 
             Console.ReadKey();
         }

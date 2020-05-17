@@ -2649,7 +2649,7 @@ namespace CombineEpisode
         private async void DoDailyRefesh(string pageStr)
         {
             lwDaily.Items.Clear();
-
+            ilDaily.Images.Clear();
             refreshModel = new List<RefreshModel>();
             int page = 15;
             int.TryParse(pageStr, out page);
