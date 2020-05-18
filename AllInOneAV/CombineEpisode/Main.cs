@@ -36,6 +36,7 @@ namespace CombineEpisode
         private static List<RefreshModel> refreshModel = new List<RefreshModel>();
         private static List<MissingCheckModel> missingCheckForFavi = new List<MissingCheckModel>();
         private static List<ScanResult> scanResult = new List<ScanResult>();
+        private static List<ScanResult> toBePlay = new List<ScanResult>();
         private Process p;
         private bool OkToStart = true;
         private string[] ImportedFiles = null;
@@ -646,13 +647,8 @@ namespace CombineEpisode
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (scanResult == null || scanResult.Count <= 0)
-            {
-                scanResult = ScanDataBaseManager.GetMatchScanResult();
-            }
-
-            lvPlay.Items.Clear();
-            BtnPlayClick();
+            int pageSize = int.Parse(txtPlayPageSize.Text);
+            BtnPlayClick(1, pageSize);
         }
 
         private void btnPlayRefresh_Click(object sender, EventArgs e)
@@ -722,6 +718,47 @@ namespace CombineEpisode
         private void btnScanBatch_Click(object sender, EventArgs e)
         {
             JavBatchScanAsync("certain");
+        }
+
+        private void btnPlayPre_Click(object sender, EventArgs e)
+        {
+            if (toBePlay != null && toBePlay.Count >= 0)
+            {
+                int pageSize = int.Parse(txtPlayPageSize.Text);
+                var pageArray = lbPlayPage.Text.Split('/');
+
+                int current = 1;
+                int total = 1;
+
+                int.TryParse(pageArray[0], out current);
+                int.TryParse(pageArray[1], out total);
+
+                if (current - 1 >= 1)
+                {
+                    current--;
+                    BtnPlayClick(current, pageSize);
+                    lbPlayPage.Text = current + " / " + total;
+                }
+            }
+        }
+
+        private void btnPlayNext_Click(object sender, EventArgs e)
+        {
+            int pageSize = int.Parse(txtPlayPageSize.Text);
+            var pageArray = lbPlayPage.Text.Split('/');
+
+            int current = 1;
+            int total = 1;
+
+            int.TryParse(pageArray[0], out current);
+            int.TryParse(pageArray[1], out total);
+
+            if (current + 1 <= total)
+            {
+                current++;
+                BtnPlayClick(current, pageSize);
+                lbPlayPage.Text = current + " / " + total;
+            }
         }
 
         #endregion
@@ -2833,14 +2870,16 @@ namespace CombineEpisode
             cbPlayCategory.Text = "";
         }
 
-        private async void BtnPlayClick()
+        private async void BtnPlayClick(int page, int pageSize)
         {
+            lvPlay.Items.Clear();
+
             if (scanResult == null || scanResult.Count <= 0)
             {
                 scanResult = ScanDataBaseManager.GetMatchScanResult();
             }
 
-            List<ScanResult> toBePlay = scanResult;
+            toBePlay = scanResult;
             List<ScanResult> actressPlay = new List<ScanResult>();
             List<ScanResult> categoryPlay = new List<ScanResult>();
             List<ScanResult> prefixPlay = new List<ScanResult>();
@@ -2894,7 +2933,11 @@ namespace CombineEpisode
 
             lbPlayStatus.Text = toBePlay.Count + " 条";
 
-            await Task.Run(() => ShowPlayContent(toBePlay));
+            var pageContent = toBePlay.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            lbPlayPage.Text = (toBePlay.Count % pageSize) == 0 ? page + " / " + (toBePlay.Count / pageSize) : page + " / " + ((toBePlay.Count / pageSize) + 1);
+
+            await Task.Run(() => ShowPlayContent(pageContent));
         }
 
         private void ShowPlayContent(List<ScanResult> list)
