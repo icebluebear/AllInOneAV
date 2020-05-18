@@ -995,7 +995,7 @@ namespace Service
 
             GetJavCookie(showConsole);
 
-            for (int i = 1; i <= page; i++)
+            for (int i = page; i >= 1; i--)
             {
                 updatePages.Add("http://www.javlibrary.com/cn/vl_update.php?&mode=&page=" + i, "更新");
             }
