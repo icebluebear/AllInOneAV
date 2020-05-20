@@ -2053,15 +2053,9 @@ namespace CombineEpisode
                     if (moveReocrd.ContainsKey(tempFileName))
                     {
                         moveReocrd[tempFileName]++;
-                        richTextBox2.AppendText("\t存在移动记录,文件名后缀+1 -> " + moveReocrd[tempFileName], Color.Green, font, true);
-                    }
-                    else
-                    {
-                        moveReocrd.Add(tempFileName, 1);
-                    }
 
-                    if (File.Exists(moveFolder + tempFileName))
-                    {
+                        richTextBox2.AppendText("\t存在移动记录,文件名后缀+1 -> " + moveReocrd[tempFileName], Color.Green, font, true);
+
                         if (moveReocrd[tempFileName] == 2)
                         {
                             var oldFileMove = item.Value.FirstOrDefault().ID + "-" + item.Value.FirstOrDefault().Name + "-1" + item.Key.Extension;
@@ -2069,8 +2063,10 @@ namespace CombineEpisode
                         }
 
                         tempFileName = item.Value.FirstOrDefault().ID + "-" + item.Value.FirstOrDefault().Name + "-" + moveReocrd[tempFileName] + item.Key.Extension;
-
-                        richTextBox2.AppendText("\t存在重名文件,生成新的移动后文件 -> " + tempFileName, Color.Green, font, true);
+                    }
+                    else
+                    {
+                        moveReocrd.Add(tempFileName, 1);
                     }
 
                     try
