@@ -1,4 +1,5 @@
 ﻿using Model.Common;
+using Service;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,17 +11,19 @@ namespace CombineEpisode
     public partial class SeedList : Form
     {
         private List<SeedMagnetSearchModel> seedList = new List<SeedMagnetSearchModel>();
+        private string cookieStr = "";
 
         public SeedList()
         {
             InitializeComponent();
         }
 
-        public SeedList(List<SeedMagnetSearchModel> seedList)
+        public SeedList(List<SeedMagnetSearchModel> seedList, string cookieStr)
         {
             InitializeComponent();
 
             this.seedList = seedList;
+            this.cookieStr = cookieStr;
         }
 
         private void SeedList_Load(object sender, EventArgs e)
@@ -56,7 +59,12 @@ namespace CombineEpisode
 
                 Clipboard.SetDataObject(sb.ToString());
 
-                this.Close();
+                var ret = OneOneFiveService.Add115MagTask(this.cookieStr, sb.ToString(), "340200422", "");
+
+                if (ret)
+                {
+                    this.Close();
+                }
             }
         }
     }

@@ -11,7 +11,7 @@ public class ChromeCookieReader
 
         List<CookieItem> ret = new List<CookieItem>();
 
-        var dbPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Google\Chrome\User Data\Default\Cookies";
+        var dbPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\115Chrome\User Data\Default\Cookies";
         if (!System.IO.File.Exists(dbPath)) throw new System.IO.FileNotFoundException("Cant find cookie store", dbPath); // race condition, but i'll risk it
 
         var connectionString = "Data Source=" + dbPath + ";pooling=false";

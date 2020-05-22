@@ -51,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            JavLibraryHelper.DoListSearch(new List<string> { "http://www.javlibrary.com/cn/vl_searchbyid.php?&keyword=RCTD" }, false, 5, false);
+            OneOneFiveService.Add115MagTask("UM_distinctid=171391065c9289-0a2caddd6cd2b3-551019-1fa400-171391065ca7e2; last_video_volume=13; acw_tc=784e2cb115882537544026336e24577a0a6974492a9ee0fd4e7cefc75cbcb7; 115_lang=zh; UID=340200422_A1_1589856487; CID=555acb8a1018fdb6f3968f9f9dd37e90; SEID=ac2ef643234e8cb4caef94420469ac052b788025b47dd4391d3c6a16116d631f24032cbefdbacc0230cec899af05a9e1d37428e07bcea662a9442161", "magnet:?xt=urn:btih:a0006b1883c71e80a6f5d6e8d6f9e8cf3075ad6e&amp;dn=%E6%96%B0%E5%89%A7%E6%83%85%E8%B4%BA%E5%B2%81%E5%8A%9B%E4%BD%9C%21%E5%A4%96%E7%94%A5%E5%A5%B3%E9%81%AD%E9%81%87%E7%97%B4%E6%B1%89%E8%88%85%E8%88%85%E7%9A%84%E7%9A%84%E6%80%A7%E9%AA%9A%E6%89%B0%EF%BC%81&amp;tr=http%3A%2F%2Fsukebei.tracker.wf%3A8888%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce", "340200422", "");
 
             Console.ReadKey();
         }

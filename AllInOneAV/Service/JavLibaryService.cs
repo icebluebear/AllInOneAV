@@ -281,19 +281,19 @@ namespace Service
                         allPages.Add(genreSubUrl + i);
                     }
 
+                    if (asc == false)
+                    {
+                        allPages.Reverse();
+                    }
+
+                    if (limit > 0)
+                    {
+                        allPages = allPages.Take(limit).ToList();
+                    }
+
                     ret.AddRange(allPages);
                 }
             });
-
-            if(asc == false)
-            {
-                ret.Reverse();    
-            }
-
-            if (limit > 0)
-            {
-                ret = ret.Take(limit).ToList();
-            }
 
             return ret;
         }

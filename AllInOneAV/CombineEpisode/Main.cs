@@ -314,8 +314,13 @@ namespace CombineEpisode
 
                 Clipboard.SetDataObject(sb.ToString());
 
-                Message ms = new Message();
-                ms.ShowDialog();
+                var ret = OneOneFiveService.Add115MagTask("", sb.ToString(), "340200422", "");
+
+                if (ret)
+                {
+                    Message ms = new Message();
+                    ms.ShowDialog();
+                }
             }
         }
 
@@ -584,7 +589,7 @@ namespace CombineEpisode
 
                 if (list != null && list.Count > 0)
                 {
-                    SeedList sl = new SeedList(list);
+                    SeedList sl = new SeedList(list, "");
                     sl.ShowDialog();
                 }
             }
@@ -636,7 +641,7 @@ namespace CombineEpisode
 
                 if (list != null && list.Count > 0)
                 {
-                    SeedList sl = new SeedList(list);
+                    SeedList sl = new SeedList(list, "");
                     sl.ShowDialog();
                 }
             }

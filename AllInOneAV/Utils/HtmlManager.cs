@@ -155,12 +155,16 @@ namespace Utils
             return ret;
         }
 
-        public static string Post(string url, Dictionary<string, string> dic)
+        public static string Post(string url, Dictionary<string, string> dic, CookieContainer cc = null)
         {
             string result = "";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
+            if (cc != null)
+            {
+                req.CookieContainer = cc;
+            }
             #region 添加Post 参数
             StringBuilder builder = new StringBuilder();
             int i = 0;

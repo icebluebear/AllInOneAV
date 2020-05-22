@@ -1,4 +1,5 @@
 ﻿using Model.Common;
+using Service;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -59,7 +60,7 @@ namespace CombineEpisode
 
                 Parallel.ForEach(missing, new ParallelOptions { MaxDegreeOfParallelism = 5 }, mi =>
                 {
-                    var res = OneOneFiveHelper.Get115SearchResult(textBox1.Text, mi.Av.ID);
+                    var res = OneOneFiveService.Get115SearchResult(textBox1.Text, mi.Av.ID);
 
                     if (res)
                     {
