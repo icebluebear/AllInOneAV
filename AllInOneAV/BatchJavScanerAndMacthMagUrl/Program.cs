@@ -71,10 +71,12 @@ namespace BatchJavScanerAndMacthMagUrl
             if (args[0] == "dolist")
             {
                 var urlList = args[1].Split(',').ToList();
+                var asc = bool.Parse(args[2]);
+                var limit = int.Parse(args[3]);
 
                 if (urlList.Count > 0)
                 {
-                    JavLibraryHelper.DoListSearch(urlList, false);
+                    JavLibraryHelper.DoListSearch(urlList, asc, limit, false);
                 }
             }
 

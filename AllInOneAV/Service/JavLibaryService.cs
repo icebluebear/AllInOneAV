@@ -64,11 +64,11 @@ namespace Service
 
             if (showConsole)
             {
-                driver = new ChromeDriver(Environment.CurrentDirectory, options);
+                driver = new ChromeDriver("c:\\setting\\", options);
             }
             else
             {
-                var driverService = ChromeDriverService.CreateDefaultService();
+                var driverService = ChromeDriverService.CreateDefaultService("c:\\setting\\");
                 driverService.HideCommandPromptWindow = true;
 
                 driver = new ChromeDriver(driverService, options);
@@ -243,7 +243,7 @@ namespace Service
             return ret;
         }
 
-        private static List<string> FillInCertainUrl(List<string> list)
+        private static List<string> FillInCertainUrl(List<string> list, bool asc = true, int limit = -1)
         {
             List<string> ret = new List<string>();
 
@@ -284,6 +284,16 @@ namespace Service
                     ret.AddRange(allPages);
                 }
             });
+
+            if(asc == false)
+            {
+                ret.Reverse();    
+            }
+
+            if (limit > 0)
+            {
+                ret = ret.Take(limit).ToList();
+            }
 
             return ret;
         }
@@ -1033,11 +1043,11 @@ namespace Service
             ScanEachAvSingleThread();
         }
 
-        public static void DoListSearch(List<string> urls, bool showConsole = true)
+        public static void DoListSearch(List<string> urls, bool asc = true, int limit = 0, bool showConsole = true)
         {
             GetJavCookie(showConsole);
 
-            var allList = FillInCertainUrl(urls);
+            var allList = FillInCertainUrl(urls, asc, limit);
 
             Parallel.ForEach(allList, new ParallelOptions { MaxDegreeOfParallelism = 12 }, url =>
             {

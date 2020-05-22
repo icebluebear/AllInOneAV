@@ -51,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            JavLibraryHelper.DoDailyUpdate(200, true);
+            JavLibraryHelper.DoListSearch(new List<string> { "http://www.javlibrary.com/cn/vl_searchbyid.php?&keyword=RCTD" }, false, 5, false);
 
             Console.ReadKey();
         }

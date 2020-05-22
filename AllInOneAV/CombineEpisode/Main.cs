@@ -551,6 +551,8 @@ namespace CombineEpisode
                 var current = lvwRecnet.GetItemAt(e.X, e.Y);
 
                 Delete(current);
+
+                ListRecentItems();
             }
         }
 
@@ -2575,7 +2577,13 @@ namespace CombineEpisode
                 if (rbMissingFavi.Checked)
                 {
                     missingCheckForFavi = new List<MissingCheckModel>();
-                    var arg = " dolist " + txtMissing.Text;
+
+                    var asc = cbMissingAsc.Checked ? " true " : " false ";
+                    int limit = 0;
+                    
+                    int.TryParse(txtMissingPage.Text, out limit);
+
+                    var arg = " dolist " + txtMissing.Text + asc + limit;
 
                     await StartJavRefresh("", arg, OutputJavFaviRefresh);
 
