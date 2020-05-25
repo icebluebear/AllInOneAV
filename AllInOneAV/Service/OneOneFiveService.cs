@@ -49,10 +49,7 @@ namespace Service
             {
                 var data = Newtonsoft.Json.Linq.JObject.Parse(returnStr);
 
-                if (data.Property("state").HasValues && data.Property("state").Value.ToString() == "true")
-                {
-                    ret = true;
-                }
+                bool.TryParse(data.Property("state").Value.ToString(), out ret);
             }
 
             return ret;

@@ -68,7 +68,8 @@ namespace ScanAllAndMatch
                                      AvID = id,
                                      AvName = av.Name,
                                      Location = file.DirectoryName,
-                                     Name = file.Name
+                                     Name = file.Name,
+                                     MatchAVId = av.AvId
                                  };
 
                                  matches.Add(m);

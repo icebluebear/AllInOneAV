@@ -2543,7 +2543,21 @@ namespace CombineEpisode
         {
             if (!String.IsNullOrEmpty(output.Data))
             {
-                rtbReport.AppendText(output.Data + Environment.NewLine);
+                if (output.Data == "/" || output.Data == "\\" || output.Data == "|" || output.Data == "-")
+                {
+                    string[] sLines = rtbReport.Lines;
+                    string[] sNewLines = new string[sLines.Length - 1];
+
+                    Array.Copy(sLines, 0, sNewLines, 0, sNewLines.Length);
+
+                    rtbReport.Lines = sNewLines;
+
+                    rtbReport.AppendText(output.Data);
+                }
+                else
+                {
+                    rtbReport.AppendText(output.Data + Environment.NewLine);
+                }
             }
         }
 

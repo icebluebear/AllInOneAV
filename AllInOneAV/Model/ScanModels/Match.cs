@@ -13,6 +13,7 @@ namespace Model.ScanModels
         public string Name { get; set; }
         public string Location { get; set; }
         //public DateTime CreateTime { get; set; }
+        public int MatchAVId { get; set; }
     }
 
     public class MatchComparer : IEqualityComparer<Match>

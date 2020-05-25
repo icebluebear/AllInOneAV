@@ -71,7 +71,7 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static int SaveMatch(Match match)
         {
-            var sql = string.Format(@"INSERT INTO Match (AvID, Name, Location, CreateTime, AvName) VALUES ('{0}', N'{1}', N'{2}', GETDATE(), N'{3}')", match.AvID, FileUtility.ReplaceInvalidChar(match.Name), match.Location, FileUtility.ReplaceInvalidChar(match.AvName));
+            var sql = string.Format(@"INSERT INTO Match (AvID, MatchAVId, Name, Location, CreateTime, AvName) VALUES ('{0}', {4}, N'{1}', N'{2}', GETDATE(), N'{3}')", match.AvID, FileUtility.ReplaceInvalidChar(match.Name), match.Location, FileUtility.ReplaceInvalidChar(match.AvName), match.MatchAVId);
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
