@@ -52,7 +52,10 @@ namespace Service
 
                 bool.TryParse(data.Property("state").Value.ToString(), out ret);
 
-                msg = data.Property("error_msg").Value.ToString();
+                if (ret == false)
+                {
+                    msg = data.Property("error_msg").Value.ToString();
+                }
             }
 
             return new ValueTuple<bool, string>(ret, msg);
