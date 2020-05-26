@@ -61,9 +61,13 @@ namespace CombineEpisode
 
                 var ret = OneOneFiveService.Add115MagTask(this.cookieStr, sb.ToString(), "340200422", "");
 
-                if (ret)
+                if (ret.Item1)
                 {
                     this.Close();
+                }
+                else
+                {
+                    MessageBox.Show(ret.Item2);
                 }
             }
         }

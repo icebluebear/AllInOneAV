@@ -84,7 +84,7 @@ namespace Service
                     {
                         report.FileLargeThan6G++;
                     }
-                 
+
                     if (report.Formats.ContainsKey(ext))
                     {
                         report.Formats[ext]++;
@@ -125,7 +125,7 @@ namespace Service
                                     Name = actress,
                                     Total = total,
                                     Ratio = (decimal)1 / (decimal)total
-                                }); 
+                                });
                             }
                             else
                             {
@@ -293,13 +293,13 @@ namespace Service
 
             sb.AppendLine(string.Format("一共有 {0} 条AV信息", report.TotalRecord));
             sb.AppendLine(string.Format("本地拥有 {0} 部AV", report.TotalAV));
-            sb.Append("其中 ");
-            report.Formats.ToList().ForEach(x => sb.Append(x.Key + " 有 " + x.Value + "部 "));
+            sb.AppendLine("其中包含如下格式： ");
+            report.Formats.OrderByDescending(x => x.Value).ToList().ForEach(x => sb.AppendLine("\t" + x.Key + " 有 " + x.Value + "部 "));
             sb.AppendLine();
-            sb.AppendLine("大于1G的有 " + report.FileLargeThan1G);
-            sb.AppendLine("大于2G的有 " + report.FileLargeThan2G);
-            sb.AppendLine("大于4G的有 " + report.FileLargeThan4G);
-            sb.AppendLine("大于6G的有 " + report.FileLargeThan6G);
+            sb.AppendLine("大于1GB的有 " + report.FileLargeThan1G);
+            sb.AppendLine("大于2GB的有 " + report.FileLargeThan2G);
+            sb.AppendLine("大于4GB的有 " + report.FileLargeThan4G);
+            sb.AppendLine("大于6GB的有 " + report.FileLargeThan6G);
             sb.AppendLine("一共有 " + report.TotalFiles + " 个文件，总大小 " + FileSize.GetAutoSizeString(report.TotalSizeLong, 2));
             sb.AppendLine("其中有 " + report.AvHasMoreThan1File + " 部AV有超过1张CD数");
 

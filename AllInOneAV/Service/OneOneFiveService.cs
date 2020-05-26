@@ -31,9 +31,10 @@ namespace Service
             return ret;
         }
 
-        public static bool Add115MagTask(string cookieStr, string mag, string uid, string sign, string host = "115.com", string reffer = "https://115.com/?cid=1835025974666577373&offset=0&tab=download&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
+        public static ValueTuple<bool, string> Add115MagTask(string cookieStr, string mag, string uid, string sign, string host = "115.com", string reffer = "https://115.com/?cid=1835025974666577373&offset=0&tab=download&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
         {
             bool ret = false;
+            string msg = "";
 
             CookieContainer cc = Get115Cookie();
 
@@ -50,9 +51,11 @@ namespace Service
                 var data = Newtonsoft.Json.Linq.JObject.Parse(returnStr);
 
                 bool.TryParse(data.Property("state").Value.ToString(), out ret);
+
+                msg = data.Property("error_msg").Value.ToString();
             }
 
-            return ret;
+            return new ValueTuple<bool, string>(ret, msg);
         }
 
         public static CookieContainer Get115Cookie()

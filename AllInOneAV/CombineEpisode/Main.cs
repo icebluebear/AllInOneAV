@@ -316,10 +316,14 @@ namespace CombineEpisode
 
                 var ret = OneOneFiveService.Add115MagTask("", sb.ToString(), "340200422", "");
 
-                if (ret)
+                if (ret.Item1)
                 {
                     Message ms = new Message();
                     ms.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show(ret.Item2);
                 }
             }
         }
@@ -2551,6 +2555,7 @@ namespace CombineEpisode
                     Array.Copy(sLines, 0, sNewLines, 0, sNewLines.Length);
 
                     rtbReport.Lines = sNewLines;
+                    rtbReport.AppendText(Environment.NewLine);
 
                     rtbReport.AppendText(output.Data);
                 }
