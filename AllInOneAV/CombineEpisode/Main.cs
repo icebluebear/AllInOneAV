@@ -772,6 +772,49 @@ namespace CombineEpisode
             }
         }
 
+        private void Main_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)    //最小化到系统托盘
+            {
+                notifyIcon1.Visible = true;    //显示托盘图标
+                this.Hide();    //隐藏窗口
+            }
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //注意判断关闭事件Reason来源于窗体按钮，否则用菜单退出时无法退出!
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;    //取消"关闭窗口"事件
+                this.WindowState = FormWindowState.Minimized;    //使关闭时窗口向右下角缩小的效果
+                notifyIcon1.Visible = true;
+                this.Hide();
+                return;
+            }
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            notifyIcon1.Visible = false;
+            this.Show();
+            WindowState = FormWindowState.Normal;
+            this.Focus();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你确定要退出？", "系统提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+            {
+
+                this.notifyIcon1.Visible = false;
+                this.Close();
+                this.Dispose();
+                System.Environment.Exit(System.Environment.ExitCode);
+
+            }
+        }
+
         #endregion
 
         #region 方法
@@ -2991,6 +3034,7 @@ namespace CombineEpisode
         }
 
         #endregion
+
     }
 
     #region 扩展方法
