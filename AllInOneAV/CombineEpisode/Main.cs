@@ -23,6 +23,7 @@ using Utils;
 namespace CombineEpisode
 {
     public partial class Main : Form
+
     {
         #region GlobalVar
 
@@ -3034,7 +3035,6 @@ namespace CombineEpisode
         }
 
         #endregion
-
     }
 
     #region 扩展方法
