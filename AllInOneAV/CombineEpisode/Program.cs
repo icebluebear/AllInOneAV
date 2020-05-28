@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace CombineEpisode
@@ -17,6 +18,20 @@ namespace CombineEpisode
         [STAThread]
         static void Main()
         {
+            Process current = Process.GetCurrentProcess();
+            Process[] processes = Process.GetProcessesByName(current.ProcessName);
+            foreach (Process process in processes)
+            {
+                if (process.Id != current.Id)
+                {
+                    if (process.MainModule.FileName == current.MainModule.FileName)
+                    {
+                        MessageBox.Show("程序已经运行", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                }
+            }
+
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             //处理UI线程异常
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
