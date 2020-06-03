@@ -51,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            OneOneFiveService.Add115MagTask("", "magnet:?xt=urn:btih:71981efce00bae79b821d2ceaafee64ad9320978&amp;dn=%5BHD%2F2.90GB%5D%20ABP-981%20%E7%BE%8E%E5%B0%91%E5%A5%B3%E3%81%A8%E3%80%81%E8%B2%B8%E3%81%97%E5%88%87%E3%82%8A%E6%B8%A9%E6%B3%89%E3%81%A8%E3%80%81%E6%BF%83%E5%AF%86%E6%80%A7%E4%BA%A4%E3%81%A8%E3%80%82%2010%20%E7%B5%B6%E5%AF%BE%E7%9A%84%E7%BE%8E%E5%B0%91%E5%A5%B3%E3%82%92%E4%B8%80%E6%B3%8A%E8%B2%B8%E3%81%97%E5%88%87%E3%82%8A%E3%80%81%E5%B1%B1%E5%A5%A5%E3%81%AE%E6%B8%A9%E6%B3%89%E5%AE%BF%E3%81%B8%20%E5%B7%9D%E5%8F%A3%E5%A4%8F%E5%A5%88&amp;tr=http%3A%2F%2Fsukebei.tracker.wf%3A8888%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce", "340200422", "");
+            JavLibraryHelper.DoDailyRefresh();
 
             Console.ReadKey();
         }

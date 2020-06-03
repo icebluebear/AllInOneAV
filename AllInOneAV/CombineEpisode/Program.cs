@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace CombineEpisode
@@ -10,7 +11,8 @@ namespace CombineEpisode
         /// 是否退出应用程序
         /// </summary>
         static bool glExitApp = false;
-
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
 
         /// <summary>
         /// 应用程序的主入口点。
@@ -26,7 +28,7 @@ namespace CombineEpisode
                 {
                     if (process.MainModule.FileName == current.MainModule.FileName)
                     {
-                        MessageBox.Show("程序已经运行", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ShowWindow(process.MainWindowHandle, 1);
                         return;
                     }
                 }

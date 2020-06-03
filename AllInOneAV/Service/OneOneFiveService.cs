@@ -16,7 +16,7 @@ namespace Service
 
             CookieContainer cc = Get115Cookie();
 
-            var url = string.Format("https://webapi.115.com/files/search?search_value=vdd-095&format=json");
+            var url = string.Format(string.Format("https://webapi.115.com/files/search?search_value={0}&format=json", content));
             var htmlRet = HtmlManager.GetHtmlWebClient("https://115.com", url, cc);
             if (htmlRet.Success)
             {

@@ -2819,10 +2819,17 @@ namespace CombineEpisode
                         lvi.BackColor = Color.Blue;
 
                         lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
+
+                        lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);
                     }
                     else
                     {
                         lvi.BackColor = Color.Green;
+
+                        //if (OneOneFiveService.Get115SearchResult("", rm.Id))
+                        //{
+                        //    lvi.BackColor = Color.GreenYellow;
+                        //}
                     }
                 }
                 else
@@ -2831,6 +2838,8 @@ namespace CombineEpisode
                     {
                         lvi.BackColor = Color.Yellow;
                         lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
+
+                        lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);
                     }
                     else
                     {

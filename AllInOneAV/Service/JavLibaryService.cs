@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 using DataBaseManager.JavDataBaseHelper;
@@ -15,6 +16,7 @@ using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Utils;
+using Publisher = Model.JavModels.Publisher;
 
 namespace Service
 {
@@ -25,27 +27,25 @@ namespace Service
         private static readonly string ImgFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
         private static readonly string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
 
-        private static void GetJavCookieOld(bool showConsole = true)
-        { 
-            var ua = JavINIClass.IniReadValue("Jav", "userAgent");
-            var cookie = JavINIClass.IniReadValue("Jav", "cookie");
-
-            while (string.IsNullOrEmpty(cookie) || string.IsNullOrEmpty(ua))
-            {
-                Thread.Sleep(1000 * 60);
-            }
-
+        private static void GetJavCookie(bool showConsole = true)
+        {
             cc = new CookieContainer();
-            var cookieStr = cookie.Split(';');
 
-            foreach (var c in cookieStr)
+            Broswer.OpenBrowserUrl("http://www.javlibrary.com/cn/");
+            Thread.Sleep(5 * 1000);
+            Broswer.Refresh_click();
+            Thread.Sleep(10 * 1000);
+
+            var cookies = new ChromeCookieReader().ReadChromeCookies(".javlibrary.com");
+
+            foreach (var c in cookies)
             {
-                if (c.Split('=')[0].Contains("cf"))
-                {
-                    System.Net.Cookie coo = new System.Net.Cookie();
+                System.Net.Cookie coo = new System.Net.Cookie();
 
-                    coo.Name = c.Split('=')[0].Trim();
-                    coo.Value = c.Split('=')[1].Trim();
+                if (c.Name.Contains("cf"))
+                {
+                    coo.Name = c.Name;
+                    coo.Value = c.Value;
                     coo.Domain = "www.javlibrary.com";
 
                     cc.Add(coo);
@@ -53,12 +53,12 @@ namespace Service
             }
         }
 
-        private static void GetJavCookie(bool showConsole = true)
+        private static void GetJavCookieOld(bool showConsole = true)
         {
             ChromeOptions options = new ChromeOptions();
             //"test-type", "--ignore-certificate-errors","window-size=1920,1080", "--disable-extensions", "--start-maximized", chromeUA, "--headless"
             var chromeUA = "--useragent=" + string.Format(UserAgent, HtmlManager.GetChromeVersion());
-            options.AddArguments("--disable-gpu", "--no-sandbox", "window-size=1,1", "log-level=3", "blink-settings=imagesEnabled=false", "--disable-extensions", "--ignore-certificate-errors");
+            //options.AddArguments("--disable-gpu", "log-level=3", "--disable-extensions");
             List<OpenQA.Selenium.Cookie> ret = new List<OpenQA.Selenium.Cookie>();
             IWebDriver driver = null;
 
