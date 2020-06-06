@@ -2722,6 +2722,8 @@ namespace CombineEpisode
                             lvi.BackColor = Color.Blue;
 
                             lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
+
+                            lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);
                         }
                         else
                         {
@@ -2734,6 +2736,8 @@ namespace CombineEpisode
                         {
                             lvi.BackColor = Color.Yellow;
                             lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
+
+                            lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);
                         }
                         else
                         {
@@ -3035,7 +3039,7 @@ namespace CombineEpisode
 
             foreach (var l in list)
             {
-                ListViewItem lvi = new ListViewItem(l.AvId + " " + l.AvName);
+                ListViewItem lvi = new ListViewItem(l.AvId + " " + l.AvName + " " + FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2));
                 lvi.ImageIndex = ilPlay.Images.IndexOfKey(l.AvName);
                 lvi.Tag = l.AvFilePath;
 
@@ -3044,6 +3048,24 @@ namespace CombineEpisode
         }
 
         #endregion
+
+        private void lvPlay_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && lvPlay.SelectedItems.Count > 0)
+            {
+                var list = SearchSeedHelper.SearchSukebei(lvPlay.SelectedItems[0].Text.Split(' ')[0]);
+
+                if (list != null && list.Count > 0)
+                {
+                    SeedList sl = new SeedList(list, "");
+                    sl.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("没有搜到");
+                }
+            }
+        }
     }
 
     #region 扩展方法

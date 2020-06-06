@@ -51,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            JavLibraryHelper.DoDailyRefresh();
+            //JavLibraryHelper.GetJavCookieOld();
 
             Console.ReadKey();
         }

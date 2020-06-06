@@ -27,7 +27,7 @@ namespace Service
         private static readonly string ImgFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
         private static readonly string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
 
-        private static void GetJavCookie(bool showConsole = true)
+        private static void GetJavCookieOld(bool showConsole = true)
         {
             cc = new CookieContainer();
 
@@ -53,7 +53,7 @@ namespace Service
             }
         }
 
-        private static void GetJavCookieOld(bool showConsole = true)
+        public static void GetJavCookie(bool showConsole = true)
         {
             ChromeOptions options = new ChromeOptions();
             //"test-type", "--ignore-certificate-errors","window-size=1920,1080", "--disable-extensions", "--start-maximized", chromeUA, "--headless"
@@ -78,7 +78,7 @@ namespace Service
             {
                 driver.Navigate().GoToUrl("http://www.javlibrary.com/cn/");
 
-                Thread.Sleep(15 * 1000);
+                //Thread.Sleep(15 * 1000);
 
                 ret = driver.Manage().Cookies.AllCookies.Where(x => x.Domain == ".javlibrary.com").ToList();
 
@@ -93,18 +93,12 @@ namespace Service
                 driver.Quit();
             }
 
-            if (ret != null && ret.Count >= 3)
-            {
-                cc = new CookieContainer();
 
-                foreach (var r in ret)
-                {
-                    cc.Add(new System.Net.Cookie(r.Name, r.Value, r.Path, r.Domain));
-                }
-            }
-            else
+            cc = new CookieContainer();
+
+            foreach (var r in ret)
             {
-                GetJavCookie(showConsole);
+                cc.Add(new System.Net.Cookie(r.Name, r.Value, r.Path, r.Domain));
             }
         }
 
