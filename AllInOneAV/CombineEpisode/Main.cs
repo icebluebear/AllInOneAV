@@ -1377,17 +1377,24 @@ namespace CombineEpisode
 
         private void GetFilesForAutoConvert()
         {
-            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+            openFileDialog1.Multiselect = true;
 
-            var rs = folderBrowserDialog1.ShowDialog();
+            var rs = openFileDialog1.ShowDialog();
 
             if (rs == DialogResult.Yes || rs == DialogResult.OK)
             {
-                txtConvertImport.Text = folderBrowserDialog1.SelectedPath;
+                var files = openFileDialog1.FileNames;
 
-                ShowConvertFiles(txtConvertImport.Text);
+                ShowConvertFiles(files);
 
-                txtConvertSave.Text = folderBrowserDialog1.SelectedPath + "\\convert\\";
+                string convert = "G:\\convert\\";
+
+                if (!Directory.Exists(convert))
+                {
+                    Directory.CreateDirectory(convert);
+                }
+
+                txtConvertSave.Text = convert;
             }
         }
 
@@ -1411,29 +1418,25 @@ namespace CombineEpisode
             }
         }
 
-        private void ShowConvertFiles(string path)
+        private void ShowConvertFiles(string[] files)
         {
-            if (Directory.Exists(path))
+            listView2.BeginUpdate();
+
+            foreach (var file in files)
             {
-                listView2.BeginUpdate();
-                var files = Directory.GetFiles(path);
-
-                foreach (var file in files)
+                if (!file.Contains("[Code="))
                 {
-                    if (!file.Contains("[Code="))
-                    {
-                        FileInfo fi = new FileInfo(file);
+                    FileInfo fi = new FileInfo(file);
 
-                        ListViewItem lvi = new ListViewItem(fi.FullName);
-                        lvi.SubItems.Add("--");
-                        lvi.SubItems.Add(FileSize.GetAutoSizeString(fi.Length, 1));
+                    ListViewItem lvi = new ListViewItem(fi.FullName);
+                    lvi.SubItems.Add("--");
+                    lvi.SubItems.Add(FileSize.GetAutoSizeString(fi.Length, 1));
 
-                        listView2.Items.Add(lvi);
-                    }
+                    listView2.Items.Add(lvi);
                 }
-
-                listView2.EndUpdate();
             }
+
+            listView2.EndUpdate();
         }
 
         private async void Convert()
@@ -2824,9 +2827,7 @@ namespace CombineEpisode
 
                         lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
 
-                        lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);
-
-                        ListViewItemUpdate2(lwDaily, lvi);
+                        lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);            
                     }
                     else
                     {
@@ -2836,7 +2837,9 @@ namespace CombineEpisode
                         //{
                         //    lvi.BackColor = Color.GreenYellow;
                         //}
-                    }                
+                    }
+
+                    ListViewItemUpdate2(lwDaily, lvi);
                 }
                 else
                 {
@@ -2857,7 +2860,7 @@ namespace CombineEpisode
 
                 JDuBar(pbDaily, lwDaily.Items.Count);
 
-                Thread.Sleep(100 * ran.Next(5));
+                Thread.Sleep(10 * ran.Next(5));
             });
         }
 
