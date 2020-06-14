@@ -58,7 +58,7 @@ namespace Service
             ChromeOptions options = new ChromeOptions();
             //"test-type", "--ignore-certificate-errors","window-size=1920,1080", "--disable-extensions", "--start-maximized", chromeUA, "--headless"
             var chromeUA = "--useragent=" + string.Format(UserAgent, HtmlManager.GetChromeVersion());
-            //options.AddArguments("--disable-gpu", "log-level=3", "--disable-extensions");
+            options.AddArguments("--disable-gpu", "--no-sandbox", "window-size=1,1", "log-level=3", "blink-settings=imagesEnabled=false", "--disable-extensions", "--ignore-certificate-errors");
             List<OpenQA.Selenium.Cookie> ret = new List<OpenQA.Selenium.Cookie>();
             IWebDriver driver = null;
 

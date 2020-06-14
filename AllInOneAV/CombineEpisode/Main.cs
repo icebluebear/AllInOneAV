@@ -2173,7 +2173,7 @@ namespace CombineEpisode
                 switch (source)
                 {
                     case SearchSeedSiteEnum.Btsow:
-                        ret = BtsowClubHelper.SearchBtsow(content);
+                        ret = SearchSeedHelper.SearchBtsow(content);
                         break;
                     case SearchSeedSiteEnum.Sukebei:
                         ret = SearchSeedHelper.SearchSukebei(content);
@@ -2825,6 +2825,8 @@ namespace CombineEpisode
                         lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
 
                         lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);
+
+                        ListViewItemUpdate2(lwDaily, lvi);
                     }
                     else
                     {
@@ -2834,24 +2836,24 @@ namespace CombineEpisode
                         //{
                         //    lvi.BackColor = Color.GreenYellow;
                         //}
-                    }
+                    }                
                 }
                 else
                 {
-                    if (matchFiles.Count > 0)
-                    {
-                        lvi.BackColor = Color.Yellow;
-                        lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
+                    //if (matchFiles.Count > 0)
+                    //{
+                    //    lvi.BackColor = Color.Yellow;
+                    //    lvi.SubItems.Add(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName);
 
-                        lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);
-                    }
-                    else
-                    {
-                        lvi.BackColor = Color.Gray;
-                    }
+                    //    lvi.Text = lvi.Text + " " + FileSize.GetAutoSizeString(matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).Length, 1);
+                    //}
+                    //else
+                    //{
+                    //    lvi.BackColor = Color.Gray;
+                    //}
+
+                    pbDaily.Maximum -= 1;
                 }
-
-                ListViewItemUpdate2(lwDaily, lvi);
 
                 JDuBar(pbDaily, lwDaily.Items.Count);
 
@@ -3016,6 +3018,11 @@ namespace CombineEpisode
                 toBePlay = toBePlay.Intersect(prefixPlay).OrderBy(x => x.AvId).ToList();
             }
 
+            if (string.IsNullOrEmpty(cbPlayActress.Text) && string.IsNullOrEmpty(cbPlayCategory.Text) && string.IsNullOrWhiteSpace(cbPlayPrefix.Text))
+            {
+                toBePlay = toBePlay.OrderBy(i => Guid.NewGuid()).ToList();
+            }
+
             lbPlayStatus.Text = toBePlay.Count + " 条";
 
             var pageContent = toBePlay.Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -3037,6 +3044,8 @@ namespace CombineEpisode
                 }
             }
 
+            lvPlay.BeginUpdate();
+
             foreach (var l in list)
             {
                 ListViewItem lvi = new ListViewItem(l.AvId + " " + l.AvName + " " + FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2));
@@ -3045,6 +3054,8 @@ namespace CombineEpisode
 
                 ListViewItemUpdate2(lvPlay, lvi);
             }
+
+            lvPlay.EndUpdate();
         }
 
         #endregion
