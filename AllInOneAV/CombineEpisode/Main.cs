@@ -1486,7 +1486,7 @@ namespace CombineEpisode
                 pbConvertCurrent.Minimum = 0;
 
                 FileInfo fi = new FileInfo(lvi.Text);
-                var targetFile = folder + fi.Name.Replace(fi.Extension, "") + "[]Format=H265[].mp4";
+                var targetFile = folder + fi.Name;
 
                 await StartConvert(lvi.Text, targetFile);
 
@@ -1504,16 +1504,16 @@ namespace CombineEpisode
             }
             else
             {
-                FileInfo fi = new FileInfo(lvi.Text);
-                var newFi = fi.FullName.Replace(fi.Extension, "") + "[]Format=H265[]" + fi.Extension;
-                try
-                {
-                    File.Move(fi.FullName, newFi);
-                }
-                catch (Exception ee)
-                {
+                //FileInfo fi = new FileInfo(lvi.Text);
+                //var newFi = fi.FullName.Replace(fi.Extension, "") + "[]Format=H265[]" + fi.Extension;
+                //try
+                //{
+                //    File.Move(fi.FullName, newFi);
+                //}
+                //catch (Exception ee)
+                //{
 
-                }
+                //}
             }
 
             listView2.BeginUpdate();
