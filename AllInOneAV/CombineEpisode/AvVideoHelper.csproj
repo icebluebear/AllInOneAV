@@ -109,6 +109,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReName.Designer.cs">
+      <DependentUpon>ReName.cs</DependentUpon>
+    </Compile>
     <Compile Include="SeedList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,6 +145,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ReName.resx">
+      <DependentUpon>ReName.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedList.resx">
       <DependentUpon>SeedList.cs</DependentUpon>
     </EmbeddedResource>

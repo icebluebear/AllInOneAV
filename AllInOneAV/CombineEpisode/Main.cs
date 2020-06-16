@@ -684,6 +684,50 @@ namespace CombineEpisode
             }
         }
 
+        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rs = MessageBox.Show("确定要删除 " + ((FileInfo)treeView1.SelectedNode.Tag).FullName + " ?", "警告", MessageBoxButtons.YesNo);
+
+            if (rs == DialogResult.Yes)
+            {
+                ((FileInfo)treeView1.SelectedNode.Tag).Delete();
+
+                treeView1.Nodes.Clear();
+                pb2.Value = 0;
+
+                ShowTree(txtLook.Text);
+            }
+        }
+
+        private void 重命名ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReName rn = new ReName();
+
+            rn.OriFile = ((FileInfo)treeView1.SelectedNode.Tag).FullName;
+
+            var rs = rn.ShowDialog();
+
+            if (rs == DialogResult.Yes)
+            {
+                treeView1.Nodes.Clear();
+                pb2.Value = 0;
+
+                ShowTree(txtLook.Text);
+            }
+        }
+
+        private void treeView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && treeView1.SelectedNode != null)
+            {
+                Point p = new Point();
+                p.X = e.Location.X + this.Location.X + 5;
+                p.Y = e.Location.Y + this.Location.Y + 100;
+
+                contextMenuStrip3.Show(p);
+            }
+        }
+
         private void lwDaily_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && lwDaily.SelectedItems.Count > 0)
@@ -770,6 +814,14 @@ namespace CombineEpisode
                 current++;
                 BtnPlayClick(current, pageSize);
                 lbPlayPage.Text = current + " / " + total;
+            }
+        }
+
+        private void btnRemoveOpen_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtRemoveFolderTxt.Text))
+            {
+                System.Diagnostics.Process.Start(txtRemoveFolderTxt.Text);
             }
         }
 
@@ -1054,9 +1106,11 @@ namespace CombineEpisode
 
                 foreach (var s in f.Value)
                 {
-                    TreeNode stn = new TreeNode(s)
+                    FileInfo fi = new FileInfo(s);
+
+                    TreeNode stn = new TreeNode(fi.FullName + " " + FileSize.GetAutoSizeString(fi.Length, 2))
                     {
-                        Tag = new FileInfo(s)
+                        Tag = fi
                     };
                     tn.Nodes.Add(stn);
                 }
@@ -1166,7 +1220,7 @@ namespace CombineEpisode
 
             foreach (TreeNode sn in node.Nodes)
             {
-                sb.AppendLine(string.Format("file '{0}'", sn.Text));
+                sb.AppendLine(string.Format("file '{0}'", ((FileInfo)sn.Tag).FullName));
             }
 
             sw.WriteLine(sb.ToString());
