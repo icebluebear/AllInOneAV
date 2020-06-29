@@ -187,9 +187,11 @@ namespace CombineEpisode
             GetFilesForAutoConvertSave();
         }
 
-        private void btStartConvert_Click(object sender, EventArgs e)
+        private async void btStartConvert_Click(object sender, EventArgs e)
         {
-            Convert();
+            var d = await Convert();
+
+            MessageBox.Show(d.TotalSeconds + " seconds");
         }
 
         private void btnCheckISO_Click(object sender, EventArgs e)
@@ -1180,9 +1182,10 @@ namespace CombineEpisode
             {
                 foreach (TreeNode stn in tn.Nodes)
                 {
+                    FileInfo fi = (FileInfo)stn.Tag;
                     totalCount++;
-                    size += new FileInfo(stn.Text).Length;
-                    files.Add(stn.Text);
+                    size += fi.Length;
+                    files.Add(fi.FullName);
                 }
             }
 
@@ -1493,12 +1496,14 @@ namespace CombineEpisode
             listView2.EndUpdate();
         }
 
-        private async void Convert()
+        private async Task<TimeSpan> Convert()
         {
+            DateTime t1 = DateTime.Now;
+
             if (string.IsNullOrEmpty(txtConvertSave.Text))
             {
                 MessageBox.Show("没有保存地址");
-                return;
+                return new TimeSpan(0);
             }
 
             GenerateSaveConvertFolder(txtConvertSave.Text);
@@ -1519,6 +1524,10 @@ namespace CombineEpisode
                     JDuBar(pbConvertTotal, index);
                 }
             }
+
+            DateTime t2 = DateTime.Now;
+
+            return (t2 - t1);
         }
 
         private async Task GetDurationAndCheck(ListViewItem lvi, string folder, bool isCheck)
