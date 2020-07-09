@@ -92,8 +92,8 @@ namespace Utils
 
             try
             {
-                var serachContent = "https://sukebei.nyaa.si/?f=0&c=0_0&q=" + id;
-                var htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.si", serachContent, cc);
+                var serachContent = "https://sukebei.nyaa.pro/search/c_0_0_k_" + id;
+                var htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.pro", serachContent, cc);
 
                 if (htmlRet.Success)
                 {
@@ -106,22 +106,29 @@ namespace Utils
 
                     foreach (var node in nodes.Skip(1))
                     {
-                        var text = node.ChildNodes[3].InnerText.Trim();
+                        var text = FileUtility.ReplaceInvalidChar(node.ChildNodes[3].InnerText.Trim());
                         var a = node.ChildNodes[5].OuterHtml;
                         var size = node.ChildNodes[7].InnerText.Trim();
-                        var date = node.ChildNodes[9].InnerText.Trim();
-                        var complete = node.ChildNodes[15].InnerText.Trim();
+                        var date = node.ChildNodes[9].OuterHtml.Trim().Replace("<td class=\"text-center\" data-timestamp=\"", "").Replace("\"></td>", "");
+                        //var complete = node.ChildNodes[15].InnerText.Trim();
 
                         var url = a.Substring(a.IndexOf("<a href=\"magnet:?xt") + 9);
                         url = url.Substring(0, url.IndexOf("\""));
+
+                        int seconds = 0;
+
+                        int.TryParse(date, out seconds);
+
+                        DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
+                        DateTime dt = startTime.AddSeconds(seconds);
 
                         SeedMagnetSearchModel temp = new SeedMagnetSearchModel
                         {
                             Title = text,
                             Size = FileUtility.GetFileSizeFromString(size),
-                            Date = DateTime.Parse(date),
+                            Date = dt,
                             Url = "",
-                            CompleteCount = int.Parse(complete),
+                            //CompleteCount = int.Parse(complete),
                             MagUrl = url,
                             Source = SearchSeedSiteEnum.Sukebei
                         };

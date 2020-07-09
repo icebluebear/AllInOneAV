@@ -55,51 +55,51 @@ namespace Service
 
         public static void GetJavCookie(bool showConsole = true)
         {
-            ChromeOptions options = new ChromeOptions();
-            //"test-type", "--ignore-certificate-errors","window-size=1920,1080", "--disable-extensions", "--start-maximized", chromeUA, "--headless"
-            var chromeUA = "--useragent=" + string.Format(UserAgent, HtmlManager.GetChromeVersion());
-            options.AddArguments("--disable-gpu", "--no-sandbox", "window-size=1,1", "log-level=3", "blink-settings=imagesEnabled=false", "--disable-extensions", "--ignore-certificate-errors");
-            List<OpenQA.Selenium.Cookie> ret = new List<OpenQA.Selenium.Cookie>();
-            IWebDriver driver = null;
+            //ChromeOptions options = new ChromeOptions();
+            ////"test-type", "--ignore-certificate-errors","window-size=1920,1080", "--disable-extensions", "--start-maximized", chromeUA, "--headless"
+            //var chromeUA = "--useragent=" + string.Format(UserAgent, HtmlManager.GetChromeVersion());
+            //options.AddArguments("--disable-gpu", "--no-sandbox", "window-size=1,1", "log-level=3", "blink-settings=imagesEnabled=false", "--disable-extensions", "--ignore-certificate-errors");
+            //List<OpenQA.Selenium.Cookie> ret = new List<OpenQA.Selenium.Cookie>();
+            //IWebDriver driver = null;
 
-            if (showConsole)
-            {
-                driver = new ChromeDriver("c:\\setting\\", options);
-            }
-            else
-            {
-                var driverService = ChromeDriverService.CreateDefaultService("c:\\setting\\");
-                driverService.HideCommandPromptWindow = true;
+            //if (showConsole)
+            //{
+            //    driver = new ChromeDriver("c:\\setting\\", options);
+            //}
+            //else
+            //{
+            //    var driverService = ChromeDriverService.CreateDefaultService("c:\\setting\\");
+            //    driverService.HideCommandPromptWindow = true;
 
-                driver = new ChromeDriver(driverService, options);
-            }
+            //    driver = new ChromeDriver(driverService, options);
+            //}
 
-            try
-            {
-                driver.Navigate().GoToUrl("http://www.javlibrary.com/cn/");
+            //try
+            //{
+            //    driver.Navigate().GoToUrl("http://www.javlibrary.com/cn/");
 
-                //Thread.Sleep(15 * 1000);
+            //    //Thread.Sleep(15 * 1000);
 
-                ret = driver.Manage().Cookies.AllCookies.Where(x => x.Domain == ".javlibrary.com").ToList();
+            //    ret = driver.Manage().Cookies.AllCookies.Where(x => x.Domain == ".javlibrary.com").ToList();
 
-                Console.WriteLine("((((((((((((((((((((((((((更新Cookie)))))))))))))))))))))))))))");
-            }
-            catch (Exception ee)
-            {
+            //    Console.WriteLine("((((((((((((((((((((((((((更新Cookie)))))))))))))))))))))))))))");
+            //}
+            //catch (Exception ee)
+            //{
 
-            }
-            finally
-            {
-                driver.Quit();
-            }
+            //}
+            //finally
+            //{
+            //    driver.Quit();
+            //}
 
 
             cc = new CookieContainer();
 
-            foreach (var r in ret)
-            {
-                cc.Add(new System.Net.Cookie(r.Name, r.Value, r.Path, r.Domain));
-            }
+            //foreach (var r in ret)
+            //{
+            //    cc.Add(new System.Net.Cookie(r.Name, r.Value, r.Path, r.Domain));
+            //}
         }
 
         private static Dictionary<string, string> GetJavCategory()
