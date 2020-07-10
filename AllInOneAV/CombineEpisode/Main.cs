@@ -2944,6 +2944,7 @@ namespace CombineEpisode
 
                 p.Start();
                 p.BeginOutputReadLine();
+
                 await p.WaitForExitAsync();
             }
         }
