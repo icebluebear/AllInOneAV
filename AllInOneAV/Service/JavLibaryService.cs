@@ -1047,6 +1047,8 @@ namespace Service
             {
                 ScanAndReturnAv(url);
             });
+
+            Thread.Sleep(3 * 1000);
         }
 
         public static void DoFaviScan(List<string> urls, bool showConsole = true)

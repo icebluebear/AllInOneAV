@@ -2937,7 +2937,7 @@ namespace CombineEpisode
                 p.StartInfo.Arguments = arg;
 
                 p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.CreateNoWindow = false;
                 p.StartInfo.RedirectStandardOutput = true;
 
                 p.OutputDataReceived += output;
