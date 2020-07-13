@@ -53,7 +53,7 @@ namespace UnitTest
         {
             //JavLibraryHelper.GetJavCookieOld();
 
-            JavLibraryHelper.DoListSearch(new List<string> { "http://www.javlibrary.com/cn/vl_star.php?s=aebvk" }, true, 1);
+            SearchSeedHelper.SearchBtsow("vdd-123");
 
             Console.ReadKey();
         }

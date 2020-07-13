@@ -17,8 +17,8 @@ namespace Utils
 
             try
             {
-                var serachContent = "https://btsow.fun/search/" + id;
-                var htmlRet = HtmlManager.GetHtmlWebClient("https://btsow.fun", serachContent, null, true);
+                var serachContent = "https://btsow.space/search/" + id;
+                var htmlRet = HtmlManager.GetHtmlWebClient("https://btsow.space", serachContent, null, true);
 
                 if (htmlRet.Success)
                 {
