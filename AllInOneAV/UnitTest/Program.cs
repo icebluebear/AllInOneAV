@@ -53,7 +53,7 @@ namespace UnitTest
         {
             //JavLibraryHelper.GetJavCookieOld();
 
-            SearchSeedHelper.SearchBtsow("vdd-123");
+            SearchSeedHelper.SearchBtsow("vdd-098");
 
             Console.ReadKey();
         }
