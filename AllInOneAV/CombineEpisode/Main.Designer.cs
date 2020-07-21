@@ -229,6 +229,7 @@
             this.lvPlay = new System.Windows.Forms.ListView();
             this.ilPlay = new System.Windows.Forms.ImageList(this.components);
             this.panel53 = new System.Windows.Forms.Panel();
+            this.txtPlaySkip = new System.Windows.Forms.TextBox();
             this.btnPlayNext = new System.Windows.Forms.Button();
             this.btnPlayPre = new System.Windows.Forms.Button();
             this.lbPlayPage = new System.Windows.Forms.Label();
@@ -2328,7 +2329,7 @@
             this.txtDailyPage.Name = "txtDailyPage";
             this.txtDailyPage.Size = new System.Drawing.Size(100, 21);
             this.txtDailyPage.TabIndex = 1;
-            this.txtDailyPage.Text = "15";
+            this.txtDailyPage.Text = "20";
             // 
             // label3
             // 
@@ -2447,6 +2448,7 @@
             // 
             // panel53
             // 
+            this.panel53.Controls.Add(this.txtPlaySkip);
             this.panel53.Controls.Add(this.btnPlayNext);
             this.panel53.Controls.Add(this.btnPlayPre);
             this.panel53.Controls.Add(this.lbPlayPage);
@@ -2466,10 +2468,19 @@
             this.panel53.Size = new System.Drawing.Size(242, 580);
             this.panel53.TabIndex = 1;
             // 
+            // txtPlaySkip
+            // 
+            this.txtPlaySkip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPlaySkip.Location = new System.Drawing.Point(164, 528);
+            this.txtPlaySkip.Name = "txtPlaySkip";
+            this.txtPlaySkip.Size = new System.Drawing.Size(43, 21);
+            this.txtPlaySkip.TabIndex = 13;
+            this.txtPlaySkip.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
+            // 
             // btnPlayNext
             // 
             this.btnPlayNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPlayNext.Location = new System.Drawing.Point(204, 528);
+            this.btnPlayNext.Location = new System.Drawing.Point(213, 528);
             this.btnPlayNext.Margin = new System.Windows.Forms.Padding(2);
             this.btnPlayNext.Name = "btnPlayNext";
             this.btnPlayNext.Size = new System.Drawing.Size(27, 21);
@@ -2481,7 +2492,7 @@
             // btnPlayPre
             // 
             this.btnPlayPre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPlayPre.Location = new System.Drawing.Point(174, 528);
+            this.btnPlayPre.Location = new System.Drawing.Point(129, 528);
             this.btnPlayPre.Margin = new System.Windows.Forms.Padding(2);
             this.btnPlayPre.Name = "btnPlayPre";
             this.btnPlayPre.Size = new System.Drawing.Size(27, 21);
@@ -2494,7 +2505,7 @@
             // 
             this.lbPlayPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPlayPage.AutoSize = true;
-            this.lbPlayPage.Location = new System.Drawing.Point(172, 484);
+            this.lbPlayPage.Location = new System.Drawing.Point(171, 485);
             this.lbPlayPage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbPlayPage.Name = "lbPlayPage";
             this.lbPlayPage.Size = new System.Drawing.Size(35, 12);
@@ -2506,11 +2517,11 @@
             // 
             this.txtPlayPageSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPlayPageSize.Location = new System.Drawing.Point(174, 507);
+            this.txtPlayPageSize.Location = new System.Drawing.Point(166, 499);
             this.txtPlayPageSize.Margin = new System.Windows.Forms.Padding(2);
             this.txtPlayPageSize.Name = "txtPlayPageSize";
             this.txtPlayPageSize.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtPlayPageSize.Size = new System.Drawing.Size(56, 21);
+            this.txtPlayPageSize.Size = new System.Drawing.Size(71, 21);
             this.txtPlayPageSize.TabIndex = 9;
             this.txtPlayPageSize.Text = "200";
             // 
@@ -2529,11 +2540,12 @@
             // 
             this.lbPlayStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPlayStatus.AutoSize = true;
-            this.lbPlayStatus.Location = new System.Drawing.Point(177, 559);
+            this.lbPlayStatus.Location = new System.Drawing.Point(127, 560);
             this.lbPlayStatus.Name = "lbPlayStatus";
             this.lbPlayStatus.Size = new System.Drawing.Size(29, 12);
             this.lbPlayStatus.TabIndex = 7;
             this.lbPlayStatus.Text = "0 条";
+            this.lbPlayStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnPlay
             // 
@@ -2597,6 +2609,8 @@
             // 
             this.cbPlayActress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbPlayActress.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cbPlayActress.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbPlayActress.FormattingEnabled = true;
             this.cbPlayActress.Location = new System.Drawing.Point(44, 22);
             this.cbPlayActress.Name = "cbPlayActress";
@@ -2678,14 +2692,14 @@
             // 删除ToolStripMenuItem
             // 
             this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
             // 重命名ToolStripMenuItem
             // 
             this.重命名ToolStripMenuItem.Name = "重命名ToolStripMenuItem";
-            this.重命名ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.重命名ToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.重命名ToolStripMenuItem.Text = "重命名";
             this.重命名ToolStripMenuItem.Click += new System.EventHandler(this.重命名ToolStripMenuItem_Click);
             // 
@@ -3029,6 +3043,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 重命名ToolStripMenuItem;
+        private System.Windows.Forms.TextBox txtPlaySkip;
     }
 }
 

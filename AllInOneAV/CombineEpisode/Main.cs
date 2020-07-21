@@ -42,6 +42,7 @@ namespace CombineEpisode
         private bool OkToStart = true;
         private string[] ImportedFiles = null;
         private Font font = new Font("微软雅黑", 10);
+        private Guid ForPlay;
 
         public static List<string> FaviUrls = new List<string>();
         public delegate void ProcessPb(ProgressBar pb, int value);
@@ -870,6 +871,28 @@ namespace CombineEpisode
             }
         }
 
+        private void lvPlay_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && lvPlay.SelectedItems.Count > 0)
+            {
+                var list = SearchSeedHelper.SearchSukebei(lvPlay.SelectedItems[0].Text.Split(' ')[0]);
+
+                if (list != null && list.Count > 0)
+                {
+                    SeedList sl = new SeedList(list, "");
+                    sl.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("没有搜到");
+                }
+            }
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            txtPlaySkipClick(sender, e);
+        }
         #endregion
 
         #region 方法
@@ -2122,6 +2145,22 @@ namespace CombineEpisode
                             richTextBox2.AppendText("\t找到适配的番号 " + pi, Color.Black, font, true);
 
                             var possibleAv = avs.Where(x => x.ID == pi).ToList();
+
+                            if (possibleAv == null || possibleAv.Count <= 0)
+                            {
+                                var prefixPart = pi.Split('-')[0];
+                                var numberPart = pi.Split('-')[1];
+
+                                if (numberPart.StartsWith("00"))
+                                {
+                                    numberPart = numberPart.Substring(2);
+
+                                    pi = prefixPart + "-" + numberPart;
+
+                                    possibleAv = avs.Where(x => x.ID == pi).ToList();
+                                }
+                            }
+
                             findMatch = true;
                             foreach (var av in possibleAv)
                             {
@@ -3022,6 +3061,8 @@ namespace CombineEpisode
 
             cbPlayActress.Text = "";
             cbPlayCategory.Text = "";
+
+            ForPlay = Guid.NewGuid();
         }
 
         private async void BtnPlayClick(int page, int pageSize)
@@ -3087,10 +3128,10 @@ namespace CombineEpisode
 
             if (string.IsNullOrEmpty(cbPlayActress.Text) && string.IsNullOrEmpty(cbPlayCategory.Text) && string.IsNullOrWhiteSpace(cbPlayPrefix.Text))
             {
-                toBePlay = toBePlay.OrderBy(i => Guid.NewGuid()).ToList();
+                toBePlay = toBePlay.OrderBy(i => ForPlay).ToList();
             }
 
-            lbPlayStatus.Text = toBePlay.Count + " 条";
+            lbPlayStatus.Text = "一共有: " + toBePlay.Count + " 条";
 
             var pageContent = toBePlay.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
@@ -3125,25 +3166,27 @@ namespace CombineEpisode
             lvPlay.EndUpdate();
         }
 
-        #endregion
-
-        private void lvPlay_MouseClick(object sender, MouseEventArgs e)
+        private void txtPlaySkipClick(object sender, KeyPressEventArgs e)
         {
-            if (e.Button == MouseButtons.Right && lvPlay.SelectedItems.Count > 0)
+            if (toBePlay != null && toBePlay.Count > 0 && e.KeyChar == (int)Keys.Enter)
             {
-                var list = SearchSeedHelper.SearchSukebei(lvPlay.SelectedItems[0].Text.Split(' ')[0]);
+                int pageSize = int.Parse(txtPlayPageSize.Text);
+                var pageArray = lbPlayPage.Text.Split('/');
 
-                if (list != null && list.Count > 0)
+                int current = 1;
+                int total = 1;
+
+                int.TryParse(txtPlaySkip.Text, out current);
+                int.TryParse(pageArray[1], out total);
+
+                if (current <= total && current >= 1)
                 {
-                    SeedList sl = new SeedList(list, "");
-                    sl.ShowDialog();
-                }
-                else
-                {
-                    MessageBox.Show("没有搜到");
+                    BtnPlayClick(current, pageSize);
+                    lbPlayPage.Text = current + " / " + total;
                 }
             }
         }
+        #endregion
     }
 
     #region 扩展方法

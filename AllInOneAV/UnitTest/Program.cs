@@ -53,7 +53,7 @@ namespace UnitTest
         {
             //JavLibraryHelper.GetJavCookieOld();
 
-            SearchSeedHelper.SearchBtsow("vdd-098");
+            JavLibraryHelper.DoCertainCategory(new Dictionary<string, string> { { "http://www.javlibrary.com/cn/vl_searchbyid.php?&page=1&keyword=xrw", "xrw" } });
 
             Console.ReadKey();
         }

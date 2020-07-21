@@ -169,17 +169,7 @@ namespace Service
             int times = 1;
             int maxTimes = 3;
 
-            //最大重试3次
-            while (times <= maxTimes && (cc == null || cc.Count < 3))
-            {
-                GetJavCookie();
-                times++;
-
-                if (cc != null && cc.Count >= 3)
-                {
-                    break;
-                }
-            }
+            GetJavCookie();
 
             if (times < 4 && cc != null)
             {
