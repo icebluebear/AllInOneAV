@@ -51,11 +51,43 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            //JavLibraryHelper.GetJavCookieOld();
-
-            JavLibraryHelper.DoCertainCategory(new Dictionary<string, string> { { "http://www.javlibrary.com/cn/vl_searchbyid.php?&page=1&keyword=xrw", "xrw" } });
+            Test115Search();
 
             Console.ReadKey();
+        }
+
+        private static void Test115Search()
+        {
+            var cookie = OneOneFiveService.Get115Cookie();
+            var result = OneOneFiveService.Get115SearchResult(cookie, "vdd");
+        }
+
+        private static void Check115Mathces()
+        {
+            var cookie = OneOneFiveService.Get115Cookie();
+            var drivers = Environment.GetLogicalDrives();
+
+            foreach (var drive in drivers)
+            {
+                var targetFolder = drive + "\\fin\\";
+                
+                if (Directory.Exists(targetFolder))
+                {
+                    var files = new DirectoryInfo(targetFolder).GetFiles();
+
+                    foreach (var file in files)
+                    {
+                        var searchContent = file.Name.Split('-')[0] + "-" + file.Name.Split('-')[1];
+
+                        var result = OneOneFiveService.Get115SearchResult(cookie, searchContent);
+
+                        if (!result)
+                        {
+                            Console.WriteLine(file.FullName);
+                        }
+                    }
+                }
+            }
         }
 
         private static void TestEverything(EverythingSearchEnum type = EverythingSearchEnum.Video)

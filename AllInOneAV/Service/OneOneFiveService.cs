@@ -10,21 +10,22 @@ namespace Service
 {
     public class OneOneFiveService
     {
-        public static bool Get115SearchResult(string cookieStr, string content, string host = "115.com", string reffer = "https://115.com/?cid=0&offset=0&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
+        public static bool Get115SearchResult(CookieContainer cc, string content, string host = "115.com", string reffer = "https://115.com/?cid=0&offset=0&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
         {
             bool ret = false;
-
-            CookieContainer cc = Get115Cookie();
 
             var url = string.Format(string.Format("https://webapi.115.com/files/search?search_value={0}&format=json", content));
             var htmlRet = HtmlManager.GetHtmlWebClient("https://115.com", url, cc);
             if (htmlRet.Success)
             {
-                var data = Newtonsoft.Json.Linq.JObject.Parse(htmlRet.Content);
-
-                if (data.Property("count").HasValues && int.Parse(data.Property("count").Value.ToString()) > 0)
+                if (!string.IsNullOrEmpty(htmlRet.Content))
                 {
-                    ret = true;
+                    var data = Newtonsoft.Json.Linq.JObject.Parse(htmlRet.Content);
+
+                    if (data.Property("count").HasValues && int.Parse(data.Property("count").Value.ToString()) > 0)
+                    {
+                        ret = true;
+                    }
                 }
             }
 

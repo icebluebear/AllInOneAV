@@ -60,7 +60,9 @@ namespace CombineEpisode
 
                 Parallel.ForEach(missing, new ParallelOptions { MaxDegreeOfParallelism = 5 }, mi =>
                 {
-                    var res = OneOneFiveService.Get115SearchResult(textBox1.Text, mi.Av.ID);
+                    var cookie = OneOneFiveService.Get115Cookie();
+
+                    var res = OneOneFiveService.Get115SearchResult(cookie, mi.Av.ID);
 
                     if (res)
                     {

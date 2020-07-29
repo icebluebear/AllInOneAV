@@ -60,6 +60,7 @@
     <Compile Include="FindModels\SearchHistory.cs" />
     <Compile Include="JavModels\Actress.cs" />
     <Compile Include="JavModels\AV.cs" />
+    <Compile Include="JavModels\AvElasticSearchModel.cs" />
     <Compile Include="JavModels\BusLibMatchResultModel.cs" />
     <Compile Include="JavModels\Category.cs" />
     <Compile Include="JavModels\Comment.cs" />
