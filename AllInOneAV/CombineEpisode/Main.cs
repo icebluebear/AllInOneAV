@@ -3105,7 +3105,7 @@ namespace CombineEpisode
                 p.StartInfo.Arguments = arg;
 
                 p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = false;
+                p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
 
                 p.OutputDataReceived += output;
@@ -3287,7 +3287,7 @@ namespace CombineEpisode
             {
                 ListViewItem lvi = new ListViewItem(FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2) + " " + l.AvId + " " + l.AvName + " " + l.Id)
                 {
-                    //ImageIndex = ilPlay.Images.IndexOfKey(l.AvName),
+                    ImageIndex = ilPlay.Images.IndexOfKey(l.AvName),
                     Tag = l.AvFilePath
                 };
 
