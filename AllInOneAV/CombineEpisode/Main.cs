@@ -442,6 +442,33 @@ namespace CombineEpisode
 
         private void Main_KeyDown(object sender, KeyEventArgs e)
         {
+            //退格删除播放记录
+            if (e.KeyCode == Keys.Back && tabControl1.SelectedTab.Name == "tabPage14")
+            {
+                if (lvwFind.Focused)
+                {
+                    if (lvwFind.SelectedItems != null && lvwFind.SelectedItems.Count > 0)
+                    {
+                        foreach (ListViewItem item in lvwFind.SelectedItems)
+                        {
+                            item.BackColor = Color.Transparent;
+                            ScanDataBaseManager.RemoveViewHistory(FileUtility.ReplaceInvalidChar(item.Tag + ""));
+                        }
+                    }
+                }
+                else 
+                {
+                    if (lvwRecnet.SelectedItems != null && lvwRecnet.SelectedItems.Count > 0)
+                    {
+                        foreach (ListViewItem item in lvwRecnet.SelectedItems)
+                        {
+                            item.BackColor = Color.Transparent;
+                            ScanDataBaseManager.RemoveViewHistory(FileUtility.ReplaceInvalidChar(item.Tag + ""));
+                        }
+                    }
+                }
+            }
+
             //空格播放事件
             if (e.KeyCode == Keys.Space && tabControl1.SelectedTab.Name == "tabPage14")
             {
@@ -875,16 +902,74 @@ namespace CombineEpisode
         {
             if (e.Button == MouseButtons.Right && lvPlay.SelectedItems.Count > 0)
             {
-                var list = SearchSeedHelper.SearchSukebei(lvPlay.SelectedItems[0].Text.Split(' ')[0]);
+                contextMenuStrip4 = new ContextMenuStrip();
+                ToolStripItem searchItem = new ToolStripMenuItem("查询");
+                ToolStripItem playItem = new ToolStripMenuItem("播放");
+                ToolStripItem seedItem = new ToolStripMenuItem("搜种子");
 
-                if (list != null && list.Count > 0)
+                contextMenuStrip4.Items.Add(searchItem);
+                contextMenuStrip4.Items.Add(playItem);
+                contextMenuStrip4.Items.Add(seedItem);
+
+                playItem.Click += new EventHandler(playItemClick);
+                seedItem.Click += new EventHandler(seedItemClick);
+
+                var av = ScanDataBaseManager.GetMatchedAv(int.Parse(lvPlay.SelectedItems[0].Text.Split(' ').LastOrDefault()));
+
+                if (av != null)
                 {
-                    SeedList sl = new SeedList(list, "");
-                    sl.ShowDialog();
-                }
-                else
-                {
-                    MessageBox.Show("没有搜到");
+                    var actress = av.Actress.Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList();
+                    var category = av.Category.Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList();
+                    var prefix = av.ID.Split('-')[0];
+
+                    if (actress != null && actress.Count > 0)
+                    {
+                        ToolStripItem actItem = new ToolStripMenuItem("演员");
+                        ((ToolStripDropDownItem)(contextMenuStrip4.Items[0])).DropDownItems.Add(actItem);
+
+                        foreach (var act in actress)
+                        {
+                            ToolStripItem temp = new ToolStripMenuItem(act);
+                            temp.Tag = "actress";
+                            temp.Click += new EventHandler(searchItemClick);
+
+                            ((ToolStripDropDownItem)actItem).DropDownItems.Add(temp);
+                        }
+                    }
+
+                    if (category != null && category.Count > 0)
+                    {
+                        ToolStripItem cateItem = new ToolStripMenuItem("类型");
+                        ((ToolStripDropDownItem)(contextMenuStrip4.Items[0])).DropDownItems.Add(cateItem);
+
+                        foreach (var cate in category)
+                        {
+                            ToolStripItem temp = new ToolStripMenuItem(cate);
+                            temp.Tag = "category";
+                            temp.Click += new EventHandler(searchItemClick);
+
+                            ((ToolStripDropDownItem)cateItem).DropDownItems.Add(temp);
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(prefix))
+                    {
+                        ToolStripItem prefixItem = new ToolStripMenuItem("前缀");
+                        ((ToolStripDropDownItem)(contextMenuStrip4.Items[0])).DropDownItems.Add(prefixItem);
+
+                        ToolStripItem temp = new ToolStripMenuItem(prefix);
+                        temp.Tag = "prefix";
+                        temp.Click += new EventHandler(searchItemClick);
+
+                        ((ToolStripDropDownItem)prefixItem).DropDownItems.Add(temp);
+                    }
+
+                    Point p = new Point();
+                    p.X = e.Location.X + this.Location.X + 5;
+                    p.Y = e.Location.Y + this.Location.Y + 100;
+
+                    contextMenuStrip4.Show(p);
+
                 }
             }
         }
@@ -892,6 +977,50 @@ namespace CombineEpisode
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             txtPlaySkipClick(sender, e);
+        }
+
+        private void seedItemClick(object sender, EventArgs e)
+        {
+            var content = lvPlay.SelectedItems[0].Text.Split(' ')[1];
+            var list = SearchSeedHelper.SearchSukebei(content);
+
+            if (list != null && list.Count > 0)
+            {
+                SeedList sl = new SeedList(list, "");
+                sl.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("没有搜到");
+            }
+        }
+
+        private void playItemClick(object sender, EventArgs e)
+        {
+            Play(lvPlay.SelectedItems[0]);
+        }
+
+        private void searchItemClick(object sender, EventArgs e)
+        {
+            var item = (ToolStripMenuItem)sender;
+
+            if (item.Tag.ToString() == "actress")
+            {
+                cbPlayActress.Text = item.Text;
+            }
+
+            if (item.Tag.ToString() == "category")
+            {
+                cbPlayCategory.Text = item.Text;
+            }
+
+            if(item.Tag.ToString() == "prefix")
+            {
+                cbPlayPrefix.Text = item.Text;
+            }
+
+            int pageSize = int.Parse(txtPlayPageSize.Text);
+            BtnPlayClick(1, pageSize);
         }
         #endregion
 
@@ -3156,9 +3285,11 @@ namespace CombineEpisode
 
             foreach (var l in list)
             {
-                ListViewItem lvi = new ListViewItem(l.AvId + " " + l.AvName + " " + FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2));
-                lvi.ImageIndex = ilPlay.Images.IndexOfKey(l.AvName);
-                lvi.Tag = l.AvFilePath;
+                ListViewItem lvi = new ListViewItem(FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2) + " " + l.AvId + " " + l.AvName + " " + l.Id)
+                {
+                    //ImageIndex = ilPlay.Images.IndexOfKey(l.AvName),
+                    Tag = l.AvFilePath
+                };
 
                 ListViewItemUpdate2(lvPlay, lvi);
             }

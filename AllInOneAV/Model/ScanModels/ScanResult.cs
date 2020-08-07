@@ -8,6 +8,7 @@ namespace Model.ScanModels
 {
     public class ScanResult
     {
+        public int Id { get; set; }
         public string AvId { get; set; }
         public string AvName { get; set; }
         public string Location { get; set; }

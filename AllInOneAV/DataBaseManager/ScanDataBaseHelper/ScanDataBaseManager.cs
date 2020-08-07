@@ -104,6 +104,13 @@ namespace DataBaseManager.ScanDataBaseHelper
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
 
+        public static int RemoveViewHistory(string file)
+        {
+            var sql = string.Format("DELETE FROM ViewHistory WHERE FileName = '{0}'", FileUtility.ReplaceInvalidChar(file));
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
         public static int InsertSearchHistory(string content)
         {
             var sql = string.Format("IF NOT EXISTS (SELECT 1 FROM SearchHistory WHERE Content = '{0}') INSERT INTO SearchHistory(Content) VALUES('{0}')", FileUtility.ReplaceInvalidChar(content));
@@ -204,7 +211,7 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static List<ScanResult> GetMatchScanResult()
         {
-            var sql = @"SELECT m.Location, m.Name AS FileName, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m LEFT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID";
+            var sql = @"SELECT m.MatchId AS Id, m.Location, m.Name AS FileName, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m LEFT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID";
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ScanResult>();
         }
@@ -228,6 +235,13 @@ namespace DataBaseManager.ScanDataBaseHelper
             var sql = "SELECT * FROM FaviScan ORDER BY Category";
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<FaviScan>();
+        }
+
+        public static AV GetMatchedAv(int id)
+        {
+            var sql = "SELECT TOP 1 av.* FROM JavLibraryDownload.dbo.AV av JOIN ScanAllAv.dbo.[Match] m ON av.AVID = m.MatchAVId WHERE m.MatchID = " + id;
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<AV>();
         }
     }
 }

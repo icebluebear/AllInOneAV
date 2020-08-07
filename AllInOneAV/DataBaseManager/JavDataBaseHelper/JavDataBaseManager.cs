@@ -536,5 +536,12 @@ namespace DataBaseManager.JavDataBaseHelper
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<Actress>();
         }
+
+        public static CommonModel GetCommonModel(string table, string name)
+        {
+            var sql = @"SELECT * FROM " + table + " WHERE Name = '" + name + "'";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<CommonModel>();
+        }
     }
 }
