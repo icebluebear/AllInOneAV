@@ -258,6 +258,7 @@
             this.contextMenuStrip4 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.playBack = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -2452,6 +2453,7 @@
             // 
             // panel53
             // 
+            this.panel53.Controls.Add(this.playBack);
             this.panel53.Controls.Add(this.txtPlaySkip);
             this.panel53.Controls.Add(this.btnPlayNext);
             this.panel53.Controls.Add(this.btnPlayPre);
@@ -2715,19 +2717,30 @@
             this.toolStripMenuItem2,
             this.toolStripMenuItem3});
             this.contextMenuStrip4.Name = "contextMenuStrip3";
-            this.contextMenuStrip4.Size = new System.Drawing.Size(181, 70);
+            this.contextMenuStrip4.Size = new System.Drawing.Size(101, 48);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(100, 22);
             this.toolStripMenuItem2.Text = "查询";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(100, 22);
             this.toolStripMenuItem3.Text = "播放";
+            // 
+            // playBack
+            // 
+            this.playBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.playBack.Location = new System.Drawing.Point(161, 431);
+            this.playBack.Name = "playBack";
+            this.playBack.Size = new System.Drawing.Size(75, 40);
+            this.playBack.TabIndex = 1;
+            this.playBack.Text = "返回跳转前";
+            this.playBack.UseVisualStyleBackColor = true;
+            this.playBack.Click += new System.EventHandler(this.playBack_Click);
             // 
             // Main
             // 
@@ -3074,6 +3087,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.Button playBack;
     }
 }
 

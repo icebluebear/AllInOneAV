@@ -38,6 +38,8 @@ namespace CombineEpisode
         private static List<MissingCheckModel> missingCheckForFavi = new List<MissingCheckModel>();
         private static List<ScanResult> scanResult = new List<ScanResult>();
         private static List<ScanResult> toBePlay = new List<ScanResult>();
+        private static int lastPlayPage = 1;
+        private static int lastPlaySize = 200;
         private Process p;
         private bool OkToStart = true;
         private string[] ImportedFiles = null;
@@ -693,6 +695,11 @@ namespace CombineEpisode
             BtnPlayClick(1, pageSize);
         }
 
+        private void playBack_Click(object sender, EventArgs e)
+        {
+            BtnPlayClick(lastPlayPage, lastPlaySize, true);
+        }
+
         private void btnPlayRefresh_Click(object sender, EventArgs e)
         {
             RefreshPlayUi();
@@ -1020,6 +1027,14 @@ namespace CombineEpisode
             }
 
             int pageSize = int.Parse(txtPlayPageSize.Text);
+
+            lastPlaySize = pageSize;
+
+            if (!string.IsNullOrEmpty(lbPlayPage.Text))
+            {
+                lastPlayPage = int.Parse(lbPlayPage.Text.Split('/')[0].Trim());
+            }
+
             BtnPlayClick(1, pageSize);
         }
         #endregion
@@ -3036,10 +3051,10 @@ namespace CombineEpisode
 
                 var list = SearchSeedHelper.SearchSukebei(rm.Id);
 
-                if (list == null || list.Count <= 0)
-                {
-                    list = SearchSeedHelper.SearchBtsow(rm.Id);
-                }
+                //if (list == null || list.Count <= 0)
+                //{
+                //    list = SearchSeedHelper.SearchBtsow(rm.Id);
+                //}
 
                 if (list != null && list.Count > 0)
                 {
@@ -3194,7 +3209,7 @@ namespace CombineEpisode
             ForPlay = Guid.NewGuid();
         }
 
-        private async void BtnPlayClick(int page, int pageSize)
+        private async void BtnPlayClick(int page, int pageSize, bool isBack = false)
         {
             lvPlay.Items.Clear();
 
@@ -3207,6 +3222,13 @@ namespace CombineEpisode
             List<ScanResult> actressPlay = new List<ScanResult>();
             List<ScanResult> categoryPlay = new List<ScanResult>();
             List<ScanResult> prefixPlay = new List<ScanResult>();
+
+            if (isBack)
+            {
+                cbPlayActress.Text = "";
+                cbPlayCategory.Text = "";
+                cbPlayPrefix.Text = "";
+            }
 
             if (!string.IsNullOrEmpty(cbPlayActress.Text))
             {

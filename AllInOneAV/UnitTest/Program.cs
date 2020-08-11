@@ -51,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            Test115Search();
+            var ret = SearchSeedHelper.SearchSukebei("vdd");
 
             Console.ReadKey();
         }
