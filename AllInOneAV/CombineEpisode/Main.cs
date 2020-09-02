@@ -3279,7 +3279,7 @@ namespace CombineEpisode
 
             if (string.IsNullOrEmpty(cbPlayActress.Text) && string.IsNullOrEmpty(cbPlayCategory.Text) && string.IsNullOrWhiteSpace(cbPlayPrefix.Text))
             {
-                toBePlay = toBePlay.OrderBy(i => ForPlay).ToList();
+                toBePlay = toBePlay.OrderBy(i => new Guid()).ToList();
             }
 
             lbPlayStatus.Text = "一共有: " + toBePlay.Count + " 条";

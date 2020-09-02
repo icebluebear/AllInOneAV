@@ -51,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            var ret = SearchSeedHelper.SearchSukebei("vdd");
+            JavLibraryHelper.GetJavCookieOld();
 
             Console.ReadKey();
         }

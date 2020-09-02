@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Model.OneOneFive;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Utils;
 
@@ -23,6 +27,28 @@ namespace Service
                     var data = Newtonsoft.Json.Linq.JObject.Parse(htmlRet.Content);
 
                     if (data.Property("count").HasValues && int.Parse(data.Property("count").Value.ToString()) > 0)
+                    {
+                        ret = true;
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+        public static bool Get115SearchExist(CookieContainer cc, string content, string host = "115.com", string reffer = "https://115.com/?cid=0&offset=0&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
+        {
+            bool ret = false;
+
+            var url = string.Format(string.Format("https://webapi.115.com/files/search?search_value={0}&format=json&limit=3&offset=0", content));
+            var htmlRet = HtmlManager.GetHtmlWebClient("https://115.com", url, cc);
+            if (htmlRet.Success)
+            {
+                if (!string.IsNullOrEmpty(htmlRet.Content))
+                {
+                    var data = Newtonsoft.Json.Linq.JObject.Parse(htmlRet.Content);
+
+                    if (data.Property("count").HasValues && int.Parse(data.Property("count").Value.ToString()) == 1)
                     {
                         ret = true;
                     }
@@ -76,6 +102,151 @@ namespace Service
             }
 
             return cc;
+        }
+
+        public static int Get115TotalFileCount(int pageSize = 1150)
+        {
+            var url = string.Format(@"https://webapi.115.com/files?aid=1&cid=1834397846621504875&o=user_ptime&asc=0&offset=1&show_dir=1&limit={0}&code=&scid=&snap=0&natsort=1&record_open_time=1&source=&format=json", pageSize);
+            var cc = Get115Cookie();
+
+            var htmlRet = HtmlManager.GetHtmlWebClient("https://115.com", url, cc);
+            if (htmlRet.Success)
+            {
+                if (!string.IsNullOrEmpty(htmlRet.Content))
+                {
+                    var data = JsonConvert.DeserializeObject<FileListModel>(htmlRet.Content);
+
+                    if (data != null && data.count > 0)
+                    {
+                        return data.count % data.page_size == 0 ? data.count / data.page_size : data.count / data.page_size + 1;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        public static List<FileItemModel> Get115Files(int start = 0, int end = 0, int pageSize = 1150)
+        {
+            List<FileItemModel> ret = new List<FileItemModel>();
+
+            var cc = Get115Cookie();
+            for (int i = start; i <= end; i++)
+            {
+                var url = string.Format(@"https://webapi.115.com/files?aid=1&cid=1834397846621504875&o=user_ptime&asc=0&offset={0}&show_dir=1&limit={1}&code=&scid=&snap=0&natsort=1&record_open_time=1&source=&format=json", i * pageSize, pageSize);
+
+                var htmlRet = HtmlManager.GetHtmlWebClient("https://115.com", url, cc);
+                if (htmlRet.Success)
+                {
+                    if (!string.IsNullOrEmpty(htmlRet.Content))
+                    {
+                        var data = JsonConvert.DeserializeObject<FileListModel>(htmlRet.Content);
+
+                        if (data != null && data.data != null)
+                        {
+                            foreach (var d in data.data)
+                            {
+                                if (!ret.Exists(x => x.sha == d.sha))
+                                {
+                                    ret.Add(d);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+        public static Dictionary<string, List<FileItemModel>> GetRepeatFiles(int pageSize = 1150)
+        {
+            Dictionary<string, List<FileItemModel>> ret = new Dictionary<string, List<FileItemModel>>();
+            var pattern = @"\(\d+\)";
+            var data = OneOneFiveService.Get115Files(0, OneOneFiveService.Get115TotalFileCount(pageSize), pageSize);
+
+            var retRepeat = data.Where(x => Regex.IsMatch(x.n, pattern)).ToList();
+
+            foreach (var repeat in retRepeat)
+            {
+                var ori = Regex.Replace(repeat.n, pattern, "");
+
+                if (!ret.ContainsKey(ori))
+                {
+                    var oriItem = data.FirstOrDefault(x => x.n == ori);
+
+                    if (oriItem != null)
+                    {
+                        List<FileItemModel> temp = new List<FileItemModel>();
+
+                        temp.Add(oriItem);
+                        temp.Add(repeat);
+
+                        ret.Add(ori, temp);
+                    }
+                }
+                else
+                {
+                    ret[ori].Add(repeat);
+                }
+            }
+
+            return ret;
+        }
+
+        public static string DeleteAndRename(Dictionary<string, List<FileItemModel>> input)
+        {
+            double deleteSize = 0;
+            CookieContainer cc = Get115Cookie();
+            var pattern = @"\(\d+\)";
+
+            foreach (var data in input)
+            {
+                if (data.Value.Count >= 2)
+                {
+                    Console.WriteLine("正在处理 " + data.Key);
+
+                    var biggest = data.Value.LastOrDefault();
+
+                    Console.WriteLine("\t最大文件为 " + biggest.n + " 大小为 " + FileSize.GetAutoSizeString(biggest.s, 2));
+
+                    data.Value.Remove(biggest);
+
+                    foreach (var de in data.Value)
+                    {
+                        Console.WriteLine("\t删除 " + de.n + " 大小为 " + FileSize.GetAutoSizeString(de.s, 2));
+                        Delete(de.fid, cc);
+                        deleteSize += de.s;
+                    }
+
+                    Console.WriteLine("\t重命名 " + biggest.n + " 到 " + Regex.Replace(biggest.n, pattern, ""));
+                    Rename(biggest.fid, Regex.Replace(biggest.n, pattern, ""), cc);
+                    Console.WriteLine();
+                }
+            }
+
+            return FileSize.GetAutoSizeString(deleteSize, 2);
+        }
+
+        public static void Delete(string fid, CookieContainer cc)
+        {
+            var url = @"https://webapi.115.com/rb/delete";
+
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            param.Add("pid", "0");
+            param.Add("fid[0]", fid);
+
+            HtmlManager.Post(url, param, cc);
+        }
+
+        public static void Rename(string fid, string newName, CookieContainer cc)
+        {
+            var url = @"https://webapi.115.com/files/batch_rename";
+
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            param.Add("files_new_name[" + fid + "]", newName);
+
+            HtmlManager.Post(url, param, cc);
         }
     }
 }
