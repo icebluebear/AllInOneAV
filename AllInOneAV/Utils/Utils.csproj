@@ -119,7 +119,6 @@
     <Compile Include="PlayerHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestClient.cs" />
-    <Compile Include="SearchSeedHelper.cs" />
     <Compile Include="VideoStream.cs" />
     <Compile Include="WindowHelper.cs" />
     <Compile Include="ZipHelper.cs" />

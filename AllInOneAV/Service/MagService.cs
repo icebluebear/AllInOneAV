@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using DataBaseManager.ScanDataBaseHelper;
+using HtmlAgilityPack;
 using Model.Common;
 using System;
 using System.Collections.Generic;
@@ -6,10 +7,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Utils;
 
-namespace Utils
+namespace Service
 {
-    public class SearchSeedHelper
+    public class MagService
     {
         public static List<SeedMagnetSearchModel> SearchBtsow(string id)
         {
@@ -76,7 +78,7 @@ namespace Utils
 
             }
 
-            return ret.OrderByDescending(x=>x.Size).ToList();
+            return ret.OrderByDescending(x => x.Size).ToList();
         }
 
         public static List<SeedMagnetSearchModel> SearchSukebei(string id, CookieContainer cc = null)
@@ -142,7 +144,7 @@ namespace Utils
 
             }
 
-            return ret.Where(x=>x.Size >= 0).OrderByDescending(x=>x.CompleteCount).ThenByDescending(x => x.Size).ToList();
+            return ret.Where(x => x.Size >= 0).OrderByDescending(x => x.CompleteCount).ThenByDescending(x => x.Size).ToList();
         }
     }
 }

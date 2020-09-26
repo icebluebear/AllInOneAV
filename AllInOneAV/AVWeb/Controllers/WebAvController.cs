@@ -28,6 +28,11 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        public ActionResult Test()
+        {
+            return View();
+        }
+
         public ActionResult UploadSeeds()
         {
             return View();

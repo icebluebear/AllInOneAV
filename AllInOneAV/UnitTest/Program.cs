@@ -348,7 +348,7 @@ namespace UnitTest
                  {
                      var searchContent = split[0] + "-" + split[1];
 
-                     seeds.Add(searchContent, SearchSeedHelper.SearchSukebei(searchContent));
+                     seeds.Add(searchContent, MagService.SearchSukebei(searchContent));
                  }
             });
 

@@ -13,5 +13,6 @@ namespace Model.ScanModels
         public string MagUrl { get; set; }
         public string MagTitle { get; set; }
         public bool IsFound { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }

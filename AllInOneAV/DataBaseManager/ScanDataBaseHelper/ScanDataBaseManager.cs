@@ -204,7 +204,7 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static int InsertMagUrl(string avid, string magUrl, string magTitle, int isFound)
         {
-            var sql = "INSERT INTO MagUrl (AvId, MagUrl, MagTitle, IsFound) VALUES ('" + avid + "', '" + magUrl + "', '" + magTitle + "', " + isFound + ")";
+            var sql = "INSERT INTO MagUrl (AvId, MagUrl, MagTitle, IsFound, CreateTime) VALUES ('" + avid + "', '" + magUrl + "', '" + magTitle + "', " + isFound + ", GETDATE())";
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
