@@ -989,7 +989,7 @@ namespace CombineEpisode
         private void seedItemClick(object sender, EventArgs e)
         {
             var content = lvPlay.SelectedItems[0].Text.Split(' ')[1];
-            var list = SearchSeedHelper.SearchSukebei(content);
+            var list = MagService.SearchSukebei(content);
 
             if (list != null && list.Count > 0)
             {
@@ -1824,7 +1824,7 @@ namespace CombineEpisode
                 var nameArr = fi.Name.Split('-');
                 var searchContent = nameArr[0] + "-" + nameArr[1];
 
-                var rets = SearchSeedHelper.SearchSukebei(searchContent);
+                var rets = MagService.SearchSukebei(searchContent);
 
                 TreeNode tn = new TreeNode(fi.FullName);
                 foreach (var ret in rets)
@@ -1971,7 +1971,7 @@ namespace CombineEpisode
 
                 Parallel.ForEach(isos, new ParallelOptions { MaxDegreeOfParallelism = 5 }, key =>
                 {
-                    var result = SearchSeedHelper.SearchSukebei(key.Value, cc);
+                    var result = MagService.SearchSukebei(key.Value, cc);
 
                     if (result != null && result.Count > 0)
                     {
@@ -1985,7 +1985,7 @@ namespace CombineEpisode
 
                 Parallel.ForEach(multi, new ParallelOptions { MaxDegreeOfParallelism = 5 }, file =>
                 {
-                    var result = SearchSeedHelper.SearchSukebei(file.Key.Substring(file.Key.LastIndexOf("\\") + 1), cc);
+                    var result = MagService.SearchSukebei(file.Key.Substring(file.Key.LastIndexOf("\\") + 1), cc);
 
                     if (result != null && result.Count > 0)
                     {
@@ -2422,10 +2422,10 @@ namespace CombineEpisode
                 switch (source)
                 {
                     case SearchSeedSiteEnum.Btsow:
-                        ret = SearchSeedHelper.SearchBtsow(content);
+                        ret = MagService.SearchBtsow(content);
                         break;
                     case SearchSeedSiteEnum.Sukebei:
-                        ret = SearchSeedHelper.SearchSukebei(content);
+                        ret = MagService.SearchSukebei(content);
                         break;
                 }
             }
@@ -2948,7 +2948,7 @@ namespace CombineEpisode
                     var matchFiles = new EverythingHelper().SearchFile(rm.Av.ID + " | " + rm.Av.ID.Replace("-", ""), EverythingSearchEnum.Video);
                     rm.Fi = matchFiles;
 
-                    var seedList = SearchSeedHelper.SearchSukebei(rm.Av.ID);
+                    var seedList = MagService.SearchSukebei(rm.Av.ID);
 
                     //if (seedList == null || seedList.Count <= 0)
                     //{
@@ -3049,7 +3049,7 @@ namespace CombineEpisode
 
                 var matchFiles = new EverythingHelper().SearchFile(rm.Id + " | " + rm.Id.Replace("-", ""), EverythingSearchEnum.Video);
 
-                var list = SearchSeedHelper.SearchSukebei(rm.Id);
+                var list = MagService.SearchSukebei(rm.Id);
 
                 //if (list == null || list.Count <= 0)
                 //{

@@ -51,7 +51,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            JavLibraryHelper.GetJavCookieOld();
+            JavLibraryHelper.GetJavCookie();
 
             Console.ReadKey();
         }

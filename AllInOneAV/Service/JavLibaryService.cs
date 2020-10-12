@@ -25,35 +25,52 @@ namespace Service
         private static LockModel lockModel = new LockModel();
         private static CookieContainer cc = null;
         private static readonly string ImgFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
+        private static readonly string Mode = JavINIClass.IniReadValue("Jav", "cookieMode");
         private static readonly string UserAgent = JavINIClass.IniReadValue("Html", "UserAgent");
 
         public static void GetJavCookie(bool showConsole = true)
         {
             cc = new CookieContainer();
 
-            //Broswer.OpenBrowserUrl("http://www.javlibrary.com/cn/");
-            //Thread.Sleep(5 * 1000);
-            //Broswer.Refresh_click();
-            //Thread.Sleep(10 * 1000);
+            if (Mode == "None")
+            {
 
-            //var cookies = new ChromeCookieReader().ReadChromeCookies(".javlibrary.com");
-
-            //foreach (var c in cookies)
-            //{
-            //    System.Net.Cookie coo = new System.Net.Cookie();
-
-            //    if (c.Name.Contains("cf"))
-            //    {
-            //        coo.Name = c.Name;
-            //        coo.Value = c.Value;
-            //        coo.Domain = "www.javlibrary.com";
-
-            //        cc.Add(coo);
-            //    }
-            //}
+            }
+            else if (Mode == "Process")
+            {
+                GetJavCookieChromeProcess();
+            }
+            else if (Mode == "Chrome")
+            {
+                GetJavCookieChromeDrive(false);
+            }
         }
 
-        public static void GetJavCookieOld(bool showConsole = true)
+        public static void GetJavCookieChromeProcess()
+        {
+            Broswer.OpenBrowserUrl("http://www.javlibrary.com/cn/");
+            Thread.Sleep(5 * 1000);
+            Broswer.Refresh_click();
+            Thread.Sleep(10 * 1000);
+
+            var cookies = new ChromeCookieReader().ReadChromeCookies(".javlibrary.com");
+
+            foreach (var c in cookies)
+            {
+                System.Net.Cookie coo = new System.Net.Cookie();
+
+                if (c.Name.Contains("cf"))
+                {
+                    coo.Name = c.Name;
+                    coo.Value = c.Value;
+                    coo.Domain = "www.javlibrary.com";
+
+                    cc.Add(coo);
+                }
+            }
+        }
+
+        public static void GetJavCookieChromeDrive(bool showConsole = true)
         {
             ChromeOptions options = new ChromeOptions();
             //"test-type", "--ignore-certificate-errors","window-size=1920,1080", "--disable-extensions", "--start-maximized", chromeUA, "--headless"
