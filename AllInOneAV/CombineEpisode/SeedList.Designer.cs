@@ -46,12 +46,12 @@
             this.listView1.FullRowSelect = true;
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1467, 788);
+            this.listView1.Size = new System.Drawing.Size(800, 450);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
             // 
             // columnHeader1
@@ -76,11 +76,10 @@
             // 
             // SeedList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1467, 788);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.listView1);
-            this.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.Name = "SeedList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "磁链列表";

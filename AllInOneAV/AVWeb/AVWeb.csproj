@@ -159,6 +159,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Scripts\waterfall.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -179,13 +180,13 @@
     <Content Include="Views\WebAv\Comic.cshtml" />
     <Content Include="Views\WebAv\UploadComics.cshtml" />
     <Content Include="Views\WebAv\Test.cshtml" />
+    <Content Include="Views\WebAv\ShowMag.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
     <Folder Include="fonts\" />
     <Folder Include="Models\" />
-    <Folder Include="Scripts\" />
     <Folder Include="Views\Comic\" />
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +200,10 @@
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{144C6554-CF3B-49AF-9A8C-926A99E633BE}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Service\Service.csproj">
+      <Project>{53BD1489-F098-4796-9EC6-8D8C1A623FC7}</Project>
+      <Name>Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{85E3D89D-603E-4992-B266-E2CD3C8B4209}</Project>

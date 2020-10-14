@@ -243,5 +243,40 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<AV>();
         }
+
+        public static int InsertRemoteScanMag(RemoteScanMag entity)
+        {
+            var sql = string.Format("INSERT INTO RemoteScanMag (AvId, AvUrl, AvName, MagTitle, MagUrl, MagSize, SearchStatus, MatchFile, CreateTime, MagDate) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', {5}, {6}, '{7}', GETDATE(), GETDATE())", entity.AvId, entity.AvUrl, entity.AvName, entity.MagTitle, entity.MagUrl, entity.MagSize, entity.SearchStatus, entity.MatchFile);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int DeleteRemoteScanMag()
+        {
+            var sql = "TRUNCATE TABLE RemoteScanMag";
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static List<RemoteScanMag> GetAllMag()
+        {
+            var sql = "SELECT * FROM RemoteScanMag";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<RemoteScanMag>();
+        }
+
+        public static int InsertOneOneFiveCookie(OneOneFiveCookieModel entity)
+        {
+            var sql = string.Format("INSERT INTO OneOneFiveCookie (OneOneFiveCookie) VALUES ('{0}')", entity.OneOneFiveCookie);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static OneOneFiveCookieModel GetOneOneFiveCookie()
+        {
+            var sql = "SELECT TOP 1 * FROM OneOneFiveCookie ORDER BY OneOneFiveCookieId DESC";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<OneOneFiveCookieModel>();
+        }
     }
 }

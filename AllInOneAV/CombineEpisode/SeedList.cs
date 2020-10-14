@@ -12,18 +12,20 @@ namespace CombineEpisode
     {
         private List<SeedMagnetSearchModel> seedList = new List<SeedMagnetSearchModel>();
         private string cookieStr = "";
+        private int AvId = 0;
 
         public SeedList()
         {
             InitializeComponent();
         }
 
-        public SeedList(List<SeedMagnetSearchModel> seedList, string cookieStr)
+        public SeedList(List<SeedMagnetSearchModel> seedList, string cookieStr, int avId)
         {
             InitializeComponent();
 
             this.seedList = seedList;
             this.cookieStr = cookieStr;
+            this.AvId = avId;
         }
 
         private void SeedList_Load(object sender, EventArgs e)
@@ -70,6 +72,11 @@ namespace CombineEpisode
                     MessageBox.Show(ret.Item2);
                 }
             }
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

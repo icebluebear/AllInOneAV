@@ -2,10 +2,15 @@
 using DataBaseManager.ScanDataBaseHelper;
 using Microsoft.Ajax.Utilities;
 using Model.JavModels;
+using Newtonsoft.Json;
+using Service;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -203,6 +208,82 @@ namespace AVWeb.Controllers
 
 
             return string.Format(html,sb.ToString());
+        }
+
+        public ActionResult ShowMag()
+        {
+            var data = ScanDataBaseManager.GetAllMag().Where(x => !string.IsNullOrEmpty(x.AvId)).GroupBy(x => x.AvId).ToDictionary(x => x.Key, x=>x.ToList());
+
+            ViewData.Add("data", data);        
+
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Add115Task(string mag)
+        {
+            CookieContainer cc = new CookieContainer();
+            bool ret = false;
+            string msg = "";
+
+            foreach (var t in JsonConvert.DeserializeObject<List<CookieItem>>(ScanDataBaseManager.GetOneOneFiveCookie().OneOneFiveCookie))
+            {
+                Cookie c = new Cookie(t.Name, t.Value, "/", "115.com");
+                cc.Add(c);
+            }
+
+            var split = mag.Split(new string[] { "magnet:?" }, StringSplitOptions.None).Where(x => !string.IsNullOrEmpty(x));
+
+            Dictionary<string, string> param = new Dictionary<string, string>();
+
+            if (split.Count() <= 1)
+            {
+                param.Add("url", mag);
+            }
+            else
+            {
+                int index = 0;
+                foreach (var s in split)
+                {
+                    param.Add(string.Format("url[{0}]", index), "magnet:?" + s);
+
+                    index++;
+                }
+            }
+
+            param.Add("sign", "");
+            param.Add("uid" , "340200422");
+            param.Add("time", DateTime.Now.ToFileTimeUtc() + "");
+
+            var returnStr = "";
+
+            if (split.Count() <= 1)
+            {
+                returnStr = HtmlManager.Post("https://115.com/web/lixian/?ct=lixian&ac=add_task_url", param, cc);
+            }
+            else
+            {
+                returnStr = HtmlManager.Post("https://115.com/web/lixian/?ct=lixian&ac=add_task_urls", param, cc);
+            }
+
+            if (!string.IsNullOrEmpty(returnStr))
+            {
+                var data = Newtonsoft.Json.Linq.JObject.Parse(returnStr);
+
+                bool.TryParse(data.Property("state").Value.ToString(), out ret);
+
+                if (ret == false)
+                {
+                    msg = data.Property("error_msg").Value.ToString();
+                }
+            }
+
+            if (string.IsNullOrEmpty(msg))
+            { 
+                msg = "下载成功";
+            }
+
+            return Json(new { status = ret, msg = msg}, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -55,6 +55,7 @@
     <Compile Include="Common\PageModel.cs" />
     <Compile Include="Common\ReportModel.cs" />
     <Compile Include="Common\SearchSeedSiteEnum.cs" />
+    <Compile Include="Common\SearchStatus.cs" />
     <Compile Include="FindModels\AVViewModel.cs" />
     <Compile Include="FindModels\Movie.cs" />
     <Compile Include="FindModels\SearchHistory.cs" />
@@ -89,7 +90,9 @@
     <Compile Include="ScanModels\Match.cs" />
     <Compile Include="ScanModels\MatchMap.cs" />
     <Compile Include="ScanModels\MatchPair.cs" />
+    <Compile Include="ScanModels\OneOneFiveCookieModel.cs" />
     <Compile Include="ScanModels\Prefix.cs" />
+    <Compile Include="ScanModels\RemoteScanMag.cs" />
     <Compile Include="ScanModels\Scan.cs" />
     <Compile Include="ScanModels\ScanResult.cs" />
     <Compile Include="ScanModels\UnmatchVW.cs" />

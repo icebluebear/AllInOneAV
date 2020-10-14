@@ -626,7 +626,7 @@ namespace CombineEpisode
 
                 if (list != null && list.Count > 0)
                 {
-                    SeedList sl = new SeedList(list, "");
+                    SeedList sl = new SeedList(list, "", 0);
                     sl.ShowDialog();
                 }
             }
@@ -678,7 +678,7 @@ namespace CombineEpisode
 
                 if (list != null && list.Count > 0)
                 {
-                    SeedList sl = new SeedList(list, "");
+                    SeedList sl = new SeedList(list, "", 0);
                     sl.ShowDialog();
                 }
             }
@@ -993,7 +993,7 @@ namespace CombineEpisode
 
             if (list != null && list.Count > 0)
             {
-                SeedList sl = new SeedList(list, "");
+                SeedList sl = new SeedList(list, "", 0);
                 sl.ShowDialog();
             }
             else
@@ -3340,6 +3340,11 @@ namespace CombineEpisode
             }
         }
         #endregion
+
+        private void lvPlay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     #region 扩展方法
