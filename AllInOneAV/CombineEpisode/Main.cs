@@ -2347,7 +2347,7 @@ namespace CombineEpisode
 
                     var chinese = "";
 
-                    if (item.Key.Name.Replace(item.Value.FirstOrDefault().ID, "").Replace(item.Value.FirstOrDefault().Name, "").Contains("-C") || item.Key.Name.Replace(item.Value.FirstOrDefault().ID, "").Replace(item.Value.FirstOrDefault().Name, "").Contains("-c"))
+                    if (item.Key.Name.Replace(item.Value.FirstOrDefault().ID, "").Replace(item.Value.FirstOrDefault().Name, "").Contains("-C") || item.Key.Name.Replace(item.Value.FirstOrDefault().ID, "").Replace(item.Value.FirstOrDefault().Name, "").Contains("-c") || item.Key.Name.Replace(item.Value.FirstOrDefault().ID, "").Replace(item.Value.FirstOrDefault().Name, "").Contains("ch"))
                     {
                         chinese = "-C";
                     }

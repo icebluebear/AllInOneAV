@@ -1,5 +1,7 @@
 ﻿@using Model.ScanModels
 @using Model.Common
+@using System.IO
+@using Utils
 
 @{
     Dictionary<string, List<RemoteScanMag>> data = (Dictionary<string, List<RemoteScanMag>>)ViewData["data"];
@@ -15,7 +17,6 @@
         <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-        <script src="~/Scripts/waterfall.js"></script>
     </head>
 
     <body>
@@ -24,7 +25,7 @@
             <p class="lead">最近一次种子扫描的结果，共 @data.Count 部</p>
         </div>
 
-        <div class="container-fluid">
+        <div class="container-fluid con">
             @while (data.Count > 0)
             {
                 var take4 = data.Take(4);
@@ -51,9 +52,14 @@
                                 <div class="card-body">
                                     <h5 class="card-title">@d.Value.FirstOrDefault().AvId</h5>
                                     <p class="card-text">@d.Value.FirstOrDefault().AvName</p>
+                                    @if (!string.IsNullOrEmpty(d.Value.FirstOrDefault().MatchFile))
+                                    { 
+                                        <p class="card-text">@(FileSize.GetAutoSizeString(new FileInfo(d.Value.FirstOrDefault().MatchFile).Length, 1))</p>
+                                        <a href="/webav/playav?filepath=@d.Value.FirstOrDefault().MatchFile" target="_blank">play</a>
+                                    }
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    @foreach (var dd in d.Value)
+                                    @foreach (var dd in d.Value.OrderByDescending(x => x.MagSize).Take(5))
                                     {
                                         <li class="list-group-item" data-mag="@dd.MagUrl">@(dd.MagTitle + " " + Utils.FileSize.GetAutoSizeString(dd.MagSize, 1))</li>
                                     }
@@ -73,10 +79,6 @@
 
 <script>
     var download = '';
-
-    $(document).ready(function () {
-        $('#waterfall-container').waterfall();
-    }); 
 
     $(".list-group-item").click(function () {
         $(this).toggleClass("list-group-item-info");

@@ -104,6 +104,10 @@ namespace ScanJavMagUrl
                         entity.SearchStatus = 2;
                         entity.MatchFile = matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName;
                     }
+                    else
+                    {
+                        entity.SearchStatus = 1;
+                    }
 
                     foreach (var seed in list)
                     {
@@ -114,7 +118,7 @@ namespace ScanJavMagUrl
                         entity.MagSize = seed.Size;
                         entity.MagTitle = FileUtility.ReplaceInvalidChar(seed.Title);
                         entity.MagUrl = seed.MagUrl;
-                        entity.SearchStatus = 1;
+                        //entity.SearchStatus = 1;
 
                         ScanDataBaseManager.InsertRemoteScanMag(entity);
                     }

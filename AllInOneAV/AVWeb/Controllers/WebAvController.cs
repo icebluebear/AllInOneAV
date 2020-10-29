@@ -219,6 +219,36 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        public ActionResult Share(string name)
+        {
+            Dictionary<string, List<FileInfo>> data = new Dictionary<string, List<FileInfo>>();
+            FileInfo[] files = null;
+            DirectoryInfo[] dirs = null;
+
+            try
+            {
+                dirs = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\Share\\" + name + "\\").GetDirectories();
+
+                foreach (var dir in dirs)
+                {
+                    data.Add(dir.Name, dir.GetFiles().ToList());
+                }
+
+                ViewData.Add("name", name.ToUpper());
+
+                if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "\\Share\\" + name + "\\bg.jpg"))
+                {
+                    ViewData.Add("pic", "http://www.cainqs.com:8087/share/" + name + "/bg.jpg");
+                }
+            }
+            catch (Exception ee)
+            {
+                
+            }
+
+            return View(data);
+        }
+
         [HttpPost]
         public JsonResult Add115Task(string mag)
         {
