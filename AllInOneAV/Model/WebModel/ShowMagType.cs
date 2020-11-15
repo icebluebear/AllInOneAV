@@ -15,6 +15,7 @@ namespace Model.WebModel
         GreaterThenExist = 8,
         HasMagSize = 16,
         GreaterThenNotExist = 32,
+        HasNoMagSize = 64,
     }
 
     public class ShowMagKey

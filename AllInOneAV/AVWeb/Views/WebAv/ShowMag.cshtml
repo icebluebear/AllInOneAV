@@ -27,7 +27,7 @@
         </div>
 
         <div class="container-fluid">
-            <div class="row row-cols-5">
+            <div class="row row-cols-6">
                 @foreach (var d in data)
                 {
                     var classStr = d.Value.FirstOrDefault().ClassStr;
@@ -36,18 +36,18 @@
                         <div class='@classStr'>
                             <img src="@d.Value.FirstOrDefault().AvUrl.Replace("ps.jpg", "pl.jpg")" class="card-img-top" alt="">
                             <div class="card-body">
-                                <h5 class="card-title">@d.Value.FirstOrDefault().AvId</h5>
-                                <p class="card-text">@d.Value.FirstOrDefault().AvName</p>
+                                <h6 class="card-title">@d.Value.FirstOrDefault().AvId</h6>
+                                <p class="card-text" style="font-size:14px">@d.Value.FirstOrDefault().AvName</p>
                                 @if (!string.IsNullOrEmpty(d.Value.FirstOrDefault().MatchFile))
                                 {
-                                    <p class="card-text">@(FileSize.GetAutoSizeString(d.Value.FirstOrDefault().MatchFileSize, 1))</p>
-                                    <a href="/webav/playav?filepath=@d.Value.FirstOrDefault().MatchFile" target="_blank">play</a>
+                                    <p class="card-text" style="font-size:14px">@(FileSize.GetAutoSizeString(d.Value.FirstOrDefault().MatchFileSize, 1))</p>
+                                    <a class="btn btn-info" href="/webav/playav?filepath=@d.Value.FirstOrDefault().MatchFile" target="_blank" style="font-size:14px">播放</a>
                                 }
                             </div>
                             <ul class="list-group list-group-flush">
-                                @foreach (var dd in d.Value.OrderByDescending(x => x.MagSize).Take(5))
+                                @foreach (var dd in d.Value.OrderByDescending(x => x.MagSize).Take(3))
                                 {
-                                    <li class="list-group-item" data-mag="@dd.MagUrl">@(dd.MagTitle + " " + Utils.FileSize.GetAutoSizeString(dd.MagSize, 1))</li>
+                                    <li class="list-group-item" data-mag="@dd.MagUrl" style="font-size:14px">@(dd.MagTitle + " " + Utils.FileSize.GetAutoSizeString(dd.MagSize, 1))</li>
                                 }
                             </ul>
                         </div>
@@ -59,10 +59,11 @@
         <div class="btn-group fixed-bottom" style="width:50%;margin-left:20px">
             <button type="button" class="btn btn-secondary filter" id="all" aria-pressed="true" value="1">全部</button>
             <button type="button" class="btn btn-primary filter" id="exist" aria-pressed="true" value="2">已存在</button>
-            <button type="button" class="btn btn-primary filter" id="notExist" aria-pressed="true" value="4">不存在</button>
+            <button type="button" class="btn btn-light filter" id="notExist" aria-pressed="true" value="4">不存在</button>
             <button type="button" class="btn btn-warning filter" id="greaterThenExist" aria-pressed="true" value="8">大于已存在</button>
             <button type="button" class="btn btn-danger filter" id="greaterThenNotExist" value="32">大于不存在</button>
             <button type="button" class="btn btn-info filter" id="noSeeds" aria-pressed="true" value="16">种子有大小</button>
+            <button type="button" class="btn btn-dark filter" id="noMagSize" aria-pressed="true" value="64">种子无大小</button>
             <button type="button" class="btn btn-success" id="download" aria-pressed="true">下载</button>
         </div>
 </body>

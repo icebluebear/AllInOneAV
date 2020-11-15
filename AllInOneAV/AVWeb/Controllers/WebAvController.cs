@@ -241,8 +241,11 @@ namespace AVWeb.Controllers
 
                     if (d.Value.Exists(x => x.MagSize > 0))
                     {
-                        d.Value.ForEach(x => x.ClassStr += " valid");
                         key.Type |= ShowMagType.HasMagSize;
+                    }
+                    else
+                    {
+                        key.Type |= ShowMagType.HasNoMagSize;
                     }
 
                     if (!string.IsNullOrEmpty(d.Value.FirstOrDefault().MatchFile))
