@@ -254,6 +254,13 @@ namespace AVWeb.Controllers
                             key.Type |= ShowMagType.GreaterThenExist;
                         }
                     }
+                    else
+                    {
+                        if (d.Value.Max(x => x.MagSize > 0))
+                        {
+                            key.Type |= ShowMagType.GreaterThenNotExist;
+                        }
+                    }
 
                     if (d.Value.Exists(x => x.MagTitle.Contains(d.Key) || x.MagTitle.Contains(d.Key.Replace("-", ""))))
                     {

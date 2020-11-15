@@ -13,7 +13,8 @@ namespace Model.WebModel
         OnlyExist = 2,
         OnlyNotExist = 4,
         GreaterThenExist = 8,
-        HasMagSize = 16
+        HasMagSize = 16,
+        GreaterThenNotExist = 32,
     }
 
     public class ShowMagKey
