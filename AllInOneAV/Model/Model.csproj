@@ -105,6 +105,7 @@
     <Compile Include="WebModel\MangaDetailVM.cs" />
     <Compile Include="WebModel\MangaPicturesVM.cs" />
     <Compile Include="WebModel\MangaSourceVM.cs" />
+    <Compile Include="WebModel\ShowMagType.cs" />
     <Compile Include="WebModel\VMResult.cs" />
   </ItemGroup>
   <ItemGroup>

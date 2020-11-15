@@ -21,5 +21,7 @@ namespace Model.ScanModels
         public DateTime CreateTime { get; set; }
         public int SearchStatus { get; set; }
         public string MatchFile { get; set; }
+        public double MatchFileSize { get; set; }
+        public string ClassStr { get; set; }
     }
 }

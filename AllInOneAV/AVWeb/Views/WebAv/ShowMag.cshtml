@@ -1,10 +1,11 @@
 ﻿@using Model.ScanModels
+@using Model.WebModel
 @using Model.Common
 @using System.IO
 @using Utils
 
 @{
-    Dictionary<string, List<RemoteScanMag>> data = (Dictionary<string, List<RemoteScanMag>>)ViewData["data"];
+    Dictionary<ShowMagKey, List<RemoteScanMag>> data = (Dictionary<ShowMagKey, List<RemoteScanMag>>)ViewData["data"];
 }
 
 <!DOCTYPE html>
@@ -25,56 +26,45 @@
             <p class="lead">最近一次种子扫描的结果，共 @data.Count 部</p>
         </div>
 
-        <div class="container-fluid con">
-            @while (data.Count > 0)
-            {
-                var take4 = data.Take(4);
-                data = data.Skip(4).ToDictionary(x => x.Key, x => x.Value);
+        <div class="container-fluid">
+            <div class="row row-cols-5">
+                @foreach (var d in data)
+                {
+                    var classStr = d.Value.FirstOrDefault().ClassStr;
 
-                <div class="row">
-                    @foreach (var d in take4)
-                    {
-
-                        var classStr = "card";
-                        if (d.Value.FirstOrDefault().SearchStatus == 1)
-                        {
-                            classStr += " bg-primary";
-                        }
-
-                        if (d.Value.FirstOrDefault().SearchStatus == 2)
-                        {
-                            classStr += " bg-success";
-                        }
-
-                        <div class="col">
-                            <div class='@classStr'>
-                                <img src="@d.Value.FirstOrDefault().AvUrl.Replace("ps.jpg", "pl.jpg")" class="card-img-top" alt="">
-                                <div class="card-body">
-                                    <h5 class="card-title">@d.Value.FirstOrDefault().AvId</h5>
-                                    <p class="card-text">@d.Value.FirstOrDefault().AvName</p>
-                                    @if (!string.IsNullOrEmpty(d.Value.FirstOrDefault().MatchFile))
-                                    { 
-                                        <p class="card-text">@(FileSize.GetAutoSizeString(new FileInfo(d.Value.FirstOrDefault().MatchFile).Length, 1))</p>
-                                        <a href="/webav/playav?filepath=@d.Value.FirstOrDefault().MatchFile" target="_blank">play</a>
-                                    }
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    @foreach (var dd in d.Value.OrderByDescending(x => x.MagSize).Take(5))
-                                    {
-                                        <li class="list-group-item" data-mag="@dd.MagUrl">@(dd.MagTitle + " " + Utils.FileSize.GetAutoSizeString(dd.MagSize, 1))</li>
-                                    }
-                                </ul>
+                    <div class="col">
+                        <div class='@classStr'>
+                            <img src="@d.Value.FirstOrDefault().AvUrl.Replace("ps.jpg", "pl.jpg")" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <h5 class="card-title">@d.Value.FirstOrDefault().AvId</h5>
+                                <p class="card-text">@d.Value.FirstOrDefault().AvName</p>
+                                @if (!string.IsNullOrEmpty(d.Value.FirstOrDefault().MatchFile))
+                                {
+                                    <p class="card-text">@(FileSize.GetAutoSizeString(d.Value.FirstOrDefault().MatchFileSize, 1))</p>
+                                    <a href="/webav/playav?filepath=@d.Value.FirstOrDefault().MatchFile" target="_blank">play</a>
+                                }
                             </div>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var dd in d.Value.OrderByDescending(x => x.MagSize).Take(5))
+                                {
+                                    <li class="list-group-item" data-mag="@dd.MagUrl">@(dd.MagTitle + " " + Utils.FileSize.GetAutoSizeString(dd.MagSize, 1))</li>
+                                }
+                            </ul>
                         </div>
-                    }
-                </div>
-            }
+                    </div>
+                }
+            </div>
         </div>
 
-        <div class="float-button">
-            <button type="button" class="btn btn-success" id="download">下载</button>
+        <div class="btn-group fixed-bottom" style="width:50%;margin-left:20px">
+            <button type="button" class="btn btn-secondary filter" id="all" aria-pressed="true" value="1">全部</button>
+            <button type="button" class="btn btn-primary filter" id="exist" aria-pressed="true" value="2">已存在</button>
+            <button type="button" class="btn btn-primary filter" id="notExist" aria-pressed="true" value="4">不存在</button>
+            <button type="button" class="btn btn-warning filter" id="greaterThenExist" aria-pressed="true" value="8">大于已存在</button>
+            <button type="button" class="btn btn-info filter" id="noSeeds" aria-pressed="true" value="16">种子有大小</button>
+            <button type="button" class="btn btn-success" id="download" aria-pressed="true">下载</button>
         </div>
-    </body>
+</body>
 </html>
 
 <script>
@@ -82,6 +72,10 @@
 
     $(".list-group-item").click(function () {
         $(this).toggleClass("list-group-item-info");
+    });
+
+    $(".filter").click(function () {
+        window.location.href = 'http://www.cainqs.com:8087/webav/ShowMag?type=' + $(this).val();
     });
 
     $("#download").click(function () {

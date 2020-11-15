@@ -94,8 +94,11 @@ namespace Service
 
             try
             {
-                var serachContent = "https://sukebei.nyaa.pro/search/c_0_0_k_" + id;
-                var htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.pro", serachContent, cc);
+                //var serachContent = "https://sukebei.nyaa.pro/search/c_0_0_k_" + id;
+                //var htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.pro", serachContent, cc);
+
+                var serachContent = "https://sukebei.nyaa.si?f=0&c=0_0&q=" + id;
+                var htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.si", serachContent, cc);
 
                 if (htmlRet.Success)
                 {

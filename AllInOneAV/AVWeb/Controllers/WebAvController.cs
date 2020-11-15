@@ -2,6 +2,8 @@
 using DataBaseManager.ScanDataBaseHelper;
 using Microsoft.Ajax.Utilities;
 using Model.JavModels;
+using Model.ScanModels;
+using Model.WebModel;
 using Newtonsoft.Json;
 using Service;
 using System;
@@ -210,11 +212,59 @@ namespace AVWeb.Controllers
             return string.Format(html,sb.ToString());
         }
 
-        public ActionResult ShowMag()
+        public ActionResult ShowMag(ShowMagType type = ShowMagType.All)
         {
             var data = ScanDataBaseManager.GetAllMag().Where(x => !string.IsNullOrEmpty(x.AvId)).GroupBy(x => x.AvId).ToDictionary(x => x.Key, x=>x.ToList());
+            Dictionary<ShowMagKey, List<RemoteScanMag>> ret = new Dictionary<ShowMagKey, List<RemoteScanMag>>();
 
-            ViewData.Add("data", data);        
+            foreach (var d in data)
+            {
+                if (d.Value.Count > 0)
+                {
+                    var key = new ShowMagKey();
+                    key.Key = d.Key;
+                    key.Type |= ShowMagType.All;
+
+                    //没有已存在文件
+                    if (d.Value.FirstOrDefault().SearchStatus == 1)
+                    {
+                        d.Value.ForEach(x => x.ClassStr = "card bg-primary");
+                        key.Type |= ShowMagType.OnlyNotExist;
+                    }
+
+                    //有已存在文件
+                    if (d.Value.FirstOrDefault().SearchStatus == 2)
+                    {
+                        d.Value.ForEach(x => x.ClassStr = "card bg-success");
+                        key.Type |= ShowMagType.OnlyExist;
+                    }
+
+                    if (d.Value.Exists(x => x.MagSize > 0))
+                    {
+                        d.Value.ForEach(x => x.ClassStr += " valid");
+                        key.Type |= ShowMagType.HasMagSize;
+                    }
+
+                    if (!string.IsNullOrEmpty(d.Value.FirstOrDefault().MatchFile))
+                    {
+                        d.Value.ForEach(x => x.MatchFileSize = new FileInfo(x.MatchFile).Length);
+
+                        if (d.Value.Max(x => x.MagSize >= x.MatchFileSize))
+                        {
+                            key.Type |= ShowMagType.GreaterThenExist;
+                        }
+                    }
+
+                    if (d.Value.Exists(x => x.MagTitle.Contains(d.Key) || x.MagTitle.Contains(d.Key.Replace("-", ""))))
+                    {
+                        ret.Add(key, d.Value);
+                    }
+                }
+            }
+
+            ret = ret.Where(x => x.Key.Type.HasFlag(type)).ToDictionary(x => x.Key, x => x.Value);
+
+            ViewData.Add("data", ret);        
 
             return View();
         }

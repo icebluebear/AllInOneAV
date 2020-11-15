@@ -89,7 +89,7 @@ namespace ScanJavMagUrl
             {
                 RemoteScanMag entity = new RemoteScanMag();
 
-                Console.WriteLine("处理 --> " + rm.Name);
+                Console.WriteLine("处理 --> " + rm.Name + models.IndexOf(rm) + "/" + models.Count);
 
                 var matchFiles = new EverythingHelper().SearchFile(rm.Id + " | " + rm.Id.Replace("-", ""), EverythingSearchEnum.Video);
 
@@ -125,6 +125,7 @@ namespace ScanJavMagUrl
                 }
                 else
                 {
+                    Console.WriteLine("没搜到");
                     entity.SearchStatus = 0;
                 }
 
