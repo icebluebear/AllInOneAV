@@ -125,18 +125,21 @@ namespace AVWeb.Controllers
 
             ApplicationLog.Debug("total -> " + scanResult.Count + " filtered -> " + toBePlay.Count);
 
-            var pageContent = toBePlay.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var pageContent = toBePlay.OrderByDescending(x=>x.ReleaseDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-            ViewData.Add("avs", toBePlay);
+            ViewData.Add("avs", pageContent);
             ViewData.Add("search", search);
+            ViewData.Add("count", (int)Math.Ceiling((decimal)toBePlay.Count / pageSize));
+            ViewData.Add("size", pageSize);
+            ViewData.Add("current", page);
 
             return View();
-        }
+        } 
 
         public ActionResult Av(int avId)
         {
             var av = JavDataBaseManager.GetAV(avId);
-            var match = ScanDataBaseManager.GetMatchMapByAvId(avId);
+            var match = ScanDataBaseManager.GetMatchScanResult(avId);
 
             if (av == null)
             {
@@ -145,7 +148,7 @@ namespace AVWeb.Controllers
 
             if (match == null)
             {
-                match = new Model.ScanModels.MatchMap();
+                match = new ScanResult();
             }
 
             ViewData.Add("av", av);

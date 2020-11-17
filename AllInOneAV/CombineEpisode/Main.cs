@@ -3307,7 +3307,7 @@ namespace CombineEpisode
 
             foreach (var l in list)
             {
-                ListViewItem lvi = new ListViewItem(FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2) + " " + l.AvId + " " + l.AvName + " " + l.Id)
+                ListViewItem lvi = new ListViewItem(FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2) + " " + l.AvId + " " + l.AvName + " " + l.MatchAvId)
                 {
                     ImageIndex = ilPlay.Images.IndexOfKey(l.AvName),
                     Tag = l.AvFilePath

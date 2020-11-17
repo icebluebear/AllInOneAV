@@ -21,6 +21,7 @@ namespace Model.ScanModels
         public DateTime ReleaseDate { get; set; }
         public string PicUrl { get; set; }
         public string WebShowName { get; set; }
+        public int MatchAvId { get; set; }
         public double FileSize
         {
             get 

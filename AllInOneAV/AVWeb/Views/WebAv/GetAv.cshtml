@@ -5,6 +5,9 @@
 @{ 
     var avs = (List<ScanResult>)ViewData["avs"];
     string search = (string)ViewData["search"];
+    int count = int.Parse(ViewData["count"].ToString());
+    int size = int.Parse(ViewData["size"].ToString());
+    int current = int.Parse(ViewData["current"].ToString());
 }
 
 <!DOCTYPE html>
@@ -38,44 +41,64 @@
         </div>
     </div>
 
-    <div class="container-fluid" style="width:90%;margin-left:50px">
-        <div class="row row-cols-5">
-            @foreach (var av in avs)
-            {
-                <div class="col">
-                    <div class='card' data-url="@("http://www.cainqs.com:8087/webav/av?avid=" + av.AvId)">
-                        <img src="@av.PicUrl" class="card-img-top" alt="">
-                        <div class="card-body">
-                            <h6 class="card-title">@av.AvId</h6>
-                            <p class="card-text" style="font-size:14px">@av.AvName</p>
-                            @if (av.FileSize > 0)
-                            {
-                                <p class="card-text" style="font-size:14px">@(FileSize.GetAutoSizeString(av.FileSize, 1))</p>
-                                <a class="btn btn-info" href="/webav/playav?filepath=@av.AvFilePath" target="_blank" style="font-size:14px">播放</a>
-                            }
+    <div id="content">
+        <div class="container-fluid" style="width:90%;margin-left:50px">
+            <div class="row row-cols-5">
+                @foreach (var av in avs)
+                {
+                    <div class="col">
+                        <div class='card'>
+                            <img src="@av.PicUrl" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <h6 class="card-title">@av.AvId</h6>
+                                <a class="card-text" style="font-size:14px" href="@("http://www.cainqs.com:8087/webav/av?avid=" + av.MatchAvId)">@av.AvName</a>
+                                @if (av.FileSize > 0)
+                                {
+                                    <p class="card-text" style="font-size:14px">@(FileSize.GetAutoSizeString(av.FileSize, 1))</p>
+                                    <a class="btn btn-info" href="/webav/playav?filepath=@av.AvFilePath" target="_blank" style="font-size:14px">播放</a>
+                                }
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    @foreach (var ac in av.ActressList)
+                                    {
+                                        <a class="badge badge-success badge-pill" href="@("http://www.cainqs.com:8087/webav/getav?search=" + ac)">@ac</a>
+                                    }
+                                </li>
+                                <li class="list-group-item">
+                                    @foreach (var ca in av.CategoryList.Take(5))
+                                    {
+                                        <a class="badge badge-info badge-pill" href="@("http://www.cainqs.com:8087/webav/getav?search=" + ca)">@ca</a>
+                                    }
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                @foreach (var ac in av.ActressList)
-                                {
-                                    <a class="badge badge-success badge-pill" href="@("http://www.cainqs.com:8087/webav/getav?search=" + ac)">@ac</a>
-                                }
-                            </li>
-                            <li class="list-group-item">
-                                @foreach (var ca in av.CategoryList.Take(5))
-                                {
-                                    <a class="badge badge-info badge-pill" href="@("http://www.cainqs.com:8087/webav/getav?search=" + ca)">@ca</a>
-                                }
-                            </li>
-                        </ul>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     </div>
 
-    <div id="paginationjs">
-    </div>
+    <nav aria-label="...">
+        <ul class="pagination">
+            @for (int i = 1; i <= count; i++)
+            {
+                if (i != current)
+                {
+                    <li class="page-item"><a class="page-link" href="@("http://www.cainqs.com:8087/webav/getav?search=" + search + "&page=" + i + "&pagesize=" + size)">@i</a></li>
+                }
+                else
+                { 
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">
+                            @i
+                            <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
 
     <script>
         $("#searchBtn").click(function () {
@@ -107,22 +130,6 @@
 
             return "";
         }
-
-        $(".card").click(function () {
-            var url = $(this).attr("data-url");
-
-            window.location.href = url;
-        });
-
-            //$('#searchBtn').pagination({
-            //    dataSource: [1, 2, 3, 4, 5, 6, 7, 50],
-            //    pageSize: 5,
-            //    pageRange: null,
-            //    showPageNumbers: true,
-            //    callback: function (data, pagination) {
-
-            //    }
-            //})
     </script>
 </body>
 </html>

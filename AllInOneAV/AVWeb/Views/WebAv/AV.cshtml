@@ -1,9 +1,10 @@
 ﻿@using Model.JavModels;
 @using Model.ScanModels;
+@using Utils;
 
 @{ 
     var av = (AV)ViewData["av"];
-    var matchMap = (MatchMap)ViewData["match"];
+    var matchMap = (ScanResult)ViewData["match"];
 }
 
 <!DOCTYPE html>
@@ -93,9 +94,9 @@
         </div>
     }
 
-    @if (!string.IsNullOrEmpty(matchMap.FilePath))
+    @if (!string.IsNullOrEmpty(matchMap.AvFilePath) && matchMap.FileSize > 0)
     {
-        <button type="button" class="btn btn-success" data-url="http://www.cainqs.com:8087/webav/playav?filePath=@(matchMap.FilePath) ">播放</button>
+        <button type="button" class="btn btn-success" data-url="http://www.cainqs.com:8087/webav/playav?filePath=@(matchMap.AvFilePath) ">播放 @FileSize.GetAutoSizeString(matchMap.FileSize, 1)</button>
     }
     else
     {

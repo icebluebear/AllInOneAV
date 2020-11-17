@@ -211,9 +211,16 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static List<ScanResult> GetMatchScanResult()
         {
-            var sql = @"SELECT m.MatchId AS Id, m.Location, m.Name AS FileName, a.PictureURL AS PicUrl, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m LEFT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID";
+            var sql = @"SELECT m.MatchId AS Id, m.MatchAVId, m.Location, m.Name AS FileName, a.PictureURL AS PicUrl, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m LEFT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID";
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ScanResult>();
+        }
+
+        public static ScanResult GetMatchScanResult(int avId)
+        {
+            var sql = @"SELECT TOP 1 m.MatchId AS Id, m.Location, m.Name AS FileName, a.PictureURL AS PicUrl, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m LEFT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID WHERE m.MatchAvID=" + avId;
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<ScanResult>();
         }
 
         public static int DeleteFaviScan()
