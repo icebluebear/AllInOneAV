@@ -52,34 +52,7 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            var mag = @"magnet:?xt=urn:btih:MBCPKKKLQQWMUCQWQZ6UJDSY5AU56MM5&amp;dn=%5BFHD%2F4.53GB%5D+PPPD-133+%E6%8A%BC%E3%81%97%E3%81%AE%E5%BC%B7%E3%81%84%E7%88%86%E4%B9%B3%E5%A5%B3%E3%81%AE%E7%86%B1%E3%81%8F%E3%81%AD%E3%81%A3%E3%81%A8%E3%82%8A%E4%B8%8B%E5%93%81%E3%81%AA%EF%BC%B3%EF%BC%A5%EF%BC%B8+JULIA+1080P&amp;tr=http%3A%2F%2Fsukebei.tracker.wf%3A8888%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce
-
-magnet:?xt=urn:btih:7deefdb0ae824e68dfac50d1fb50e63c4c8f87cb&amp;dn=gvh-139+%E3%83%9E%E3%83%9E%E3%81%AE%E3%83%AA%E3%82%A2%E3%83%AB%E6%80%A7%E6%95%99%E8%82%B2+%E5%90%9B%E5%B3%B6%E3%81%BF%E3%81%8A&amp;tr=http%3A%2F%2Fsukebei.tracker.wf%3A8888%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce
-
-magnet:?xt=urn:btih:889261950514623c0db8968dd676efad4326b223&amp;dn=SVDVD822+SNS%E3%81%A7%E8%A6%8B%E3%81%A4%E3%81%91%E3%81%9F%E7%B4%A0%E4%BA%BA%E5%B7%A8%E4%B9%B3%E5%A8%98%E3%81%AB%E8%86%A3%E5%A5%A5%E3%81%BE%E3%81%A7%E3%83%87%E3%82%AB%E3%83%81%E3%83%B3%E3%81%A7%E6%BF%80%E3%83%94%E3%82%B9%EF%BC%81%E5%88%9D%E3%82%81%E3%81%A6%E3%81%AE%E3%83%9D%E3%83%AB%E3%83%81%E3%82%AA%E3%82%A4%E3%82%AD%E3%81%AB%E9%AC%BC%E6%BD%AE%E6%92%92%E3%81%8D%E6%95%A3%E3%82%89%E3%81%97%E3%82%A8%E3%83%93%E5%8F%8D%E3%82%8A%E7%B5%B6%E9%A0%82%E3%81%99%E3%82%8B%E3%83%89M%E6%95%8F%E6%84%9F%E5%A8%98%E3%80%82&amp;tr=http%3A%2F%2Fsukebei.tracker.wf%3A8888%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce
-
-magnet:?xt=urn:btih:07a89a9cb69ce19ea7ba6aabfcb134179761b8dc&amp;dn=gmem-015+%E7%8B%82%E6%B0%97%E6%8B%B7%E5%95%8F%E5%87%A6%E5%88%91Episode02%3A%E6%82%AA%E9%AD%94%E3%81%AE%E5%AA%9A%E8%96%AC%E3%81%AB%E6%9A%B4%E5%A5%B3%E6%8D%9C%E6%9F%BB%E5%AE%98%E3%81%8B%E3%81%AA%E3%81%A7%E8%87%AA%E7%94%B1&amp;tr=http%3A%2F%2Fsukebei.tracker.wf%3A8888%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce";
-
-            var split = mag.Split(new string[] { "magnet:?" }, StringSplitOptions.None).Where(x => !string.IsNullOrEmpty(x));
-
-            Dictionary<string, string> param = new Dictionary<string, string>();
-
-            if (split.Count() <= 1)
-            {
-                param.Add("url", mag);
-            }
-            else
-            {
-                int index = 0;
-                foreach (var s in split)
-                {
-                    param.Add(string.Format("url[{0}]", index), "magnet:?" + s);
-
-                    index++;
-                }
-            }
-
-            Console.ReadKey();
+            JavLibraryHelper.DoListSearch(new List<string>() { "http://www.javlibrary.com/cn/vl_newentries.php" });
         }
 
         private static void Test115Search()

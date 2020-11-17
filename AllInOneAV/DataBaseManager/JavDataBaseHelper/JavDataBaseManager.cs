@@ -37,6 +37,13 @@ namespace DataBaseManager.JavDataBaseHelper
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<Category>();
         }
 
+        public static List<Actress> GetActress()
+        {
+            var sql = @"SELECT * FROM Actress";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<Actress>();
+        }
+
         public static List<CommonModel> GetCommonMode(string table)
         {
             var sql = @"SELECT * FROM " + table;

@@ -211,7 +211,7 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static List<ScanResult> GetMatchScanResult()
         {
-            var sql = @"SELECT m.MatchId AS Id, m.Location, m.Name AS FileName, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m LEFT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID";
+            var sql = @"SELECT m.MatchId AS Id, m.Location, m.Name AS FileName, a.PictureURL AS PicUrl, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m LEFT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID";
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ScanResult>();
         }
@@ -246,14 +246,56 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static int InsertRemoteScanMag(RemoteScanMag entity)
         {
-            var sql = string.Format("INSERT INTO RemoteScanMag (AvId, AvUrl, AvName, MagTitle, MagUrl, MagSize, SearchStatus, MatchFile, CreateTime, MagDate) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', {5}, {6}, '{7}', GETDATE(), GETDATE())", entity.AvId, entity.AvUrl, entity.AvName, entity.MagTitle, entity.MagUrl, entity.MagSize, entity.SearchStatus, entity.MatchFile);
+            var sql = string.Format("INSERT INTO RemoteScanMag (AvId, AvUrl, AvName, MagTitle, MagUrl, MagSize, SearchStatus, MatchFile, CreateTime, MagDate, ScanJobId) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', {5}, {6}, '{7}', GETDATE(), GETDATE(), {8})", entity.AvId, entity.AvUrl, entity.AvName, entity.MagTitle, entity.MagUrl, entity.MagSize, entity.SearchStatus, entity.MatchFile, entity.JobId);
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
 
+        public static int InsertScanJob(string scanJobName, string scanParameter)
+        {
+            var sql = string.Format("INSERT INTO ScanJob (ScanJobName, ScanParameter, CreateTime, EndTime, IsFinish) VALUES ('{0}', '{1}', GETDATE(), GETDATE(), 0) SELECT @@IDENTITY", scanJobName, scanParameter);
+
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(con, CommandType.Text, sql));
+        }
+
         public static int DeleteRemoteScanMag()
         {
-            var sql = "TRUNCATE TABLE RemoteScanMag";
+            var sql = "DELETE FROM RemoteScanMag WHERE ScanJobId = 0";
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static ScanJob GetFirstScanJob()
+        {
+            var sql = "SELECT TOP 1 * FROM ScanJob WHERE IsFinish = 0 ORDER BY CreateTime ASC";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<ScanJob>();
+        }
+
+        public static List<ScanJob> GetScanJob(int count)
+        {
+            var sql = "SELECT TOP " + count + " * FROM ScanJob ORDER BY EndTime DESC";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ScanJob>();
+        }
+
+        public static int DeleteScanJob(int jobId)
+        {
+            var sql = "DELETE FROM ScanJob WHERE ScanJobId=" + jobId;
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int DeleteRemoteMagScan(int jobId)
+        {
+            var sql = "DELETE FROM RemoteScanMag WHERE ScanJobId=" + jobId;
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int SetScanJobFinish(int scanJobId)
+        {
+            var sql = "UPDATE ScanJob SET IsFinish = 1, EndTime = GETDATE() WHERE ScanJobId = " + scanJobId;
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
@@ -261,6 +303,13 @@ namespace DataBaseManager.ScanDataBaseHelper
         public static List<RemoteScanMag> GetAllMag()
         {
             var sql = "SELECT * FROM RemoteScanMag";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<RemoteScanMag>();
+        }
+
+        public static List<RemoteScanMag> GetAllMagByJob(int jobId)
+        {
+            var sql = "SELECT * FROM RemoteScanMag WHERE ScanJobId="+jobId;
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<RemoteScanMag>();
         }

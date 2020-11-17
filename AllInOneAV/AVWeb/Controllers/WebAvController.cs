@@ -60,53 +60,75 @@ namespace AVWeb.Controllers
             return View();
         }
 
-        public ActionResult GetAv(int page = 1, int pageSize = 20, string id = "", string category = "", string actress = "", string director = "", string company = "", string publisher = "", string releaseDate = "", string orderBy = " ReleaseDate ", string orderType = " DESC ")
+        public ActionResult GetAv(string search, int page = 1, int pageSize = 20)
         {
-            List<AV> ret = new List<AV>();
-            string orderStr = orderBy + orderType;
-            string where = " 1 = 1 ";
-            string pageStr = @" AND t.OnePage BETWEEN " + (((page - 1) * pageSize) + 1) + " AND " + page * pageSize; ;
+            ApplicationLog.Debug("search -> " + search);
+            var scanResult = ScanDataBaseManager.GetMatchScanResult();
 
-            if (!string.IsNullOrEmpty(id))
+            var toBePlay = new List<ScanResult>();
+            List<ScanResult> namePlay = new List<ScanResult>();
+            List<ScanResult> actressPlay = new List<ScanResult>();
+            List<ScanResult> categoryPlay = new List<ScanResult>();
+            List<ScanResult> prefixPlay = new List<ScanResult>();
+            List<ScanResult> direPlay = new List<ScanResult>();
+
+            foreach (var r in scanResult)
             {
-                where += string.Format(" AND ID = '{0}' ", id);
+                if (r.AvId == search.ToUpper())
+                {
+                    ApplicationLog.Debug("找到ID");
+                    toBePlay.Add(r);
+                }
             }
 
-            if (!string.IsNullOrEmpty(category))
+            foreach (var r in scanResult)
             {
-                where += string.Format(" AND Category LIKE '%{0}%' ", category);
+                foreach (var ac in r.ActressList)
+                {
+                    if (ac.Contains(search))
+                    {
+                        ApplicationLog.Debug("找到演员");
+                        toBePlay.Add(r);
+                    }
+                }
             }
 
-            if (!string.IsNullOrEmpty(actress))
+            foreach (var r in scanResult)
             {
-                where += string.Format(" AND Actress LIKE '%{0}%' ", actress);
+                foreach (var ca in r.CategoryList)
+                {
+                    if (ca.Contains(search))
+                    {
+                        ApplicationLog.Debug("找到类型");
+                        toBePlay.Add(r);
+                    }
+                }
             }
 
-            if (!string.IsNullOrEmpty(director))
+            foreach (var r in scanResult)
             {
-                where += string.Format(" AND Director LIKE '%{0}%' ", director);
+                if (r.Prefix.Contains(search.ToUpper()))
+                {
+                    ApplicationLog.Debug("找到前缀");
+                    toBePlay.Add(r);
+                }
             }
 
-            if (!string.IsNullOrEmpty(company))
+            foreach (var r in scanResult)
             {
-                where += string.Format(" AND Company LIKE '%{0}%' ", company);
+                if (r.Director.Contains(search))
+                {
+                    ApplicationLog.Debug("找到导演");
+                    toBePlay.Add(r);
+                }
             }
 
-            if (!string.IsNullOrEmpty(publisher))
-            {
-                where += string.Format(" AND Publisher = '%{0}%' ", publisher);
-            }
+            ApplicationLog.Debug("total -> " + scanResult.Count + " filtered -> " + toBePlay.Count);
 
-            if (!string.IsNullOrEmpty(releaseDate))
-            {
-                var date = DateTime.Parse(releaseDate);
+            var pageContent = toBePlay.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-                where += string.Format(" AND ReleaseDate = '{0}' ", date.ToString("yyyy-MM-dd") + " 00:00:00.000");
-            }
-
-            var items =  WebService.WebService.GetAv(orderBy, where, pageStr);
-
-            ViewData.Add("avs", items);
+            ViewData.Add("avs", toBePlay);
+            ViewData.Add("search", search);
 
             return View();
         }
@@ -212,9 +234,10 @@ namespace AVWeb.Controllers
             return string.Format(html,sb.ToString());
         }
 
-        public ActionResult ShowMag(ShowMagType type = ShowMagType.All)
+        public ActionResult ShowMag(ShowMagType type = ShowMagType.All, int jobId = 0)
         {
-            var data = ScanDataBaseManager.GetAllMag().Where(x => !string.IsNullOrEmpty(x.AvId)).GroupBy(x => x.AvId).ToDictionary(x => x.Key, x=>x.ToList());
+            ApplicationLog.Debug("showmag -> type " + type + " jobid " + jobId);
+            var data = ScanDataBaseManager.GetAllMagByJob(jobId).Where(x => !string.IsNullOrEmpty(x.AvId)).GroupBy(x => x.AvId).ToDictionary(x => x.Key, x=>x.ToList());
             Dictionary<ShowMagKey, List<RemoteScanMag>> ret = new Dictionary<ShowMagKey, List<RemoteScanMag>>();
 
             foreach (var d in data)
@@ -274,6 +297,7 @@ namespace AVWeb.Controllers
 
             ret = ret.Where(x => x.Key.Type.HasFlag(type)).ToDictionary(x => x.Key, x => x.Value);
 
+            ViewData.Add("jobId", jobId);
             ViewData.Add("data", ret);        
 
             return View();
@@ -307,6 +331,90 @@ namespace AVWeb.Controllers
             }
 
             return View(data);
+        }
+
+        public ActionResult ScanJav()
+        {
+            #region 按页面
+            List<ScanMap> page = new List<ScanMap>();
+
+            page.Add(new ScanMap()
+            {
+                Title = "新加入",
+                Url = "http://www.javlibrary.com/cn/vl_newentries.php?mode="
+            });
+            page.Add(new ScanMap()
+            {
+                Title = "最想要",
+                Url = "http://www.javlibrary.com/cn/vl_mostwanted.php?mode="
+            });
+            page.Add(new ScanMap()
+            {
+                Title = "高评价",
+                Url = "http://www.javlibrary.com/cn/vl_bestrated.php?mode="
+            });
+            page.Add(new ScanMap()
+            {
+                Title = "新发行",
+                Url = "http://www.javlibrary.com/cn/vl_newrelease.php?mode="
+            });
+
+            ViewData.Add("page", page);
+            #endregion
+
+            #region 按演员
+            var actress = JavDataBaseManager.GetActress();
+            ViewData.Add("actress", actress);
+            #endregion
+
+            #region 按类型
+            var cate = JavDataBaseManager.GetCategories();
+            ViewData.Add("cate", cate);
+            #endregion
+
+            #region 按收藏
+            var faviModel = ScanDataBaseManager.GetFaviScan();
+
+            var favi = faviModel.GroupBy(x => x.Category).ToDictionary(x => x.Key, x => x.ToList());
+
+            ViewData.Add("favi", favi);
+            #endregion
+
+            return View();
+        }
+
+        public ActionResult ScanJobList(int pageSize = 20)
+        {
+            var model = ScanDataBaseManager.GetScanJob(pageSize);
+
+            return View(model);
+        }
+
+        public JsonResult DeleteScanJob(int jobId)
+        {
+            var ret = 0;
+
+            ret += ScanDataBaseManager.DeleteScanJob(jobId);
+            ret += ScanDataBaseManager.DeleteRemoteMagScan(jobId);
+
+            if (ret > 0)
+            {
+                return Json(new { success = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = "Fail" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult PostScanJob(string jobName, string scanParameter)
+        {
+            ApplicationLog.Debug("PostScanJob -> jobName " + jobName + " scanParameter " + scanParameter);
+
+            var jobId = ScanDataBaseManager.InsertScanJob(jobName, scanParameter);
+
+            return Json(new { msg = "success", jobId = jobId });
         }
 
         [HttpPost]

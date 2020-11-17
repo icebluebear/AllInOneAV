@@ -181,7 +181,10 @@
     <Content Include="Views\WebAv\UploadComics.cshtml" />
     <Content Include="Views\WebAv\Test.cshtml" />
     <Content Include="Views\WebAv\ShowMag.cshtml" />
-    <Content Include="Views\WebAv\Share.cshtml" />
+    <Content Include="Views\WebAv\ShareVideo.cshtml" />
+    <Content Include="Views\Shared\Header.cshtml" />
+    <Content Include="Views\WebAv\ScanJav.cshtml" />
+    <Content Include="Views\WebAv\ScanJobList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

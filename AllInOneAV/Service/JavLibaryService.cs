@@ -1028,6 +1028,11 @@ namespace Service
             ScanAvList();
         }
 
+        public static void DoCombineScan(List<string> startingPages, bool isAsc, int pageSize, bool showConsole = true)
+        {
+            GetJavCookie(showConsole);
+        }
+
         public static void DoFullScanSingleThread(bool showConsole = true)
         {
             //获取Cookie

@@ -94,7 +94,10 @@
     <Compile Include="ScanModels\Prefix.cs" />
     <Compile Include="ScanModels\RemoteScanMag.cs" />
     <Compile Include="ScanModels\Scan.cs" />
+    <Compile Include="ScanModels\ScanJob.cs" />
+    <Compile Include="ScanModels\ScanParameter.cs" />
     <Compile Include="ScanModels\ScanResult.cs" />
+    <Compile Include="ScanModels\ScanType.cs" />
     <Compile Include="ScanModels\UnmatchVW.cs" />
     <Compile Include="ScanModels\ViewHistory.cs" />
     <Compile Include="SisModels\LastOperationEndDate.cs" />

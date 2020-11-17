@@ -23,23 +23,51 @@ namespace ScanJavMagUrl
 
         static void Main(string[] args)
         {
-            var arg = " refresh " + 20;
+            string arg = "";
+            int jobId = 0;
 
-            DoJob(arg);
+            if (args.Length == 0)
+            {
+                arg = " refresh " + 20;
+
+                ScanDataBaseManager.DeleteRemoteScanMag();
+            }
+            else
+            {
+                var model = ScanDataBaseManager.GetFirstScanJob();
+
+                if (model != null)
+                {
+                    var parameter = JsonConvert.DeserializeObject<ScanParameter>(model.ScanParameter);
+                    parameter.ScanJobId = model.ScanJobId;
+
+                    if (parameter != null && parameter.StartingPage != null && parameter.StartingPage.Count > 0)
+                    {
+                        arg = string.Format("dolist {0} {1} {2}", string.Join(",", parameter.StartingPage), parameter.IsAsc, parameter.PageSize);
+                        jobId = parameter.ScanJobId;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            DoJob(arg, jobId);
 
             while (IsFinish)
-            { 
+            {
                 
             }
+
+            ScanDataBaseManager.SetScanJobFinish(jobId);
         }
 
-        async static void DoJob(string arg)
+        async static void DoJob(string arg, int jobId)
         {
-            ScanDataBaseManager.DeleteRemoteScanMag();
-
             await StartJavRefresh("", arg, OutputJavRefresh);
 
-            await Task.Run(() => UpdateRefreshUi());
+            await Task.Run(() => UpdateRefreshUi(jobId));
 
             IsFinish = false;
         }
@@ -81,13 +109,14 @@ namespace ScanJavMagUrl
             }
         }
 
-        private static void UpdateRefreshUi()
+        private static void UpdateRefreshUi(int jobId = 0)
         {
             Random ran = new Random();
 
             Parallel.ForEach(models, new ParallelOptions { MaxDegreeOfParallelism = 5 }, rm =>
             {
                 RemoteScanMag entity = new RemoteScanMag();
+                entity.JobId = jobId;
 
                 Console.WriteLine("处理 --> " + rm.Name + models.IndexOf(rm) + "/" + models.Count);
 

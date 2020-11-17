@@ -1,0 +1,226 @@
+﻿@using Model.ScanModels
+@using Model.JavModels
+ 
+<!DOCTYPE html>
+
+@{ 
+
+    List<ScanMap> page = (List<ScanMap>)ViewData["page"];
+    List<Actress> actress = (List<Actress>)ViewData["actress"];
+    List<Category> category = (List<Category>)ViewData["cate"];
+
+    Dictionary<string, List<FaviScan>> favi = (Dictionary<string, List<FaviScan>>)ViewData["favi"];
+}
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebAV-浏览Jav</title>
+
+    @Html.Partial("Header")
+</head>
+
+<body>
+    @Html.Partial("Share")
+
+    <div>
+        <div class="btn-group center" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary fliterBtn active" id="byPage" data-show="pageDiv" aria-pressed="true">按页面</button>
+            <button type="button" class="btn btn-secondary fliterBtn" id="byPrefix" data-show="prefixDiv" aria-pressed="true">按前缀</button>
+            <button type="button" class="btn btn-success fliterBtn" id="byCate" data-show="cateDiv" aria-pressed="true">按类型</button>
+            <button type="button" class="btn btn-danger fliterBtn" id="byActress" data-show="actressDiv" aria-pressed="true">按演员</button>
+            <button type="button" class="btn btn-warning fliterBtn" id="byFavi" data-show="faviDiv" aria-pressed="true">按书签</button>
+        </div>
+
+        <div class="input-group" style="width:30%">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <input type="checkbox" aria-label="Radio button for following text input" id="order" checked>
+                    <label class="form-check-label" for="radio">
+                        正序
+                    </label>
+                </div>
+            </div>
+            <input type="number" placeholder="负数为全部" class="form-control" aria-label="Text input with radio button" id="pageSize" value="-1">
+        </div>
+    </div>
+
+    <div id="prefixDiv" class="filter" style="display:none">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">前缀</span>
+            </div>
+            <input type="text" id="prefixInput" class="form-control" placeholder="多个用逗号区分" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="prefixBtn">添加任务</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pageDiv" class="filter" style="display:block">
+        <div class="input-group mb-3" style="width:50%">
+            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple data-max-options="5" data-actions-box="true" title="请选择页面" id="pageSelect">
+                @foreach (var p in page)
+                {
+                    <option value="@p.Url">@p.Title</option>
+                }
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="pageBtn">添加任务</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cateDiv" class="filter" style="display:none">
+        <div class="input-group mb-3" style="width:50%">
+            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择页面" data-actions-box="true" id="categorySelect">
+                @foreach (var ca in category)
+                {
+                    <option value="@ca.Url">@ca.Name</option>
+                }
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="categoryBtn">添加任务</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="actressDiv" class="filter" style="display:none">
+        <div class="input-group mb-3" style="width:50%">
+            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择页面" data-actions-box="true" id="actressSelect">
+                @foreach (var ac in actress)
+                {
+                    <option value="@ac.URL">@ac.Name</option>
+                }
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="actressBtn">添加任务</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="faviDiv" class="filter" style="display:none">
+        <div class="input-group mb-3" style="width:50%">
+            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择页面" data-actions-box="true" id="faviSelect">
+                @foreach(var fc in favi)
+                { 
+                    <optgroup label="@fc.Key">
+                        @foreach (var f in fc.Value)
+                        {
+                            <option value="@f.Url">@f.Name</option>
+                        }
+                    </optgroup>
+                }
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="faviBtn">添加任务</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $('.selectpicker').selectpicker({
+            'noneSelectedText': '请选择',
+            'deselectAllText': '全不选',
+            'selectAllText': '全选',
+        })
+
+        $("#prefixBtn").click(function () {
+            var url = 'http://www.javlibrary.com/cn/vl_searchbyid.php?&keyword=';
+            var input = $("#prefixInput").val().split(',');
+            var jobName = '按前缀搜索' + $("#prefixInput").val();
+            var urls = [];
+
+            input.forEach(x => urls.push(url + x));
+
+            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': urls };
+
+            $.ajax({
+                url: "/webav/PostScanJob",
+                type: "post",
+                data: { 'jobname': jobName, 'scanParameter': JSON.stringify(parameter) },
+
+                success: function (result) {
+
+                }
+            });
+        });
+
+        $("#pageBtn").click(function () {
+            var jobName = $(".filter-option-inner-inner:visible").html();
+            var input = $("#pageSelect").val();
+
+            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
+
+            $.ajax({
+                url: "/webav/PostScanJob",
+                type: "post",
+                data: { 'jobname': jobName, 'scanParameter': JSON.stringify(parameter) },
+
+                success: function (result) {
+                    window.location.href = 'http://www.cainqs.com:8087/webav/scanjoblist';
+                }
+            });
+        });
+
+        $("#faviBtn").click(function () {
+            var jobName = $(".filter-option-inner-inner:visible").html();
+            var input = $("#faviSelect").val();
+
+            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
+
+            $.ajax({
+                url: "/webav/PostScanJob",
+                type: "post",
+                data: { 'jobname': jobName, 'scanParameter': JSON.stringify(parameter) },
+
+                success: function (result) {
+                    window.location.href = 'http://www.cainqs.com:8087/webav/scanjoblist';
+                }
+            });
+        });
+
+        $("#categoryBtn").click(function () {
+            var jobName = $(".filter-option-inner-inner:visible").html();
+            var input = $("#categorySelect").val();
+
+            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
+
+            $.ajax({
+                url: "/webav/PostScanJob",
+                type: "post",
+                data: { 'jobname': jobName, 'scanParameter': JSON.stringify(parameter) },
+
+                success: function (result) {
+                    window.location.href = 'http://www.cainqs.com:8087/webav/scanjoblist';
+                }
+            });
+        });
+
+        $("#actressBtn").click(function () {
+            var jobName = $(".filter-option-inner-inner:visible").html();
+            var input = $("#actressSelect").val();
+
+            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
+
+            $.ajax({
+                url: "/webav/PostScanJob",
+                type: "post",
+                data: { 'jobname': jobName, 'scanParameter': JSON.stringify(parameter) },
+
+                success: function (result) {
+                    window.location.href = 'http://www.cainqs.com:8087/webav/scanjoblist';
+                }
+            });
+        });
+
+        $(".fliterBtn").click(function () {
+            $(".filter").hide();
+            var selector = "#" + $(this).data("show");
+
+            $(selector).show();
+        });
+    </script>
+</body>
+</html>

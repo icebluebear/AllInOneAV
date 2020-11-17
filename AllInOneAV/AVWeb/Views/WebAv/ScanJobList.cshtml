@@ -1,0 +1,49 @@
+﻿@model List<Model.ScanModels.ScanJob>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebAV-浏览种子</title>
+
+    @Html.Partial("Header")
+</head>
+
+<body>
+    @Html.Partial("Share")
+
+    <ul class="list-group" style="width:40%;">
+        @foreach (var s in Model)
+        {
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            @s.ScanJobName
+            <span class="badge badge-info badge-pill">@(s.IsFinish == 1 ? "已完成" : "进行中")</span>
+            <span class="badge badge-primary badge-pill">@s.EndTime.ToString("yyyy-MM-dd hh:mm:ss")</span>
+            <a href="@("http://www.cainqs.com:8087/webav/ShowMag?type=0&jobid=" + s.ScanJobId)" target="_blank" class="btn btn-info">详情</a>
+            <button type="button" class="btn btn-danger" data-jobid="@s.ScanJobId">删除</button>
+        </li>
+        }
+    </ul>
+
+    <script>
+        function myrefresh() {
+            window.location.reload();
+        }
+        setTimeout('myrefresh()', 60 * 1000);
+
+        $(".btn-danger").click(function () {
+
+            var jobId = $(this).data("jobid");
+
+            $.ajax({
+                url: "/webav/DeleteScanJob?jobid=" + jobId,
+                type: "get",
+
+                success: function (result) {
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

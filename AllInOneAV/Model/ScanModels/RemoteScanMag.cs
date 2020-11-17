@@ -23,5 +23,6 @@ namespace Model.ScanModels
         public string MatchFile { get; set; }
         public double MatchFileSize { get; set; }
         public string ClassStr { get; set; }
+        public int JobId { get; set; }
     }
 }

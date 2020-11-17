@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,22 @@ namespace Model.ScanModels
         public string Category { get; set; }
         public string Actress { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public string PicUrl { get; set; }
+        public string WebShowName { get; set; }
+        public double FileSize
+        {
+            get 
+            {
+                if (File.Exists(Location + "\\" + FileName))
+                {
+                    return new FileInfo(Location + "\\" + FileName).Length;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
 
         public string AvFilePath
         {
