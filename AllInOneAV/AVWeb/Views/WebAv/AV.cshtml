@@ -23,72 +23,54 @@
     {
         <div class="card mb-3" style="width:100%;">
             <div class="row no-gutters">
-                <div class="col-md-4">
-                    <img src="@av.PictureURL" class="card-img" alt="..." style="width:70%">
+                <div class="col-md-7">
+                    <img src="@av.PictureURL" class="card-img" alt="..." style="width:100%">
                 </div>
-                <div class="col-md-8" style="width:30%">
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="id">番号</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.ID">
-                    </div>
-
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="name">名称</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.Name">
-                    </div>
-
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="actress">演员</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.Actress">
-                    </div>
-
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="category">类型</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.Category">
-                    </div>
-
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="director">导演</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.Director">
-                    </div>
-
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="publisher">发行商</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.Publisher">
-                    </div>
-
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="company">制作公司</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.Company">
-                    </div>
-
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="length">时长</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.AvLength">
-                    </div>
-
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="releaseDate">发行日期</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="@av.ReleaseDate">
-                    </div>
+                <div class="col-md-5">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            番号
+                            <span class="badge">@av.ID</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            名称
+                            <span class="badge">@av.Name</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            演员
+                            @foreach (var ac in av.Actress.Split(','))
+                            {
+                                <a class="badge badge-primary badge-pill" href="@("http://www.cainqs.com:8087/webav/getav?searchType=actress&search=" + ac)">@ac</a>
+                            }
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            类型
+                            @foreach (var ca in av.Category.Split(','))
+                            {
+                                <a class="badge badge-primary badge-pill" href="@("http://www.cainqs.com:8087/webav/getav?searchType=category&search=" + ca)">@ca</a>
+                            }
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            导演
+                            <span class="badge">@av.Director.Replace(",","")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            发行商
+                            <span class="badge">@av.Publisher.Replace(",", "")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            制作公司
+                            <span class="badge">@av.Company.Replace(",", "")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            时长
+                            <span class="badge">@av.AvLength</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size:12px">
+                            发行日期
+                            <span class="badge">@av.ReleaseDate</span>
+                        </li>
+                    </ul>                
                 </div>
             </div>
         </div>

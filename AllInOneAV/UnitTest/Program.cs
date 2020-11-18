@@ -52,7 +52,21 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            JavLibraryHelper.DoListSearch(new List<string>() { "http://www.javlibrary.com/cn/vl_newentries.php" });
+            var model = ScanDataBaseManager.GetFirstScanJobTest();
+
+            if (model != null)
+            {
+                var parameter = JsonConvert.DeserializeObject<ScanParameter>(model.ScanParameter);
+                parameter.ScanJobId = model.ScanJobId;
+
+                if (parameter != null && parameter.StartingPage != null && parameter.StartingPage.Count > 0)
+                {
+                    var arg = string.Format("dolist {0} {1} {2}", string.Join(",", parameter.StartingPage), parameter.IsAsc, parameter.PageSize);
+                    var jobId = parameter.ScanJobId;
+
+                    JavLibraryHelper.DoListSearch(parameter.StartingPage, true, -1);
+                }
+            }
         }
 
         private static void Test115Search()

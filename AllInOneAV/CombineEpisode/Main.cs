@@ -2585,6 +2585,8 @@ namespace CombineEpisode
 
         private async void StartScanAndMatch()
         {
+            rtbMatch.Text = "";
+
             await StartScanAndMatchTask(OutputStartScanAndMatch);
 
             matchesAV = ScanDataBaseManager.GetAllMatch();
@@ -3344,6 +3346,24 @@ namespace CombineEpisode
         private void lvPlay_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void richTextBox1_ContentsResized(object sender, ContentsResizedEventArgs e)
+        {
+            richTextBox1.SelectionStart = richTextBox1.Text.Length;
+            richTextBox1.ScrollToCaret();
+        }
+
+        private void richTextBox2_ContentsResized(object sender, ContentsResizedEventArgs e)
+        {
+            richTextBox2.SelectionStart = richTextBox2.Text.Length;
+            richTextBox2.ScrollToCaret();
+        }
+
+        private void rtbMatch_ContentsResized(object sender, ContentsResizedEventArgs e)
+        {
+            rtbMatch.SelectionStart = rtbMatch.Text.Length;
+            rtbMatch.ScrollToCaret();
         }
     }
 

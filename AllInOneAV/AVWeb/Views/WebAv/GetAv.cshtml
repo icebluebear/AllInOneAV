@@ -8,6 +8,7 @@
     int count = int.Parse(ViewData["count"].ToString());
     int size = int.Parse(ViewData["size"].ToString());
     int current = int.Parse(ViewData["current"].ToString());
+    int total = int.Parse(ViewData["total"].ToString());
 }
 
 <!DOCTYPE html>
@@ -25,7 +26,7 @@
     <div class="jumbotron">
         <div class="container">
             <h1 class="display-4">搜索 @search</h1>
-            <p class="lead">共找到 @avs.Count</p>
+            <p class="lead">共找到 @total</p>
         </div>
     </div>
 
@@ -51,21 +52,21 @@
                             <img src="@av.PicUrl" class="card-img-top" alt="">
                             <div class="card-body">
                                 <h6 class="card-title">@av.AvId</h6>
-                                <a class="card-text" style="font-size:14px" href="@("http://www.cainqs.com:8087/webav/av?avid=" + av.MatchAvId)">@av.AvName</a>
+                                <a class="card-text" style="font-size:12px" href="@("http://www.cainqs.com:8087/webav/av?avid=" + av.MatchAvId)">@av.AvName</a>
                                 @if (av.FileSize > 0)
                                 {
-                                    <p class="card-text" style="font-size:14px">@(FileSize.GetAutoSizeString(av.FileSize, 1))</p>
-                                    <a class="btn btn-info" href="/webav/playav?filepath=@av.AvFilePath" target="_blank" style="font-size:14px">播放</a>
+                                    <p class="card-text" style="font-size:12px">@(FileSize.GetAutoSizeString(av.FileSize, 1))</p>
+                                    <a class="btn btn-info" href="/webav/playav?filepath=@av.AvFilePath" target="_blank" style="font-size:12px">播放</a>
                                 }
                             </div>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
+                                <li class="list-group-item" style="font-size:12px">
                                     @foreach (var ac in av.ActressList)
                                     {
                                         <a class="badge badge-success badge-pill" href="@("http://www.cainqs.com:8087/webav/getav?search=" + ac)">@ac</a>
                                     }
                                 </li>
-                                <li class="list-group-item">
+                                <li class="list-group-item" style="font-size:12px">
                                     @foreach (var ca in av.CategoryList.Take(5))
                                     {
                                         <a class="badge badge-info badge-pill" href="@("http://www.cainqs.com:8087/webav/getav?search=" + ca)">@ca</a>

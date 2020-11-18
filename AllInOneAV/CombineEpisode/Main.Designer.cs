@@ -244,6 +244,7 @@
             this.cbPlayCategory = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbPlayActress = new System.Windows.Forms.ComboBox();
+            this.tabPage17 = new System.Windows.Forms.TabPage();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -259,7 +260,6 @@
             this.contextMenuStrip4 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPage17 = new System.Windows.Forms.TabPage();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -998,6 +998,7 @@
             this.richTextBox1.Size = new System.Drawing.Size(1118, 532);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            this.richTextBox1.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.richTextBox1_ContentsResized);
             // 
             // panel16
             // 
@@ -1091,6 +1092,7 @@
             this.richTextBox2.Size = new System.Drawing.Size(1118, 529);
             this.richTextBox2.TabIndex = 0;
             this.richTextBox2.Text = "";
+            this.richTextBox2.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.richTextBox2_ContentsResized);
             // 
             // panel26
             // 
@@ -1553,6 +1555,7 @@
             this.rtbMatch.Size = new System.Drawing.Size(1118, 535);
             this.rtbMatch.TabIndex = 0;
             this.rtbMatch.Text = "";
+            this.rtbMatch.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.rtbMatch_ContentsResized);
             // 
             // panel35
             // 
@@ -2637,6 +2640,15 @@
             this.cbPlayActress.Size = new System.Drawing.Size(178, 20);
             this.cbPlayActress.TabIndex = 0;
             // 
+            // tabPage17
+            // 
+            this.tabPage17.Location = new System.Drawing.Point(4, 22);
+            this.tabPage17.Name = "tabPage17";
+            this.tabPage17.Size = new System.Drawing.Size(1118, 580);
+            this.tabPage17.TabIndex = 19;
+            this.tabPage17.Text = "等待下载";
+            this.tabPage17.UseVisualStyleBackColor = true;
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -2744,15 +2756,6 @@
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(100, 22);
             this.toolStripMenuItem3.Text = "播放";
-            // 
-            // tabPage17
-            // 
-            this.tabPage17.Location = new System.Drawing.Point(4, 22);
-            this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(1118, 580);
-            this.tabPage17.TabIndex = 19;
-            this.tabPage17.Text = "等待下载";
-            this.tabPage17.UseVisualStyleBackColor = true;
             // 
             // Main
             // 

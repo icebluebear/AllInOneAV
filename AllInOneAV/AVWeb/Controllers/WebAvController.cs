@@ -20,35 +20,15 @@ using Utils;
 
 namespace AVWeb.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class WebAvController : Controller
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        // GET: WebAv
         public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Test()
         {
             return View();
         }
 
         public ActionResult UploadSeeds()
         {
-            return View();
-        }
-
-        public ActionResult GetUnmatched(bool includePlayed = true)
-        {
-            ViewData.Add("list", WebService.WebService.GetUnMatch(includePlayed).OrderByDescending(x => x.HasPlayed).ToList());
-
             return View();
         }
 
@@ -60,10 +40,17 @@ namespace AVWeb.Controllers
             return View();
         }
 
-        public ActionResult GetAv(string search, int page = 1, int pageSize = 20)
+        public ActionResult GetAv(string search, bool onlyExist = false, string searchType = "all", int page = 1, int pageSize = 20)
         {
             ApplicationLog.Debug("search -> " + search);
-            var scanResult = ScanDataBaseManager.GetMatchScanResult();
+            var scanResult = new List<ScanResult>();
+
+            scanResult = ScanDataBaseManager.GetMatchScanResult();
+
+            if (onlyExist)
+            {
+                scanResult = scanResult.Where(x => !string.IsNullOrEmpty(x.Location)).ToList();
+            }
 
             var toBePlay = new List<ScanResult>();
             List<ScanResult> namePlay = new List<ScanResult>();
@@ -72,54 +59,69 @@ namespace AVWeb.Controllers
             List<ScanResult> prefixPlay = new List<ScanResult>();
             List<ScanResult> direPlay = new List<ScanResult>();
 
-            foreach (var r in scanResult)
+            if (searchType == "all" || searchType == "id")
             {
-                if (r.AvId == search.ToUpper())
+                foreach (var r in scanResult)
                 {
-                    ApplicationLog.Debug("找到ID");
-                    toBePlay.Add(r);
-                }
-            }
-
-            foreach (var r in scanResult)
-            {
-                foreach (var ac in r.ActressList)
-                {
-                    if (ac.Contains(search))
+                    if (r.AvId == search.ToUpper())
                     {
-                        ApplicationLog.Debug("找到演员");
+                        ApplicationLog.Debug("找到ID");
                         toBePlay.Add(r);
                     }
                 }
             }
 
-            foreach (var r in scanResult)
+            if (searchType == "all" || searchType == "actress")
             {
-                foreach (var ca in r.CategoryList)
+                foreach (var r in scanResult)
                 {
-                    if (ca.Contains(search))
+                    foreach (var ac in r.ActressList)
                     {
-                        ApplicationLog.Debug("找到类型");
+                        if (ac.Contains(search))
+                        {
+                            ApplicationLog.Debug("找到演员");
+                            toBePlay.Add(r);
+                        }
+                    }
+                }
+            }
+
+            if (searchType == "all" || searchType == "category")
+            {
+                foreach (var r in scanResult)
+                {
+                    foreach (var ca in r.CategoryList)
+                    {
+                        if (ca.Contains(search))
+                        {
+                            ApplicationLog.Debug("找到类型");
+                            toBePlay.Add(r);
+                        }
+                    }
+                }
+            }
+
+            if (searchType == "all" || searchType == "prefix")
+            {
+                foreach (var r in scanResult)
+                {
+                    if (r.Prefix.Contains(search.ToUpper()))
+                    {
+                        ApplicationLog.Debug("找到前缀");
                         toBePlay.Add(r);
                     }
                 }
             }
 
-            foreach (var r in scanResult)
+            if (searchType == "all" || searchType == "director")
             {
-                if (r.Prefix.Contains(search.ToUpper()))
+                foreach (var r in scanResult)
                 {
-                    ApplicationLog.Debug("找到前缀");
-                    toBePlay.Add(r);
-                }
-            }
-
-            foreach (var r in scanResult)
-            {
-                if (r.Director.Contains(search))
-                {
-                    ApplicationLog.Debug("找到导演");
-                    toBePlay.Add(r);
+                    if (r.Director.Contains(search))
+                    {
+                        ApplicationLog.Debug("找到导演");
+                        toBePlay.Add(r);
+                    }
                 }
             }
 
@@ -132,6 +134,7 @@ namespace AVWeb.Controllers
             ViewData.Add("count", (int)Math.Ceiling((decimal)toBePlay.Count / pageSize));
             ViewData.Add("size", pageSize);
             ViewData.Add("current", page);
+            ViewData.Add("total", toBePlay.Count);
 
             return View();
         } 
@@ -154,21 +157,6 @@ namespace AVWeb.Controllers
             ViewData.Add("av", av);
             ViewData.Add("match", match);
 
-            return View();
-        }
-
-        public ActionResult Actress()
-        {
-            return View();
-        }
-
-        public ActionResult Category()
-        {
-            return View();
-        }
-
-        public ActionResult UploadComics()
-        {
             return View();
         }
 
@@ -340,6 +328,12 @@ namespace AVWeb.Controllers
         {
             #region 按页面
             List<ScanMap> page = new List<ScanMap>();
+
+            page.Add(new ScanMap()
+            {
+                Title = "新话题",
+                Url = "http://www.javlibrary.com/cn/vl_update.php?mode="
+            });
 
             page.Add(new ScanMap()
             {

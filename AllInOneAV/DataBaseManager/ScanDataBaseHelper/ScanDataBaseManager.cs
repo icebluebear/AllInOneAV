@@ -211,7 +211,14 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static List<ScanResult> GetMatchScanResult()
         {
-            var sql = @"SELECT m.MatchId AS Id, m.MatchAVId, m.Location, m.Name AS FileName, a.PictureURL AS PicUrl, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m LEFT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID";
+            var sql = @"SELECT m.MatchId AS Id, CASE WHEN m.Location IS NULL THEN a.AVID ELSE m.MatchAVId END AS MatchAvId, m.Location, m.Name AS FileName, a.PictureURL AS PicUrl, a.ID AS AvId, a.Company, a.Name AS AvName, a.Director, a.Publisher, a.Category, a.Actress, a.ReleaseDate FROM ScanAllAv.dbo.Match m RIGHT JOIN JavLibraryDownload.dbo.AV a ON m.AvID = a.ID";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ScanResult>();
+        }
+
+        public static List<ScanResult> GetAllAvFromJav()
+        {
+            var sql = @"SELECT AvId AS MatchAVId, '' AS Location, '' AS FileName, PictureURL AS PicUrl, ID AS AvId, Company, Name AS AvName, Director, Publisher, Category, Actress, ReleaseDate FROM JavLibraryDownload.dbo.AV";
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ScanResult>();
         }
@@ -275,6 +282,13 @@ namespace DataBaseManager.ScanDataBaseHelper
         public static ScanJob GetFirstScanJob()
         {
             var sql = "SELECT TOP 1 * FROM ScanJob WHERE IsFinish = 0 ORDER BY CreateTime ASC";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<ScanJob>();
+        }
+
+        public static ScanJob GetFirstScanJobTest()
+        {
+            var sql = "SELECT TOP 1 * FROM ScanJob ORDER BY CreateTime ASC";
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<ScanJob>();
         }
