@@ -332,6 +332,7 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        [Rights]
         public ActionResult ShareList()
         {
             var list = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\Share\\").GetDirectories();
@@ -472,8 +473,8 @@ namespace AVWeb.Controllers
                     {
                         Guid guid = Guid.NewGuid();
 
-                        CookieTools.AddCookie("token", guid.ToString(), "");
-                        CookieTools.AddCookie("uName", uName, "");
+                        CookieTools.AddCookie("token", guid.ToString(), DateTime.Now.AddDays(1), "");
+                        CookieTools.AddCookie("uName", uName, DateTime.Now.AddDays(1), "");
 
                         CacheTools.CacheInsert(uName, guid.ToString(), DateTime.Now.AddDays(1));
 
