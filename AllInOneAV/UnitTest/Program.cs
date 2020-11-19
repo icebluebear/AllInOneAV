@@ -52,21 +52,11 @@ namespace UnitTest
 
         static void Main(string[] args)
         {
-            var model = ScanDataBaseManager.GetFirstScanJobTest();
+            Guid guid = Guid.NewGuid();
 
-            if (model != null)
-            {
-                var parameter = JsonConvert.DeserializeObject<ScanParameter>(model.ScanParameter);
-                parameter.ScanJobId = model.ScanJobId;
+            Console.WriteLine(guid.ToString());
 
-                if (parameter != null && parameter.StartingPage != null && parameter.StartingPage.Count > 0)
-                {
-                    var arg = string.Format("dolist {0} {1} {2}", string.Join(",", parameter.StartingPage), parameter.IsAsc, parameter.PageSize);
-                    var jobId = parameter.ScanJobId;
-
-                    JavLibraryHelper.DoListSearch(parameter.StartingPage, true, -1);
-                }
-            }
+            Console.ReadKey();
         }
 
         private static void Test115Search()

@@ -1,4 +1,5 @@
-﻿using DataBaseManager.JavDataBaseHelper;
+﻿using AVWeb.Filter;
+using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
 using Microsoft.Ajax.Utilities;
 using Model.JavModels;
@@ -27,11 +28,19 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        [Rights]
+        public ActionResult Play()
+        {
+            return View();
+        }
+
+        [Rights]
         public ActionResult UploadSeeds()
         {
             return View();
         }
 
+        [Rights]
         public ActionResult PlayAv(string filePath)
         {
             var host = "http://www.cainqs.com:8087/avapi/playav?filename=" + filePath;
@@ -40,9 +49,9 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        [Rights]
         public ActionResult GetAv(string search, bool onlyExist = false, string searchType = "all", int page = 1, int pageSize = 20)
         {
-            ApplicationLog.Debug("search -> " + search);
             var scanResult = new List<ScanResult>();
 
             scanResult = ScanDataBaseManager.GetMatchScanResult();
@@ -65,7 +74,6 @@ namespace AVWeb.Controllers
                 {
                     if (r.AvId == search.ToUpper())
                     {
-                        ApplicationLog.Debug("找到ID");
                         toBePlay.Add(r);
                     }
                 }
@@ -79,7 +87,6 @@ namespace AVWeb.Controllers
                     {
                         if (ac.Contains(search))
                         {
-                            ApplicationLog.Debug("找到演员");
                             toBePlay.Add(r);
                         }
                     }
@@ -94,7 +101,6 @@ namespace AVWeb.Controllers
                     {
                         if (ca.Contains(search))
                         {
-                            ApplicationLog.Debug("找到类型");
                             toBePlay.Add(r);
                         }
                     }
@@ -107,7 +113,6 @@ namespace AVWeb.Controllers
                 {
                     if (r.Prefix.Contains(search.ToUpper()))
                     {
-                        ApplicationLog.Debug("找到前缀");
                         toBePlay.Add(r);
                     }
                 }
@@ -119,13 +124,10 @@ namespace AVWeb.Controllers
                 {
                     if (r.Director.Contains(search))
                     {
-                        ApplicationLog.Debug("找到导演");
                         toBePlay.Add(r);
                     }
                 }
             }
-
-            ApplicationLog.Debug("total -> " + scanResult.Count + " filtered -> " + toBePlay.Count);
 
             var pageContent = toBePlay.OrderByDescending(x=>x.ReleaseDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
@@ -137,8 +139,9 @@ namespace AVWeb.Controllers
             ViewData.Add("total", toBePlay.Count);
 
             return View();
-        } 
+        }
 
+        [Rights]
         public ActionResult Av(int avId)
         {
             var av = JavDataBaseManager.GetAV(avId);
@@ -225,9 +228,9 @@ namespace AVWeb.Controllers
             return string.Format(html,sb.ToString());
         }
 
+        [Rights]
         public ActionResult ShowMag(ShowMagType type = ShowMagType.All, int jobId = 0)
         {
-            ApplicationLog.Debug("showmag -> type " + type + " jobid " + jobId);
             var data = ScanDataBaseManager.GetAllMagByJob(jobId).Where(x => !string.IsNullOrEmpty(x.AvId)).GroupBy(x => x.AvId).ToDictionary(x => x.Key, x=>x.ToList());
             Dictionary<ShowMagKey, List<RemoteScanMag>> ret = new Dictionary<ShowMagKey, List<RemoteScanMag>>();
 
@@ -294,36 +297,49 @@ namespace AVWeb.Controllers
             return View();
         }
 
-        public ActionResult Share(string name)
+        public ActionResult ShareFile(string name)
         {
-            Dictionary<string, List<FileInfo>> data = new Dictionary<string, List<FileInfo>>();
-            FileInfo[] files = null;
-            DirectoryInfo[] dirs = null;
+            List<FileInfo> f = new List<FileInfo>();
+            List<DirectoryInfo> d = new List<DirectoryInfo>();
 
             try
             {
-                dirs = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\Share\\" + name + "\\").GetDirectories();
+                var dirs = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\Share\\" + name + "\\").GetDirectories();
+                var files = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\Share\\" + name + "\\").GetFiles();
+
+                foreach (var file in files)
+                {
+                    f.Add(file);
+                }
 
                 foreach (var dir in dirs)
                 {
-                    data.Add(dir.Name, dir.GetFiles().ToList());
+                    d.Add(dir);
                 }
+
+                ApplicationLog.Debug(name);
 
                 ViewData.Add("name", name.ToUpper());
-
-                if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "\\Share\\" + name + "\\bg.jpg"))
-                {
-                    ViewData.Add("pic", "http://www.cainqs.com:8087/share/" + name + "/bg.jpg");
-                }
             }
             catch (Exception ee)
             {
-                
+                ApplicationLog.Error(ee.ToString());
             }
 
-            return View(data);
+            ViewData.Add("file", f);
+            ViewData.Add("dir", d);
+
+            return View();
         }
 
+        public ActionResult ShareList()
+        {
+            var list = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "\\Share\\").GetDirectories();
+
+            return View(list);
+        }
+
+        [Rights]
         public ActionResult ScanJav()
         {
             #region 按页面
@@ -380,6 +396,7 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        [Rights]
         public ActionResult ScanJobList(int pageSize = 20)
         {
             var model = ScanDataBaseManager.GetScanJob(pageSize);
@@ -387,6 +404,7 @@ namespace AVWeb.Controllers
             return View(model);
         }
 
+        [Rights]
         public JsonResult DeleteScanJob(int jobId)
         {
             var ret = 0;
@@ -404,16 +422,85 @@ namespace AVWeb.Controllers
             }
         }
 
+        public ActionResult GetValidateCode()
+        {
+            ValidateCode vCode = new ValidateCode();
+            string code = vCode.CreateValidateCode(5);
+            Session["ValidateCode"] = code;
+            byte[] bytes = vCode.CreateValidateGraphic(code);
+            return File(bytes, @"image/jpeg");
+        }
+
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        public ActionResult Logout()
+        {
+            var uName = CookieTools.GetCookie("uName").Value;
+ 
+            if (!string.IsNullOrEmpty(uName))
+            {
+                CacheTools.CacheRemove(uName);
+
+                CookieTools.RemoveCookie(uName);
+                CookieTools.RemoveCookie("token");
+            }
+
+            return View("Index");
+        }
+
+        public ActionResult NoRights()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(string token = "")
+        {
+            string uName = Request.Form["userName"];
+            string uPwd = Request.Form["userPassword"];
+            string uValidate = Request.Form["validate"];
+            string serviceCode = Session["ValidateCode"] as string;//服务器端验证码
+
+            if (!string.IsNullOrEmpty(uName) && !string.IsNullOrEmpty(uPwd) && uValidate.Equals(serviceCode))
+            {
+                try
+                {
+                    if (ScanDataBaseManager.IsUser(uName, uPwd))
+                    {
+                        Guid guid = Guid.NewGuid();
+
+                        CookieTools.AddCookie("token", guid.ToString(), "");
+                        CookieTools.AddCookie("uName", uName, "");
+
+                        CacheTools.CacheInsert(uName, guid.ToString(), DateTime.Now.AddDays(1));
+
+                        TempData["LoginState"] = 1;
+
+                        return Redirect("Index");
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+
+            return View("Login");
+        }
+
+        [Rights]
         [HttpPost]
         public JsonResult PostScanJob(string jobName, string scanParameter)
         {
-            ApplicationLog.Debug("PostScanJob -> jobName " + jobName + " scanParameter " + scanParameter);
-
             var jobId = ScanDataBaseManager.InsertScanJob(jobName, scanParameter);
 
             return Json(new { msg = "success", jobId = jobId });
         }
 
+        [Rights]
         [HttpPost]
         public JsonResult Add115Task(string mag)
         {

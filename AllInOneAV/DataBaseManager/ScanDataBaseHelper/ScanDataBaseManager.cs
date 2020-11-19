@@ -348,5 +348,12 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<OneOneFiveCookieModel>();
         }
+
+        public static bool IsUser(string name, string pass)
+        {
+            var sql = string.Format("SELECT * FROM UserInfo WHERE UserName = '{0}' AND UserPassword = '{1}'", name, pass);
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<UserInfo>() == null ? false : true;
+        }
     }
 }

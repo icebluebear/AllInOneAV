@@ -1,0 +1,56 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+@Html.Partial("Header")
+
+<style>
+    /*web background*/
+    .container {
+        display: table;
+        height: 100%;
+    }
+
+    .row {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    /* centered columns styles */
+    .row-centered {
+        text-align: center;
+    }
+
+    .col-centered {
+        display: inline-block;
+        float: none;
+        text-align: left;
+        margin-right: -4px;
+    }
+</style>
+
+<div class="container">
+    <div class="row row-centered">
+        <div class="well col-md-6 col-centered">
+            <form method="post" action="/webav/login">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">用户名</label>
+                    <input type="text" class="form-control" id="userName" name="userName">
+                    <small id="emailHelp" class="form-text text-muted">未开放注册</small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">密码</label>
+                    <input type="password" class="form-control" id="password" name="userPassword">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">验证码</label>
+                    <input type="text" class="form-control" id="validCode" name="validate">
+                    <img class="form-check-label" for="exampleCheck1" src="/webav/GetValidateCode" alt="看不清？点击更换" onclick="this.src=this.src+'?'" />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

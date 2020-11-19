@@ -1,31 +1,60 @@
-﻿<div>
+﻿@using Utils
+
+<div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-info">
-        <a class="navbar-brand" href="http://www.cainqs.com:8087/webav/index">WebAV</a>
+        <a class="navbar-brand" href="http://www.cainqs.com:8087/webav/index"><img src="~/Imgs/head.jpg" style="width:50px;height:50px"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="http://www.cainqs.com:8087/webav/index">首页</a>
+                <li class="nav-item" id="index">
+                    <a class="nav-link" href="/webav/index">首页</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://www.cainqs.com:8087/webav/playav">播放</a>
+                <li class="nav-item" id="play">
+                    <a class="nav-link" href="/webav/play">播放</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://www.cainqs.com:8087/webav/scanjav">扫描Jav</a>
+                <li class="nav-item" id="scanjav">
+                    <a class="nav-link" href="/webav/scanjav">扫描Jav</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://www.cainqs.com:8087/webav/scanjoblist">浏览种子</a>
+                <li class="nav-item" id="scanjoblist">
+                    <a class="nav-link" href="/webav/scanjoblist">浏览种子</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://www.cainqs.com:8087/webav/uploadseeds">上传种子</a>
+                <li class="nav-item" id="uploadseeds">
+                    <a class="nav-link" href="/webav/uploadseeds">上传种子</a>
+                </li>
+                <li class="nav-item" id="sharelist">
+                    <a class="nav-link" href="/webav/sharelist">文件分享</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="http://www.cainqs.com:9080" target="_blank">查看PT下载</a>
                 </li>
             </ul>
+
+            <form class="form-inline my-2 my-lg-0">
+                @{
+                    var logged = false;
+                    var cookie = CookieTools.GetCookie("uName");
+                    var token = CookieTools.GetCookie("token");
+                    if (cookie != null && token != null)
+                    {
+                        if (CacheTools.GetCache<string>(cookie.Value) == token.Value)
+                        {
+                            logged = true;
+                        }
+                    }
+                }
+
+                @if (logged)
+                {
+                    <a class="btn btn-success my-2 my-sm-0" id="login" href="/webav/logout">登出@(cookie.Value)</a>
+                }
+                else
+                {
+                    <a class="btn btn-success my-2 my-sm-0" id="login" href="/webav/login">登录</a>
+                }
+            </form>
         </div>
     </nav>
 </div>

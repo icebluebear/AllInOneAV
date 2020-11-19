@@ -23,8 +23,8 @@
 <body>
     @Html.Partial("Share")
 
-    <div>
-        <div class="btn-group center" role="group" aria-label="Basic example">
+    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-primary fliterBtn active" id="byPage" data-show="pageDiv" aria-pressed="true">按页面</button>
             <button type="button" class="btn btn-secondary fliterBtn" id="byPrefix" data-show="prefixDiv" aria-pressed="true">按前缀</button>
             <button type="button" class="btn btn-success fliterBtn" id="byCate" data-show="cateDiv" aria-pressed="true">按类型</button>
@@ -32,7 +32,7 @@
             <button type="button" class="btn btn-warning fliterBtn" id="byFavi" data-show="faviDiv" aria-pressed="true">按书签</button>
         </div>
 
-        <div class="input-group" style="width:30%">
+        <div class="input-group">
             <div class="input-group-prepend">
                 <div class="input-group-text">
                     <input type="checkbox" aria-label="Radio button for following text input" id="order" checked>
@@ -52,7 +52,7 @@
             </div>
             <input type="text" id="prefixInput" class="form-control" placeholder="多个用逗号区分" aria-label="Recipient's username" aria-describedby="button-addon2">
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="prefixBtn">添加任务</button>
+                <button class="btn btn-info btn-outline-secondary" type="button" id="prefixBtn">添加任务</button>
             </div>
         </div>
     </div>
@@ -66,59 +66,63 @@
                 }
             </select>
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="pageBtn">添加任务</button>
+                <button class="btn btn-info btn-outline-secondary" type="button" id="pageBtn">添加任务</button>
             </div>
         </div>
     </div>
 
     <div id="cateDiv" class="filter" style="display:none">
         <div class="input-group mb-3" style="width:50%">
-            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择页面" data-actions-box="true" id="categorySelect">
+            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择类型" data-actions-box="true" id="categorySelect">
                 @foreach (var ca in category)
                 {
                     <option value="@ca.Url">@ca.Name</option>
                 }
             </select>
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="categoryBtn">添加任务</button>
+                <button class="btn btn-info btn-outline-secondary" type="button" id="categoryBtn">添加任务</button>
             </div>
         </div>
     </div>
 
     <div id="actressDiv" class="filter" style="display:none">
         <div class="input-group mb-3" style="width:50%">
-            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择页面" data-actions-box="true" id="actressSelect">
+            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择女优" data-actions-box="true" id="actressSelect">
                 @foreach (var ac in actress)
                 {
                     <option value="@ac.URL">@ac.Name</option>
                 }
             </select>
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="actressBtn">添加任务</button>
+                <button class="btn btn-info btn-outline-secondary" type="button" id="actressBtn">添加任务</button>
             </div>
         </div>
     </div>
 
     <div id="faviDiv" class="filter" style="display:none">
-        <div class="input-group mb-3" style="width:50%">
-            <select class="selectpicker form-control" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择页面" data-actions-box="true" id="faviSelect">
-                @foreach(var fc in favi)
-                { 
-                    <optgroup label="@fc.Key">
-                        @foreach (var f in fc.Value)
-                        {
-                            <option value="@f.Url">@f.Name</option>
-                        }
-                    </optgroup>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="border:none;padding:0">
+                @foreach (var fc in favi)
+                {
+                    <div class="input-group mb-3">
+                        <select class="selectpicker form-control faviSelect" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择@(fc.Key)" data-actions-box="true">
+                            @foreach (var f in fc.Value)
+                            {
+                                <option value="@f.Url">@f.Name</option>
+                            }
+                        </select>
+                    </div>
                 }
-            </select>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="faviBtn">添加任务</button>
-            </div>
+            </li>
+        </ul>
+        <div class="input-group-append">
+            <button class="btn btn-info btn-outline-secondary" type="button" id="faviBtn">添加任务</button>
         </div>
     </div>
 
     <script>
+        $(".nav-item").removeClass("active");
+        $("#scanjav").addClass("active");
 
         $('.selectpicker').selectpicker({
             'noneSelectedText': '请选择',
@@ -165,8 +169,20 @@
         });
 
         $("#faviBtn").click(function () {
-            var jobName = $(".filter-option-inner-inner:visible").html();
-            var input = $("#faviSelect").val();
+            var jobName = '';
+
+            $(".filter-option-inner-inner:visible").each(function (index, element) {
+                if ($(this).html() != undefined && $(this).html() != '') {
+                    jobName += $(this).html() + ' ';
+                }
+            });
+
+            var input = [];
+
+            $(".faviSelect").each(function (index, element) {
+                if ($(this).val() != undefined && $(this).val() != [] && $(this).val() != '' )
+                input.push.apply(input, $(this).val());
+            });
 
             var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
 

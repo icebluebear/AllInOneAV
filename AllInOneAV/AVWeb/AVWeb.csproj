@@ -148,6 +148,7 @@
     <Compile Include="Controllers\AVApiController.cs" />
     <Compile Include="Controllers\ComicController.cs" />
     <Compile Include="Controllers\WebAvController.cs" />
+    <Compile Include="Filter\Rights.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -159,6 +160,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Imgs\head.jpg" />
     <Content Include="Scripts\waterfall.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -177,10 +179,14 @@
     <Content Include="Views\WebAv\AV.cshtml" />
     <Content Include="Views\WebAv\Comic.cshtml" />
     <Content Include="Views\WebAv\ShowMag.cshtml" />
-    <Content Include="Views\WebAv\ShareVideo.cshtml" />
+    <Content Include="Views\WebAv\ShareFile.cshtml" />
     <Content Include="Views\Shared\Header.cshtml" />
     <Content Include="Views\WebAv\ScanJav.cshtml" />
     <Content Include="Views\WebAv\ScanJobList.cshtml" />
+    <Content Include="Views\WebAv\Play.cshtml" />
+    <Content Include="Views\WebAv\ShareList.cshtml" />
+    <Content Include="Views\WebAv\login.cshtml" />
+    <Content Include="Views\WebAv\NoRights.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

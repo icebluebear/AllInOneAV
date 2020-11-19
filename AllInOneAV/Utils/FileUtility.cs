@@ -401,6 +401,12 @@ namespace Utils
                     Directory.CreateDirectory(whereToSave);
                 }
 
+
+                if (!Directory.Exists(whereToSave + "\\" + subFolder))
+                {
+                    Directory.CreateDirectory(whereToSave + "\\" + subFolder);
+                }
+
                 ExcuteProcess(ffmpegLocation, command_line, (s, t) => duration += (t.Data));
 
                 duration = duration.Substring(duration.IndexOf("Duration") + 10);
@@ -425,20 +431,20 @@ namespace Utils
 
                 foreach (var item in frame)
                 {
-                    if (File.Exists(whereToSave + subFolder + "-" + currentIndex + ".jpg"))
+                    if (File.Exists(whereToSave + "\\" + subFolder + "\\" + currentIndex + ".jpg"))
                     {
-                        File.Delete(whereToSave + subFolder + "-" + currentIndex + ".jpg");
+                        File.Delete(whereToSave + "\\" + subFolder + "\\" + currentIndex + ".jpg");
                     }
 
                     string screenLine = "";
 
                     if (size)
                     {
-                        screenLine = "-ss " + item + " -i \"" + fullName + "\" -s " + width + "x" + height + " -vframes 1 \"" + whereToSave + subFolder + "-" + currentIndex + ".jpg\"";
+                        screenLine = "-ss " + item + " -i \"" + fullName + "\" -s " + width + "x" + height + " -vframes 1 \"" + whereToSave + "\\" + subFolder + "\\" + currentIndex + ".jpg\"";
                     }
                     else
                     {
-                        screenLine = "-ss " + item + " -i \"" + fullName + "\" -vframes 1 \"" + whereToSave + subFolder + "-" + currentIndex + ".jpg\"";
+                        screenLine = "-ss " + item + " -i \"" + fullName + "\" -vframes 1 \"" + whereToSave + "\\" + subFolder + "\\" + currentIndex + ".jpg\"";
                     }
 
                     result++;

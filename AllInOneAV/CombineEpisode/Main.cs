@@ -32,6 +32,7 @@ namespace CombineEpisode
         private static readonly string imageFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
         private static readonly string ffmpeg = "c:\\setting\\ffmpeg.exe";
         private static readonly string combineFilePath = "c:\\setting\\combinefile\\";
+        private static readonly string thumsFolder = "c:\\setting\\thumbs\\";
         private static List<Model.ScanModels.Match> matchesAV = new List<Model.ScanModels.Match>();
         private static List<FileInfo> recentFi = new List<FileInfo>();
         private static List<RefreshModel> refreshModel = new List<RefreshModel>();
@@ -1282,6 +1283,11 @@ namespace CombineEpisode
                         Tag = fi
                     };
                     tn.Nodes.Add(stn);
+
+                    if (cbThums.Checked)
+                    {
+                        FileUtility.GetThumbnails(fi.FullName, ffmpeg, thumsFolder, fi.Name, 6, false);
+                    }
                 }
 
                 treeView1.Nodes.Add(tn);
@@ -3364,6 +3370,27 @@ namespace CombineEpisode
         {
             rtbMatch.SelectionStart = rtbMatch.Text.Length;
             rtbMatch.ScrollToCaret();
+        }
+
+        private void contextMenuStrip3_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void 看截图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FileInfo fi = (FileInfo)treeView1.SelectedNode.Tag;
+
+            if (Directory.Exists(thumsFolder + fi.Name))
+            {
+                var pics = Directory.GetFiles(thumsFolder + fi.Name);
+
+                if (pics != null && pics.Length > 0)
+                {
+                    Thums th = new Thums(pics.ToList());
+                    th.ShowDialog();
+                }
+            }
         }
     }
 

@@ -121,6 +121,12 @@
     <Compile Include="SeedList.Designer.cs">
       <DependentUpon>SeedList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Thums.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Thums.Designer.cs">
+      <DependentUpon>Thums.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="115Search.resx">
       <DependentUpon>115Search.cs</DependentUpon>
     </EmbeddedResource>
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SeedList.resx">
       <DependentUpon>SeedList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Thums.resx">
+      <DependentUpon>Thums.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="AvVideoHelper_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">

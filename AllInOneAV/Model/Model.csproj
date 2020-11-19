@@ -82,6 +82,7 @@
     <Compile Include="MangaModel\ManhuadbPic.cs" />
     <Compile Include="OneOneFive\FileListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScanModels\UserInfo.cs" />
     <Compile Include="ScanModels\DuplicateJSON.cs" />
     <Compile Include="ScanModels\FaviScan.cs" />
     <Compile Include="ScanModels\Finish.cs" />

@@ -1,0 +1,114 @@
+﻿@using Utils;
+
+@{
+    Layout = null;
+
+    List<FileInfo> files = (List<FileInfo>)ViewData["file"];
+    List<DirectoryInfo> dirs = (List<DirectoryInfo>)ViewData["dir"];
+    string current = (string)ViewData["name"];
+    string[] trace = current.Split('\\');
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>分享 - @current</title>
+
+    @Html.Partial("Header")
+
+    @if (ViewData["pic"] != null)
+    {
+        <style>
+            .jumbotron {
+                background: url(@((string)ViewData["pic"]));
+            }
+        </style>
+    }
+</head>
+
+<body>
+    @Html.Partial("Share")
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">@current</h1>
+            <p class="lead">共有@(files.Count)个文件 @(dirs.Count)个文件夹</p>
+        </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="http://www.cainqs.com:8087/webav/sharelist">分享列表</a></li>
+            @if (trace.Length > 1)
+            {
+                for (int i = 0; i < trace.Length - 1; i++)
+                {
+                    var name = "";
+
+                    for (int j = 0; j <= i; j++)
+                    {
+                        name += trace[j] + "\\";
+                    }
+
+                    <li class="breadcrumb-item"><a href="@("http://www.cainqs.com:8087/webav/sharefile?name=" + name.Substring(0, name.Length - 1))">@trace[i]</a></li>
+                }
+
+                <li class="breadcrumb-item active" aria-current="page">@trace[trace.Length - 1]</li>
+            }
+            else if (trace.Length == 1)
+            {
+                <li class="breadcrumb-item active" aria-current="page">@trace[0]</li>
+            }
+        </ol>
+    </nav>
+
+    <ul class="list-group">
+        @if (files.Count <= 0)
+        {
+            <div class="alert alert-warning" role="alert">
+                当前目录没有文件
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-primary" role="alert">
+                文件
+            </div>
+        }
+        @foreach (var m in files)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                @m.Name
+                <a class="badge badge-primary badge-pill" download="@(m.Name)" href="@("http://www.cainqs.com:8087/share/" + current.Replace("\\","/") + "/" + m.Name)">下载 大小@(FileSize.GetAutoSizeString(m.Length, 1))</a>
+            </li>
+        }
+    </ul>
+
+    <ul class="list-group">
+        @if (dirs.Count <= 0)
+        {
+            <div class="alert alert-warning" role="alert">
+                当前目录没有子目录
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-primary" role="alert">
+                目录
+            </div>
+        }
+        @foreach (var d in dirs)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                @d.Name
+                <a class="badge badge-primary badge-pill" href="@("http://www.cainqs.com:8087/webav/sharefile?name=" + current + "\\" + HttpUtility.UrlEncode(d.Name))">进入</a>
+            </li>
+        }
+    </ul>
+</body>
+</html>
