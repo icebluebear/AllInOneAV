@@ -14,7 +14,14 @@ namespace GenerateReport
     {
         static void Main(string[] args)
         {
-            Service.ReportService.GenerateReport();
+            if (args.Length == 0)
+            {
+                Service.ReportService.GenerateReport();
+            }
+            else
+            {
+                Service.ReportService.GenerateReportDataOnly();
+            }
         }
     }
 }

@@ -43,6 +43,7 @@ namespace UnitTest
         private static string RootFolder = JavINIClass.IniReadValue("Sis", "root");
         private static string ListPattern = JavINIClass.IniReadValue("Sis", "ListPattern");
         private static string ListDatePattern = JavINIClass.IniReadValue("Sis", "ListDatePattern");
+        private static string FFMpeg = "C:\\Setting\\ffmpeg.exe";
         private static string Prefix = JavINIClass.IniReadValue("Sis", "Prefix");
         private static readonly string imageFolder = JavINIClass.IniReadValue("Jav", "imgFolder");
         private static readonly Dictionary<string, string> ChannelMapping = new Dictionary<string, string> { { AsiaCensoredAuthorshipSeed, "亚洲有码原创" }, { AsiaCensoredSection, "亚洲有码转帖" }, { WesternUncensoredAuthorshipSeed, "欧美无码原创" }, { WesternUncensored, "欧美无码转帖" }, { AsiaUncensoredAuthorshipSeed, "亚洲无码原创" }, { AsiaUncensoredSection, "亚洲无码转帖" } };
@@ -50,13 +51,10 @@ namespace UnitTest
 
         private static LockModel lockModel = new LockModel();
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Guid guid = Guid.NewGuid();
+            
 
-            Console.WriteLine(guid.ToString());
-
-            Console.ReadKey();
         }
 
         private static void Test115Search()
@@ -95,7 +93,7 @@ namespace UnitTest
 
         private static void TestEverything(EverythingSearchEnum type = EverythingSearchEnum.Video)
         {
-            var content = "mvsd-029 | mvsd029";
+            var content = "!c:\\ mvsd-029 | mvsd029 ";
 
             var res = new EverythingHelper().SearchFile(content, type);
         }

@@ -402,6 +402,8 @@ namespace AVWeb.Controllers
         {
             var model = ScanDataBaseManager.GetScanJob(pageSize);
 
+            model.ForEach(x => x.CurrentItemCount = ScanDataBaseManager.GetScanJobItem(x.ScanJobId));
+
             return View(model);
         }
 

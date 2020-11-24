@@ -13,6 +13,8 @@ namespace Service
 {
     public class MagService
     {
+        private static readonly string sukebei = JavINIClass.IniReadValue("Mag", "sukebei");
+
         public static List<SeedMagnetSearchModel> SearchBtsow(string id)
         {
             List<SeedMagnetSearchModel> ret = new List<SeedMagnetSearchModel>();
@@ -94,11 +96,18 @@ namespace Service
 
             try
             {
-                //var serachContent = "https://sukebei.nyaa.pro/search/c_0_0_k_" + id;
-                //var htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.pro", serachContent, cc);
+                HtmlResponse htmlRet = new HtmlResponse() { Success = false };
 
-                var serachContent = "https://sukebei.nyaa.si?f=0&c=0_0&q=" + id;
-                var htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.si", serachContent, cc);
+                if (sukebei == "pro")
+                {
+                    var serachContent = "https://sukebei.nyaa.pro/search/c_0_0_k_" + id;
+                    htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.pro", serachContent, cc);
+                }
+                else if (sukebei == "si")
+                {
+                    var serachContent = "https://sukebei.nyaa.si?f=0&c=0_0&q=" + id;
+                    htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.si", serachContent, cc);
+                }
 
                 if (htmlRet.Success)
                 {

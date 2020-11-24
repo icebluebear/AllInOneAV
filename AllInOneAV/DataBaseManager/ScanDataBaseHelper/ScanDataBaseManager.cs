@@ -2,13 +2,12 @@
 using Model.FindModels;
 using Model.JavModels;
 using Model.ScanModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utils;
 
 namespace DataBaseManager.ScanDataBaseHelper
@@ -260,7 +259,7 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static int InsertRemoteScanMag(RemoteScanMag entity)
         {
-            var sql = string.Format("INSERT INTO RemoteScanMag (AvId, AvUrl, AvName, MagTitle, MagUrl, MagSize, SearchStatus, MatchFile, CreateTime, MagDate, ScanJobId) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', {5}, {6}, '{7}', GETDATE(), GETDATE(), {8})", entity.AvId, entity.AvUrl, entity.AvName, entity.MagTitle, entity.MagUrl, entity.MagSize, entity.SearchStatus, entity.MatchFile, entity.JobId);
+            var sql = string.Format("INSERT INTO RemoteScanMag (AvId, AvUrl, AvName, MagTitle, MagUrl, MagSize, SearchStatus, MatchFile, CreateTime, MagDate, ScanJobId) VALUES ('{0}', '{1}', N'{2}', '{3}', '{4}', {5}, {6}, N'{7}', GETDATE(), GETDATE(), {8})", entity.AvId, entity.AvUrl, entity.AvName, entity.MagTitle, entity.MagUrl, entity.MagSize, entity.SearchStatus, entity.MatchFile, entity.JobId);
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
@@ -300,6 +299,13 @@ namespace DataBaseManager.ScanDataBaseHelper
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ScanJob>();
         }
 
+        public static int GetScanJobItem(int scanJobId)
+        {
+            var sql = "SELECT COUNT(DISTINCT(AvId)) FROM RemoteScanMag WHERE ScanJobID = " + scanJobId;
+
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(con, CommandType.Text, sql));
+        }
+
         public static int DeleteScanJob(int jobId)
         {
             var sql = "DELETE FROM ScanJob WHERE ScanJobId=" + jobId;
@@ -314,9 +320,9 @@ namespace DataBaseManager.ScanDataBaseHelper
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
 
-        public static int SetScanJobFinish(int scanJobId)
+        public static int SetScanJobFinish(int scanJobId, int status, int totalItem = 0)
         {
-            var sql = "UPDATE ScanJob SET IsFinish = 1, EndTime = GETDATE() WHERE ScanJobId = " + scanJobId;
+            var sql = "UPDATE ScanJob SET IsFinish = " + status + ", TotalItem = " + totalItem + ", EndTime = GETDATE() WHERE ScanJobId = " + scanJobId;
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
@@ -354,6 +360,82 @@ namespace DataBaseManager.ScanDataBaseHelper
             var sql = string.Format("SELECT * FROM UserInfo WHERE UserName = '{0}' AND UserPassword = '{1}'", name, pass);
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<UserInfo>() == null ? false : true;
+        }
+
+        public static int DeleteReportItem()
+        {
+            var sql = "TRUNCATE TABLE ReportItem";
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int InsertOrUpdateReportItem(ReportType reportType, string itemName, int exist, double existSize, int reportId)
+        {
+            var sql = string.Format(@"IF EXISTS (SELECT 1 FROM ReportItem WHERE ReportType = {0} AND ItemName = '{1}' AND ReportId = {4})
+                                            UPDATE ReportItem SET ExistCount = ExistCount + {2}, TotalCount = TotalCount + 1, TotalSize = TotalSize + {3} WHERE ReportType = {0} AND ItemName = '{1}' AND ReportId = {4}
+                                        ELSE
+                                            INSERT INTO ReportItem (ReportType, ItemName, ExistCount, TotalCount, TotalSize, ReportId) VALUES ({0}, '{1}', {2}, 1, {3}, {4})", (int)reportType, itemName, exist, existSize, reportId);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int BatchInserReportItem(List<ReportItem> items)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ReportItemId", typeof(int));
+            dt.Columns.Add("ReportType", typeof(int));
+            dt.Columns.Add("ItemName", typeof(string));
+            dt.Columns.Add("ExistCount", typeof(int));
+            dt.Columns.Add("TotalCount", typeof(int));
+            dt.Columns.Add("TotalSize", typeof(double));
+            dt.Columns.Add("ReportId", typeof(int));
+
+            foreach(var item in items)
+            {
+                dt.Rows.Add(null, (int)item.ReportType, item.ItemName, item.ExistCount, item.TotalCount, item.TotalSize, item.ReportId);
+            }
+
+            using (SqlConnection conn = new SqlConnection(con))
+            {
+                SqlBulkCopy bulkCopy = new SqlBulkCopy(conn);
+                bulkCopy.DestinationTableName = "ReportItem";
+                bulkCopy.BatchSize = dt.Rows.Count;
+                conn.Open();
+                if (dt != null && dt.Rows.Count != 0)
+                {
+                    bulkCopy.WriteToServer(dt);
+                }
+            }
+
+            return items.Count;
+        }
+
+        public static int InsertReportItem(ReportType reportType, string itemName, int exist, double existSize, int reportId)
+        {
+            var sql = string.Format(@"INSERT INTO ReportItem (ReportType, ItemName, ExistCount, TotalCount, TotalSize, ReportId) VALUES ({0}, '{1}', {2}, 1, {3}, {4})", (int)reportType, itemName, exist, existSize, reportId);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int InsertReport(Report entity)
+        {
+            var sql = string.Format(@"INSERT INTO Report (ReportDate,TotalCount,TotalExist,TotalExistSize,LessThenOneGiga,OneGigaToTwo,TwoGigaToFour,FourGigaToSix,GreaterThenSixGiga,Extension,H265Count,ChineseCount,IsFinish,EndDate) VALUES (GETDATE(), {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, '{8}', {9}, {10}, {11}, GETDATE()) SELECT @@IDENTITY", entity.TotalCount, entity.TotalExist, entity.TotalExistSize, entity.LessThenOneGiga, entity.OneGigaToTwo, entity.TwoGigaToFour, entity.FourGigaToSix, entity.GreaterThenSixGiga, entity.Extension, entity.H265Count, entity.ChineseCount, 0);
+
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(con, CommandType.Text, sql));
+        }
+
+        public static int UpdateReport(Report entity)
+        {
+            var sql = string.Format("UPDATE Report SET TotalExist = {0}, TotalExistSize = {1}, LessThenOneGiga = {2}, OneGigaToTwo = {3}, TwoGigaToFour = {4}, FourGigaToSix = {5}, GreaterThenSixGiga = {6}, Extension = '{7}', H265Count = {8}, ChineseCount = {9} WHERE ReportId = " + entity.ReportId, entity.TotalExist, entity.TotalExistSize, entity.LessThenOneGiga, entity.OneGigaToTwo, entity.TwoGigaToFour, entity.FourGigaToSix, entity.GreaterThenSixGiga, JsonConvert.SerializeObject(entity.ExtensionModel), entity.H265Count, entity.ChineseCount);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int UpdateReportFinish(int id)
+        {
+            var sql = "UPDATE Report SET IsFinish = 1, EndDate = GETDATE() WHERE ReportID = " + id;
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
     }
 }

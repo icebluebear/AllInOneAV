@@ -3224,6 +3224,7 @@ namespace CombineEpisode
             if (scanResult == null || scanResult.Count <= 0)
             {
                 scanResult = ScanDataBaseManager.GetMatchScanResult();
+                scanResult = scanResult.Where(x => !string.IsNullOrEmpty(x.Location)).ToList();
             }
 
             toBePlay = scanResult;
@@ -3315,13 +3316,16 @@ namespace CombineEpisode
 
             foreach (var l in list)
             {
-                ListViewItem lvi = new ListViewItem(FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2) + " " + l.AvId + " " + l.AvName + " " + l.MatchAvId)
-                {
-                    ImageIndex = ilPlay.Images.IndexOfKey(l.AvName),
-                    Tag = l.AvFilePath
-                };
+                if (l.FileSize > 0)
+                { 
+                    ListViewItem lvi = new ListViewItem(FileSize.GetAutoSizeString(new FileInfo(l.AvFilePath).Length, 2) + " " + l.AvId + " " + l.AvName + " " + l.MatchAvId)
+                    {
+                        ImageIndex = ilPlay.Images.IndexOfKey(l.AvName),
+                        Tag = l.AvFilePath
+                    };
 
-                ListViewItemUpdate2(lvPlay, lvi);
+                    ListViewItemUpdate2(lvPlay, lvi);
+                }
             }
 
             lvPlay.EndUpdate();

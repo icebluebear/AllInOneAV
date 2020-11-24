@@ -45,6 +45,8 @@ namespace ScanJavMagUrl
                     {
                         arg = string.Format("dolist {0} {1} {2}", string.Join(",", parameter.StartingPage), parameter.IsAsc, parameter.PageSize);
                         jobId = parameter.ScanJobId;
+
+                        ScanDataBaseManager.SetScanJobFinish(jobId, -1);
                     }
                 }
                 else
@@ -60,12 +62,14 @@ namespace ScanJavMagUrl
                 
             }
 
-            ScanDataBaseManager.SetScanJobFinish(jobId);
+            ScanDataBaseManager.SetScanJobFinish(jobId, 1, models.Count);
         }
 
         async static void DoJob(string arg, int jobId)
         {
             await StartJavRefresh("", arg, OutputJavRefresh);
+
+            ScanDataBaseManager.SetScanJobFinish(jobId, -1, models.Count);
 
             await Task.Run(() => UpdateRefreshUi(jobId));
 
@@ -112,26 +116,26 @@ namespace ScanJavMagUrl
         private static void UpdateRefreshUi(int jobId = 0)
         {
             Random ran = new Random();
+            int count = 1;
 
-            Parallel.ForEach(models, new ParallelOptions { MaxDegreeOfParallelism = 5 }, rm =>
+            Parallel.ForEach(models, new ParallelOptions { MaxDegreeOfParallelism = 10 }, rm =>
             {
                 RemoteScanMag entity = new RemoteScanMag();
                 entity.JobId = jobId;
 
-                Console.WriteLine("处理 --> " + rm.Name + models.IndexOf(rm) + "/" + models.Count);
+                Console.WriteLine("处理 --> " + count++ + "/" + models.Count);
 
-                var matchFiles = new EverythingHelper().SearchFile(rm.Id + " | " + rm.Id.Replace("-", ""), EverythingSearchEnum.Video);
+                var matchFiles = new EverythingHelper().SearchFile("!c:\\ " + rm.Id + " | " + rm.Id.Replace("-", ""), EverythingSearchEnum.Video);
 
                 var list = MagService.SearchSukebei(rm.Id);
 
                 if (list != null && list.Count > 0)
                 {
-                    ScanDataBaseManager.DeleteMagUrlById(rm.Id);
-
                     if (matchFiles.Count > 0)
                     {
+                        var biggestFile = matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length));
                         entity.SearchStatus = 2;
-                        entity.MatchFile = matchFiles.FirstOrDefault(x => x.Length == matchFiles.Max(y => y.Length)).FullName;
+                        entity.MatchFile = biggestFile.FullName;
                     }
                     else
                     {
@@ -149,7 +153,16 @@ namespace ScanJavMagUrl
                         entity.MagUrl = seed.MagUrl;
                         //entity.SearchStatus = 1;
 
-                        ScanDataBaseManager.InsertRemoteScanMag(entity);
+                        try
+                        {
+                            ScanDataBaseManager.InsertRemoteScanMag(entity);
+                        }
+                        catch (Exception ee)
+                        {
+                            entity.MatchFile = "";
+                            entity.SearchStatus = 1;
+                            ScanDataBaseManager.InsertRemoteScanMag(entity);
+                        }
                     }
                 }
                 else
@@ -157,8 +170,6 @@ namespace ScanJavMagUrl
                     Console.WriteLine("没搜到");
                     entity.SearchStatus = 0;
                 }
-
-                Thread.Sleep(10 * ran.Next(5));
             });
         }
     }

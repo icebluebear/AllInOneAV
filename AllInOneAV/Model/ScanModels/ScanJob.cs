@@ -14,5 +14,7 @@ namespace Model.ScanModels
         public DateTime EndTime { get; set; }
         public int IsFinish { get; set; }
         public string ScanParameter { get; set; }
+        public int TotalItem { get; set; }
+        public int CurrentItemCount { get; set; }
     }
 }

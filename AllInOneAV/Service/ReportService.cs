@@ -3,6 +3,7 @@ using DataBaseManager.ScanDataBaseHelper;
 using Model.Common;
 using Model.JavModels;
 using Model.ScanModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -441,5 +442,169 @@ namespace Service
 
             Console.WriteLine(reportStr);
        }
+
+        public static void GenerateReportDataOnly()
+        {
+            List<ReportItem> items = new List<ReportItem>();
+            ScanDataBaseManager.DeleteReportItem();
+            var allAv = JavDataBaseManager.GetAllAV();
+            var allMatch = GenerateExistingAVs();
+
+            Report report = new Report();
+            report.ExtensionModel = new Dictionary<string, int>();
+            report.TotalCount = allAv.Count;
+
+            var reportId = ScanDataBaseManager.InsertReport(report);
+            report.ReportId = reportId;
+            int process = 0;
+
+            foreach(var av in allAv)
+            { 
+                ProcessReportType(av, allMatch, report, items);
+                process++;
+                Console.WriteLine(process + " / " + allAv.Count);
+            };
+
+            ScanDataBaseManager.BatchInserReportItem(items);
+            ScanDataBaseManager.UpdateReport(report);
+            ScanDataBaseManager.UpdateReportFinish(reportId);
+        }
+
+        private static void ProcessReportType(AV av, Dictionary<int, List<FileInfo>> existFiles, Report report, List<ReportItem> items)
+        {
+            int exist = 0;
+            double existSize = 0d;
+
+            if (existFiles.ContainsKey(av.AvId))
+            {
+                var file = existFiles[av.AvId];
+
+                if (file.Count() > 0)
+                {
+                    var biggestFile = file.FirstOrDefault(x => x.Length == file.Max(y => y.Length));
+
+                    exist = 1;
+                    existSize = biggestFile.Length;
+
+                    report.TotalExist += 1;
+                    report.TotalExistSize += biggestFile.Length;
+
+                    var extensionKey = biggestFile.Extension;
+
+                    if (report.ExtensionModel.ContainsKey(extensionKey))
+                    {
+                        report.ExtensionModel[extensionKey] = report.ExtensionModel[extensionKey] + 1;
+                    }
+                    else
+                    {
+                        report.ExtensionModel.Add(extensionKey, 1);
+                    }
+
+                    if (biggestFile.Length < (long)1 * 1024 * 1000 * 1000)
+                    {
+                        report.LessThenOneGiga++;
+                    }
+
+                    if (biggestFile.Length >= (long)1 * 1024 * 1000 * 1000 && biggestFile.Length < (long)2 * 1024 * 1000 * 1000)
+                    {
+                        report.OneGigaToTwo++;
+                    }
+
+                    if (biggestFile.Length >= (long)2 * 1024 * 1000 * 1000 && biggestFile.Length < (long)4 * 1024 * 1000 * 1000)
+                    {
+                        report.TwoGigaToFour++;
+                    }
+
+                    if (biggestFile.Length >= (long)4 * 1024 * 1000 * 1000 && biggestFile.Length < (long)6 * 1024 * 1000 * 1000)
+                    {
+                        report.FourGigaToSix++;
+                    }
+
+                    if (biggestFile.Length >= (long)6 * 1024 * 1000 * 1000)
+                    {
+                        report.GreaterThenSixGiga++;
+                    }
+
+                    if (biggestFile.Name.Contains("-C" + biggestFile.Extension))
+                    {
+                        report.ChineseCount++;
+                    }
+                }
+            }
+
+            foreach (ReportType type in Enum.GetValues(typeof(ReportType)))
+            {
+                switch (type)
+                {
+                    case ReportType.Actress:
+                        foreach (var itemName in av.Actress.Split(',').Where(x => !string.IsNullOrEmpty(x)))
+                        {
+                            ProcessReportItem(ReportType.Actress, itemName, exist, existSize, report.ReportId, items);
+                        }
+                        break;
+                    case ReportType.Category:
+                        foreach (var itemName in av.Category.Split(',').Where(x => !string.IsNullOrEmpty(x)))
+                        {
+                            ProcessReportItem(ReportType.Category, itemName, exist, existSize, report.ReportId, items);
+                        }
+                        break;
+                    case ReportType.Company:
+                        foreach (var itemName in av.Company.Split(',').Where(x => !string.IsNullOrEmpty(x)))
+                        {
+                            ProcessReportItem(ReportType.Company, itemName, exist, existSize, report.ReportId, items);
+                        }
+                        break;
+                    case ReportType.Date:
+                        ProcessReportItem(ReportType.Date, av.ReleaseDate.ToString("yyyy-dd-mm"), exist, existSize, report.ReportId, items);
+                        break;
+                    case ReportType.Director:
+                        foreach (var itemName in av.Director.Split(',').Where(x => !string.IsNullOrEmpty(x)))
+                        {
+                            ProcessReportItem(ReportType.Director, itemName, exist, existSize, report.ReportId, items);
+                        }
+                        break;
+                    case ReportType.Prefix:
+                        var prefix = av.ID.Split('-').Length >= 2 ? av.ID.Split('-')[0] : "";
+                        if (!string.IsNullOrEmpty(prefix))
+                        {
+                            ProcessReportItem(ReportType.Prefix, prefix, exist, existSize, report.ReportId, items);
+                        }
+                        break;
+                    case ReportType.Publisher:
+                        foreach (var itemName in av.Publisher.Split(',').Where(x => !string.IsNullOrEmpty(x)))
+                        {
+                            ProcessReportItem(ReportType.Publisher, itemName, exist, existSize, report.ReportId, items);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private static void ProcessReportItem(ReportType type, string itemName, int exist, double existSize, int reportId, List<ReportItem> items)
+        {
+            var tempItem = items.FirstOrDefault(x => x.ReportId == reportId && x.ItemName == itemName && x.ReportType == type);
+            if (tempItem != null)
+            {
+                tempItem.TotalSize += existSize;
+                tempItem.ExistCount += exist;
+                tempItem.TotalCount += 1;
+            }
+            else
+            {
+                items.Add(new ReportItem()
+                {
+                    ExistCount = exist,
+                    ItemName = itemName,
+                    ReportType = type,
+                    TotalCount = 1,
+                    TotalSize = existSize,
+                    ReportId = reportId
+                });
+            }
+
+            //ScanDataBaseManager.InsertReportItem(type, FileUtility.ReplaceInvalidChar(itemName), exist, existSize, reportId);
+        }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using Model.Common;
 using Model.JavModels;
 using Model.ScanModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -383,6 +384,23 @@ namespace Utils
             }
 
             return info;
+        }
+
+        public async static Task<bool> IsH265(string fName, string ffmpegLocation)
+        {
+            bool ret = false;
+
+            var info = await GetFfmpegInfo(fName, ffmpegLocation);
+
+            info = info.Substring(info.IndexOf("Video: "));
+            info = info.Substring(0, info.IndexOf(","));
+
+            if (info.Contains("hevc"))
+            {
+                ret = true;
+            }
+
+            return ret;
         }
 
         public static int GetThumbnails(string fName, string ffmpegLocation, string whereToSave, string subFolder, int howManyPictures, bool size, int width = 320, int height = 240)
@@ -981,6 +999,62 @@ namespace Utils
         private static int min(int a, int b, int c)
         {
             return Math.Min(Math.Min(a, b), c);
+        }
+
+        public static void CollectExistAvFile(string FFmpeg, DateTime date)
+        {
+            List<AvInfo> infos = new List<AvInfo>();
+            List<FileInfo> fInfos = new List<FileInfo>();
+
+            foreach (var drive in Environment.GetLogicalDrives())
+            {
+                var targetFolder = drive + "\\fin\\";
+
+                if (Directory.Exists(targetFolder))
+                {
+                    fInfos.AddRange(new DirectoryInfo(targetFolder).GetFiles());
+                }
+            }
+
+            foreach (var fi in fInfos)
+            {
+                CollectExistAvInfo(infos, fi, FFmpeg);
+            }
+
+            var fileName = "G:\\AllScan" + date.ToString("yyyyMMdd") + ".json";
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+
+                Thread.Sleep(100);
+            }
+            File.Create(fileName).Close();
+            StreamWriter sw = new StreamWriter(fileName);
+            sw.WriteLine(JsonConvert.SerializeObject(infos));
+            sw.Close();
+        }
+
+        public async static void CollectExistAvInfo(List<AvInfo> infos, FileInfo info, string ffmpeg)
+        {
+            AvInfo i = new AvInfo();
+
+            i.Location = info.DirectoryName;
+            i.Name = info.Name.Replace(info.Extension, "");
+            i.Extension = info.Extension;
+            i.Size = info.Length;
+            i.IsChinese = (i.Name.EndsWith("-C") || i.Name.EndsWith("-c"));
+            i.CreateTime = i.CreateTime;
+
+            try
+            {
+                //i.IsH265 = await FileUtility.IsH265(info.FullName, ffmpeg);
+            }
+            catch (Exception ee)
+            {
+
+            }
+
+            infos.Add(i);
         }
     }
 
