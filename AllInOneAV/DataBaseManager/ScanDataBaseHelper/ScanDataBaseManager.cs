@@ -238,7 +238,8 @@ namespace DataBaseManager.ScanDataBaseHelper
 
         public static int InsertFaviScan(FaviScan favi)
         {
-            var sql = "INSERT INTO FaviScan (Category, Url, Name) VALUES ('" + favi.Category + "', '" + favi.Url + "', '" + favi.Name + "')";
+            var sql = @"IF NOT EXISTS (SELECT * FROM FaviScan WHERE [Url] = '" + favi.Url + @"')
+                            INSERT INTO FaviScan (Category, Url, Name) VALUES ('" + favi.Category + "', '" + favi.Url + "', '" + favi.Name + "')";
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }

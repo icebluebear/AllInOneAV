@@ -5,11 +5,16 @@
 <head>
     <meta charset="utf-8" />
     <title>WebAV-播放</title>
+    @Html.Partial("Header")
 </head>
 
-<div>
-    <video src="@path" controls/>
-</div>
+<body>
+    @Html.Partial("Share")
 
-<script>
-</script>
+    <div>
+        <video src="@path" controls />
+    </div>
+
+    <script>
+    </script>
+</body>

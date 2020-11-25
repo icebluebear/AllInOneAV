@@ -1,0 +1,125 @@
+﻿@{
+    var cookieMode = ViewData["cookieMode"].ToString();
+    var sukebei = ViewData["sukebei"].ToString();
+}
+
+<head>
+    <meta charset="utf-8" />
+    <title>WebAV-设置</title>
+    @Html.Partial("Header")
+</head>
+
+<body>
+    @Html.Partial("Share")
+
+    <div class="container-fluid">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">抓取Jav模式 None:直接抓取，Process:启动Chrome, Chrome:使用ChromeDriver</span>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="cookieMode" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @cookieMode
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" data-selector="cookieMode" href="javascript:;">None</a>
+                    <a class="dropdown-item" data-selector="cookieMode" href="javascript:;">Process</a>
+                    <a class="dropdown-item" data-selector="cookieMode" href="javascript:;">Chrome</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Sukebei网址</span>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="magMode" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @sukebei
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" data-selector="magMode" href="javascript:;">pro</a>
+                    <a class="dropdown-item" data-selector="magMode" href="javascript:;">si</a>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="iniBtn">保存</button>
+    </div>
+
+    <div class="container-fluid">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Jav收藏设置</span>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="favi" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    actress
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" data-selector="favi" href="javascript:;">actress</a>
+                    <a class="dropdown-item" data-selector="favi" href="javascript:;">category</a>
+                    <a class="dropdown-item" data-selector="favi" href="javascript:;">prefix</a>
+                    <a class="dropdown-item" data-selector="favi" href="javascript:;">director</a>
+                </div>
+            </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Url</span>
+            </div>
+            <input type="text" aria-label="First name" class="form-control" id="url">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">名称</span>
+            </div>
+            <input type="text" aria-label="First name" class="form-control" id="name">
+        </div>
+
+        <button type="button" class="btn btn-primary" id="faviBtn">保存</button>
+    </div>
+
+    <script>
+        $(".dropdown-item").click(function () {
+            var selector = "#" + $(this).data("selector");
+
+            $(selector).html($(this).html());
+        });
+
+        $("#iniBtn").click(function () {
+            $.ajax({
+                url: "/webav/SaveIniSetting",
+                type: "get",
+                data: { 'cookieMode': $("#cookieMode").html().trim(), 'magurl': $("#magMode").html().trim() },
+
+                success: function (result) {
+                    if (result.success = "suceess") {
+                        alert("更新成功");
+                        window.location.reload();
+                    } else {
+                        alert("更新失败");
+                    }
+                }
+            });
+        });
+
+        $("#faviBtn").click(function () {
+            if ($("#url").val() == '' || $("#name").val() == '') {
+                alert("内容为空");
+                return;
+            }
+
+            $.ajax({
+                url: "/webav/SaveJavSetting",
+                type: "get",
+                data: { 'category': $("#favi").html().trim(), 'url': $("#url").val(), 'name': $("#name").val() },
+
+                success: function (result) {
+                    if (result.success = "suceess") {
+                        alert("更新成功");
+                        window.location.reload();
+                    } else {
+                        alert("更新失败");
+                    }
+                }
+            });
+        });
+    </script>
+</body>

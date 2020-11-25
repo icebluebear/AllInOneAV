@@ -793,6 +793,68 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        [Rights]
+        public ActionResult Setting() 
+        {
+            string cookieMode = JavINIClass.IniReadValue("Jav", "cookieMode"); 
+            string sukebei = JavINIClass.IniReadValue("Mag", "sukebei");
+
+            ViewData.Add("cookieMode", cookieMode);
+            ViewData.Add("sukebei", sukebei);
+
+            return View();
+        }
+
+        [Rights]
+        public JsonResult SaveIniSetting(string cookieMode, string magUrl)
+        {
+            bool ret = true;
+            try
+            {
+                JavINIClass.IniWriteValue("Jav", "cookieMode", cookieMode);
+                JavINIClass.IniWriteValue("Mag", "sukebei", magUrl);
+            } catch (Exception ee)
+            {
+                ApplicationLog.Debug(ee.ToString());
+                ret = false;
+            }
+
+            if (ret)
+            {
+                return Json(new { success = "success" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = "fail" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [Rights]
+        public JsonResult SaveJavSetting(string category, string url, string name)
+        {
+            var ret = 0;
+
+            try
+            {
+                FaviScan fs = new FaviScan();
+
+                fs.Category = category;
+                fs.Url = url;
+                fs.Name = name;
+
+                ret = ScanDataBaseManager.InsertFaviScan(fs);
+            }
+            catch (Exception ee)
+            {
+                ApplicationLog.Debug(ee.ToString());
+            }
+
+            if (ret > 0)
+            {
+                return Json(new { success = "success" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = "fail" }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult Login(string token = "")
         {

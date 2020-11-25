@@ -189,6 +189,7 @@
     <Content Include="Views\WebAv\login.cshtml" />
     <Content Include="Views\WebAv\NoRights.cshtml" />
     <Content Include="Views\WebAv\ShowChart.cshtml" />
+    <Content Include="Views\WebAv\Setting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
