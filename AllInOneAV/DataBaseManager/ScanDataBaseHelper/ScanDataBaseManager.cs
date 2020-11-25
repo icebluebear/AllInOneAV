@@ -437,5 +437,19 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
+
+        public static Report GetReport()
+        {
+            var sql = "SELECT TOP 1 * FROM Report WHERE IsFinish = 1 ORDER BY EndDate DESC";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<Report>();
+        }
+
+        public static List<ReportItem> ReportItem(int reportId)
+        {
+            var sql = "SELECT * FROM ReportItem WHERE ReportId=" + reportId;
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ReportItem>();
+        }
     }
 }

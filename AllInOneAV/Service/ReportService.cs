@@ -555,7 +555,7 @@ namespace Service
                         }
                         break;
                     case ReportType.Date:
-                        ProcessReportItem(ReportType.Date, av.ReleaseDate.ToString("yyyy-dd-mm"), exist, existSize, report.ReportId, items);
+                        ProcessReportItem(ReportType.Date, av.ReleaseDate.ToString("yyyy"), exist, existSize, report.ReportId, items);
                         break;
                     case ReportType.Director:
                         foreach (var itemName in av.Director.Split(',').Where(x => !string.IsNullOrEmpty(x)))
@@ -584,7 +584,7 @@ namespace Service
 
         private static void ProcessReportItem(ReportType type, string itemName, int exist, double existSize, int reportId, List<ReportItem> items)
         {
-            var tempItem = items.FirstOrDefault(x => x.ReportId == reportId && x.ItemName == itemName && x.ReportType == type);
+            var tempItem = items.FirstOrDefault(x => x.ReportId == reportId && x.ItemName == itemName && (ReportType)x.ReportType == type);
             if (tempItem != null)
             {
                 tempItem.TotalSize += existSize;
@@ -597,7 +597,7 @@ namespace Service
                 {
                     ExistCount = exist,
                     ItemName = itemName,
-                    ReportType = type,
+                    ReportType = (int)type,
                     TotalCount = 1,
                     TotalSize = existSize,
                     ReportId = reportId

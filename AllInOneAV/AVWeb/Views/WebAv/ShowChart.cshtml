@@ -1,0 +1,1543 @@
+﻿<!DOCTYPE html>
+
+@model DirectoryInfo[]
+@using Utils
+
+@{ 
+    var countString = ViewData["countString"].ToString();
+    var extensionString = ViewData["extensionString"].ToString();
+    var sizeString = ViewData["sizeString"].ToString();
+    var chineseString = ViewData["chineseString"].ToString();
+
+    var actressString = (Dictionary<string, string>)ViewData["actressString"];
+    var categoryString = (Dictionary<string, string>)ViewData["categoryString"];
+    var directorString = (Dictionary<string, string>)ViewData["directorString"];
+    var companyString = (Dictionary<string, string>)ViewData["companyString"];
+    var publisherString = (Dictionary<string, string>)ViewData["publisherString"];
+    var prefixString = (Dictionary<string, string>)ViewData["prefixString"];
+    var dateString = (Dictionary<string, string>)ViewData["dateString"];
+
+    var actressRatioString = (Dictionary<string, string>)ViewData["actressRatioString"];
+    var categoryRatioString = (Dictionary<string, string>)ViewData["categoryRatioString"];
+    var directorRatioString = (Dictionary<string, string>)ViewData["directorRatioString"];
+    var companyRatioString = (Dictionary<string, string>)ViewData["companyRatioString"];
+    var publisherRatioString = (Dictionary<string, string>)ViewData["publisherRatioString"];
+    var prefixRatioString = (Dictionary<string, string>)ViewData["prefixRatioString"];
+    var dateRatioString = (Dictionary<string, string>)ViewData["dateRatioString"];
+
+    var actressSizeString = (Dictionary<string, string>)ViewData["actressSizeString"];
+    var categorySizeString = (Dictionary<string, string>)ViewData["categorySizeString"];
+    var directorSizeString = (Dictionary<string, string>)ViewData["directorSizeString"];
+    var companySizeString = (Dictionary<string, string>)ViewData["companySizeString"];
+    var publisherSizeString = (Dictionary<string, string>)ViewData["publisherSizeString"];
+    var prefixSizeString = (Dictionary<string, string>)ViewData["prefixSizeString"];
+    var dateSizeString = (Dictionary<string, string>)ViewData["dateSizeString"];
+}
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebAV-统计</title>
+
+    @Html.Partial("Header")
+</head>
+
+<body>
+    @Html.Partial("Share")
+
+    <div class="container-fluid">
+        <div class="row row-cols-4" style="height:300px">
+            <div class="col-sm" id="countChart">
+            </div>
+            <div class="col-sm" id="extensionChart">
+            </div>
+            <div class="col-sm" id="sizeChart">
+            </div>
+            <div class="col-sm" id="chineseChart">
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="countChartDrop" data-toggle="dropdown" data-id="c11" aria-haspopup="true" aria-expanded="false">
+                TOP20女优
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item countChartItem" href="javascript:;" data-id="c11">TOP20女优</a>
+                <a class="dropdown-item countChartItem" href="javascript:;" data-id="c12">TOP20类型</a>
+                <a class="dropdown-item countChartItem" href="javascript:;" data-id="c13">TOP20导演</a>
+                <a class="dropdown-item countChartItem" href="javascript:;" data-id="c14">TOP20公司</a>
+                <a class="dropdown-item countChartItem" href="javascript:;" data-id="c15">TOP20发行商</a>
+                <a class="dropdown-item countChartItem" href="javascript:;" data-id="c16">TOP20番号</a>
+                <a class="dropdown-item countChartItem" href="javascript:;" data-id="c17">TOP20日期</a>
+            </div>
+        </div>
+
+
+        <div id="actressChart" class="countChart c11" style="height:250px;display:block"></div>
+        <div id="categoryChart" class="countChart c12" style="height:250px;display:block"></div>
+        <div id="directorChart" class="countChart c13" style="height:250px;display:block"></div>
+        <div id="companyChart" class="countChart c14" style="height:250px;display:block"></div>
+        <div id="publisherChart" class="countChart c15" style="height:250px;display:block"></div>
+        <div id="prefixChart" class="countChart c16" style="height:250px;display:block"></div>
+        <div id="dateChart" class="countChart c17" style="height:250px;display:block"></div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row row-cols-2" style="height:250px">
+            <div class="col-sm">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="ratioChartDrop" data-toggle="dropdown" data-id="r11" aria-haspopup="true" aria-expanded="false">
+                        TOP20女优占比
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item ratioChartItem" href="javascript:;" data-id="r11">TOP20女优占比</a>
+                        <a class="dropdown-item ratioChartItem" href="javascript:;" data-id="r12">TOP20类型占比</a>
+                        <a class="dropdown-item ratioChartItem" href="javascript:;" data-id="r13">TOP20导演占比</a>
+                        <a class="dropdown-item ratioChartItem" href="javascript:;" data-id="r14">TOP20公司占比</a>
+                        <a class="dropdown-item ratioChartItem" href="javascript:;" data-id="r15">TOP20发行商占比</a>
+                        <a class="dropdown-item ratioChartItem" href="javascript:;" data-id="r16">TOP20番号占比</a>
+                        <a class="dropdown-item ratioChartItem" href="javascript:;" data-id="r17">TOP20日期占比</a>
+                    </div>
+                </div>
+
+
+                <div id="actressRatioChart" class="ratioChart r11" style="height:250px;display:block"></div>
+                <div id="categoryRatioChart" class="ratioChart r12" style="height:250px;display:block"></div>
+                <div id="directorRatioChart" class="ratioChart r13" style="height:250px;display:block"></div>
+                <div id="companyRatioChart" class="ratioChart r14" style="height:250px;display:block"></div>
+                <div id="publisherRatioChart" class="ratioChart r15" style="height:250px;display:block"></div>
+                <div id="prefixRatioChart" class="ratioChart r16" style="height:250px;display:block"></div>
+                <div id="dateRatioChart" class="ratioChart r17" style="height:250px;display:block"></div>
+            </div>
+
+            <div class="col-sm">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="sizeChartDrop" data-toggle="dropdown" data-id="s11" aria-haspopup="true" aria-expanded="false">
+                        TOP20女优总大小
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item sizeChartItem" href="javascript:;" data-id="s11">TOP20女优总大小</a>
+                        <a class="dropdown-item sizeChartItem" href="javascript:;" data-id="s12">TOP20类型总大小</a>
+                        <a class="dropdown-item sizeChartItem" href="javascript:;" data-id="s13">TOP20导演总大小</a>
+                        <a class="dropdown-item sizeChartItem" href="javascript:;" data-id="s14">TOP20公司总大小</a>
+                        <a class="dropdown-item sizeChartItem" href="javascript:;" data-id="s15">TOP20发行商总大小</a>
+                        <a class="dropdown-item sizeChartItem" href="javascript:;" data-id="s16">TOP20番号总大小</a>
+                        <a class="dropdown-item sizeChartItem" href="javascript:;" data-id="s17">TOP20日期总大小</a>
+                    </div>
+                </div>
+
+                <div id="actressSizeChart" class="sizeChart s11" style="height:250px;display:block"></div>
+                <div id="categorySizeChart" class="sizeChart s12" style="height:250px;display:block"></div>
+                <div id="directorSizeChart" class="sizeChart s13" style="height:250px;display:block"></div>
+                <div id="companySizeChart" class="sizeChart s14" style="height:250px;display:block"></div>
+                <div id="publisherSizeChart" class="sizeChart s15" style="height:250px;display:block"></div>
+                <div id="prefixSizeChart" class="sizeChart s16" style="height:250px;display:block"></div>
+                <div id="dateSizeChart" class="sizeChart s17" style="height:250px;display:block"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".nav-item").removeClass("active");
+        $("#showchart").addClass("active");
+
+        var KBCount = 1024;
+        var MBCount = KBCount * 1024;
+        var GBCount = MBCount * 1024;
+        var TBCount = GBCount * 1024;
+
+        function getFileSize(lenght) {
+            if (KBCount > lenght) {
+                return Math.round(lenght, 1) + "B";
+            }
+            else if (MBCount > lenght) {
+                return Math.round(lenght / KBCount, 1) + "KB";
+            }
+            else if (GBCount > lenght) {
+                return Math.round(size / MBCount, 1) + "MB";
+            }
+            else if (TBCount > lenght) {
+                return Math.round(lenght / GBCount, 1) + "GB";
+            }
+            else {
+                return Math.round(lenght / TBCount, 1) + "TB";
+            }
+        }
+
+        var basic = document.getElementById("countChart");
+        var basicChart = echarts.init(basic);
+        var extension = document.getElementById("extensionChart");
+        var extensionChart = echarts.init(extension);
+        var size = document.getElementById("sizeChart");
+        var sizeChart = echarts.init(size);
+        var chinese = document.getElementById("chineseChart");
+        var chineseChart = echarts.init(chinese);
+
+        var actress = document.getElementById("actressChart");
+        var actressChart = echarts.init(actress);
+        var category = document.getElementById("categoryChart");
+        var categoryChart = echarts.init(category);
+        var director = document.getElementById("directorChart");
+        var directorChart = echarts.init(director);
+        var company = document.getElementById("companyChart");
+        var companyChart = echarts.init(company);
+        var publisher = document.getElementById("publisherChart");
+        var publisherChart = echarts.init(publisher);
+        var prefix = document.getElementById("prefixChart");
+        var prefixChart = echarts.init(prefix);
+        var date = document.getElementById("dateChart");
+        var dateChart = echarts.init(date);
+
+        var actressRatio = document.getElementById("actressRatioChart");
+        var actressRatioChart = echarts.init(actressRatio);
+        var categoryRatio = document.getElementById("categoryRatioChart");
+        var categoryRatioChart = echarts.init(categoryRatio);
+        var directorRatio = document.getElementById("directorRatioChart");
+        var directorRatioChart = echarts.init(directorRatio);
+        var companyRatio = document.getElementById("companyRatioChart");
+        var companyRatioChart = echarts.init(companyRatio);
+        var publisherRatio = document.getElementById("publisherRatioChart");
+        var publisherRatioChart = echarts.init(publisherRatio);
+        var prefixRatio = document.getElementById("prefixRatioChart");
+        var prefixRatioChart = echarts.init(prefixRatio);
+        var dateRatio = document.getElementById("dateRatioChart");
+        var dateRatioChart = echarts.init(dateRatio);
+
+        var actressSize = document.getElementById("actressSizeChart");
+        var actressSizeChart = echarts.init(actressSize);
+        var categorySize = document.getElementById("categorySizeChart");
+        var categorySizeChart = echarts.init(categorySize);
+        var directorSize = document.getElementById("directorSizeChart");
+        var directorSizeChart = echarts.init(directorSize);
+        var companySize = document.getElementById("companySizeChart");
+        var companySizeChart = echarts.init(companySize);
+        var publisherSize = document.getElementById("publisherSizeChart");
+        var publisherSizeChart = echarts.init(publisherSize);
+        var prefixSize = document.getElementById("prefixSizeChart");
+        var prefixSizeChart = echarts.init(prefixSize);
+        var dateSize = document.getElementById("dateSizeChart");
+        var dateSizeChart = echarts.init(dateSize);
+        
+        basicOption = null;
+        var basicOption = {
+            title: {
+                text: '已有AV数',
+                subtext: '[总共]数据来自Javlibrary',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            dataset: {
+                source: [
+                    @Html.Raw(countString)
+                ]
+            },
+            series: [{
+                name: '已有AV数',
+                type: 'pie',
+                radius: 90,
+                center: ['50%', '55%']
+            }]
+        };;
+
+
+        extensionOption = null;
+        var extensionOption = {
+            title: {
+                text: '已有AV的后缀分布',
+                subtext: '本地AV文件的后缀分布',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            dataset: {
+                source: [
+                    @Html.Raw(extensionString)
+                ]
+            },
+            series: [{
+                name: '已有AV的后缀分布',
+                type: 'pie',
+                radius: 90,
+                center: ['50%', '55%']
+            }]
+        };;
+
+        sizeOption = null;
+        var sizeOption = {
+            title: {
+                text: '已有AV的文件大小统计',
+                subtext: '本地AV文件大小的区间分布',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            dataset: {
+                source: [
+                    @Html.Raw(sizeString)
+                ]
+            },
+            series: [{
+                name: '已有AV的文件大小统计',
+                type: 'pie',
+                radius: 90,
+                center: ['50%', '55%']
+            }]
+        };;
+
+        chineseOption = null;
+        var chineseOption = {
+            title: {
+                text: '已有AV中文字幕数量',
+                subtext: '本地AV文件中问字幕占比',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            dataset: {
+                source: [
+                    @Html.Raw(chineseString)
+                ]
+            },
+            series: [{
+                name: '已有AV中文字幕数量',
+                type: 'pie',
+                radius: 90,
+                center: ['50%', '55%']
+            }]
+        };;
+
+        actressOption = null;
+        actressOption = {
+            title: {
+                text: 'TOP20 拥有女优AV数',
+                subtext: '本地存在的AV中',
+                left: 'center'
+            },
+            color: ['#3CB371'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(actressString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(actressString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        categoryOption = null;
+        categoryOption = {
+            title: {
+                text: 'TOP20 拥有类型AV数',
+                subtext: '本地存在的AV中',
+                left: 'center'
+            },
+            color: ['#3CB371'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(categoryString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(categoryString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        directorOption = null;
+        directorOption = {
+            title: {
+                text: 'TOP20 拥有导演AV数',
+                subtext: '本地存在的AV中',
+                left: 'center'
+            },
+            color: ['#3CB371'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(directorString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(directorString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        companyOption = null;
+        companyOption = {
+            title: {
+                text: 'TOP20 拥有公司AV数',
+                subtext: '本地存在的AV中',
+                left: 'center'
+            },
+            color: ['#3CB371'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(companyString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(companyString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        publisherOption = null;
+        publisherOption = {
+            title: {
+                text: 'TOP20 拥有发行商AV数',
+                subtext: '本地存在的AV中',
+                left: 'center'
+            },
+            color: ['#3CB371'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(publisherString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(publisherString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        prefixOption = null;
+        prefixOption = {
+            title: {
+                text: 'TOP20 拥有番号AV数',
+                subtext: '本地存在的AV中',
+                left: 'center'
+            },
+            color: ['#3CB371'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(prefixString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(prefixString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        dateOption = null;
+        dateOption = {
+            title: {
+                text: 'TOP20 拥有年份AV数',
+                subtext: '本地存在的AV中',
+                left: 'center'
+            },
+            color: ['#3CB371'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(dateString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(dateString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        actressRatioOption = null;
+        actressRatioOption = {
+            title: {
+                text: 'TOP20 拥有女优AV占比数',
+                subtext: '为了公平只统计总数>=100的数据，用本地数据/Javlibrary的收集数据',
+                left: 'center'
+            },
+            color: ['#CDBE70'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 占比：${params[0].value}%
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(actressRatioString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(actressRatioString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        categoryRatioOption = null;
+        categoryRatioOption = {
+            title: {
+                text: 'TOP20 拥有类型AV占比数',
+                subtext: '为了公平只统计总数>=100的数据，用本地数据/Javlibrary的收集数据',
+                left: 'center'
+            },
+            color: ['#CDBE70'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 占比：${params[0].value}%
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(categoryRatioString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(categoryRatioString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        directorRatioOption = null;
+        directorRatioOption = {
+            title: {
+                text: 'TOP20 拥有导演AV占比数',
+                subtext: '为了公平只统计总数>=100的数据，用本地数据/Javlibrary的收集数据',
+                left: 'center'
+            },
+            color: ['#CDBE70'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 占比：${params[0].value}%
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(directorRatioString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(directorRatioString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        companyRatioOption = null;
+        companyRatioOption = {
+            title: {
+                text: 'TOP20 拥有公司AV占比数',
+                subtext: '为了公平只统计总数>=100的数据，用本地数据/Javlibrary的收集数据',
+                left: 'center'
+            },
+            color: ['#CDBE70'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 占比：${params[0].value}%
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(companyRatioString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(companyRatioString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        publisherRatioOption = null;
+        publisherRatioOption = {
+            title: {
+                text: 'TOP20 拥有发行商AV占比数',
+                subtext: '为了公平只统计总数>=100的数据，用本地数据/Javlibrary的收集数据',
+                left: 'center'
+            },
+            color: ['#CDBE70'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 占比：${params[0].value}%
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(publisherRatioString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(publisherRatioString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        prefixRatioOption = null;
+        prefixRatioOption = {
+            title: {
+                text: 'TOP20 拥有番号AV占比数',
+                subtext: '为了公平只统计总数>=100的数据，用本地数据/Javlibrary的收集数据',
+                left: 'center'
+            },
+            color: ['#CDBE70'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 占比：${params[0].value}%
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(prefixRatioString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(prefixRatioString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        dateRatioOption = null;
+        dateRatioOption = {
+            title: {
+                text: 'TOP20 拥有年份AV占比数',
+                subtext: '为了公平只统计总数>=100的数据，用本地数据/Javlibrary的收集数据',
+                left: 'center'
+            },
+            color: ['#CDBE70'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 占比：${params[0].value}%
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(dateRatioString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(dateRatioString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        actressSizeOption = null;
+        actressSizeOption = {
+            title: {
+                text: 'TOP20 拥有女优总大小',
+                subtext: '本地AV文件的总大小',
+                left: 'center'
+            },
+            color: ['#CD5555'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 大小：${getFileSize(params[0].value)}
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(actressSizeString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(actressSizeString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        categorySizeOption = null;
+        categorySizeOption = {
+            title: {
+                text: 'TOP20 拥有类型总大小',
+                subtext: '本地AV文件的总大小',
+                left: 'center'
+            },
+            color: ['#CD5555'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 大小：${getFileSize(params[0].value)}
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(categorySizeString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(categorySizeString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        directorSizeOption = null;
+        directorSizeOption = {
+            title: {
+                text: 'TOP20 拥有导演总大小',
+                subtext: '本地AV文件的总大小',
+                left: 'center'
+            },
+            color: ['#CD5555'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 大小：${getFileSize(params[0].value)}
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(directorSizeString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(directorSizeString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        companySizeOption = null;
+        companySizeOption = {
+            title: {
+                text: 'TOP20 拥有公司总大小',
+                subtext: '本地AV文件的总大小',
+                left: 'center'
+            },
+            color: ['#CD5555'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 大小：${getFileSize(params[0].value)}
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(companySizeString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(companySizeString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        publisherSizeOption = null;
+        publisherSizeOption = {
+            title: {
+                text: 'TOP20 拥有发行商总大小',
+                subtext: '本地AV文件的总大小',
+                left: 'center'
+            },
+            color: ['#CD5555'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 大小：${getFileSize(params[0].value)}
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(publisherSizeString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(publisherSizeString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        prefixSizeOption = null;
+        prefixSizeOption = {
+            title: {
+                text: 'TOP20 拥有番号总大小',
+                subtext: '本地AV文件的总大小',
+                left: 'center'
+            },
+            color: ['#CD5555'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 大小：${getFileSize(params[0].value)}
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(prefixSizeString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(prefixSizeString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        dateSizeOption = null;
+        dateSizeOption = {
+            title: {
+                text: 'TOP20 拥有年份总大小',
+                subtext: '本地AV文件的总大小',
+                left: 'center'
+            },
+            color: ['#CD5555'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter(params) {
+                    return `
+                        ${params[0].axisValue} 大小：${getFileSize(params[0].value)}
+                       `;
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: @Html.Raw(dateSizeString.FirstOrDefault().Key),
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,//倾斜度 -90 至 90 默认为0
+                        margin: 15,
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    max: 100,
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: @Html.Raw(dateSizeString.FirstOrDefault().Value),
+                }
+            ]
+        };
+
+        if (chineseOption && typeof chineseOption === "object") {
+            chineseChart.setOption(chineseOption, true);
+        }
+        if (sizeOption && typeof sizeOption === "object") {
+            sizeChart.setOption(sizeOption, true);
+        }
+        if (extensionOption && typeof extensionOption === "object") {
+            extensionChart.setOption(extensionOption, true);
+        }
+        if (basicOption && typeof basicOption === "object") {
+            basicChart.setOption(basicOption, true);
+        }
+
+        if (actressOption && typeof actressOption === "object") {
+            actressChart.setOption(actressOption, true);
+        }
+        if (categoryOption && typeof categoryOption === "object") {
+            categoryChart.setOption(categoryOption, true);
+        }
+        if (directorOption && typeof directorOption === "object") {
+            directorChart.setOption(directorOption, true);
+        }
+        if (companyOption && typeof companyOption === "object") {
+            companyChart.setOption(companyOption, true);
+        }
+        if (publisherOption && typeof publisherOption === "object") {
+            publisherChart.setOption(publisherOption, true);
+        }
+        if (prefixOption && typeof prefixOption === "object") {
+            prefixChart.setOption(prefixOption, true);
+        }
+        if (dateOption && typeof dateOption === "object") {
+            dateChart.setOption(dateOption, true);
+        }
+
+        if (actressRatioOption && typeof actressRatioOption === "object") {
+            actressRatioChart.setOption(actressRatioOption, true);
+        }
+        if (categoryRatioOption && typeof categoryRatioOption === "object") {
+            categoryRatioChart.setOption(categoryRatioOption, true);
+        }
+        if (directorRatioOption && typeof directorRatioOption === "object") {
+            directorRatioChart.setOption(directorRatioOption, true);
+        }
+        if (companyRatioOption && typeof companyRatioOption === "object") {
+            companyRatioChart.setOption(companyRatioOption, true);
+        }
+        if (publisherRatioOption && typeof publisherRatioOption === "object") {
+            publisherRatioChart.setOption(publisherRatioOption, true);
+        }
+        if (prefixRatioOption && typeof prefixRatioOption === "object") {
+            prefixRatioChart.setOption(prefixRatioOption, true);
+        }
+        if (dateRatioOption && typeof dateRatioOption === "object") {
+            dateRatioChart.setOption(dateRatioOption, true);
+        }
+
+        if (actressSizeOption && typeof actressSizeOption === "object") {
+            actressSizeChart.setOption(actressSizeOption, true);
+        }
+        if (categorySizeOption && typeof categorySizeOption === "object") {
+            categorySizeChart.setOption(categorySizeOption, true);
+        }
+        if (directorSizeOption && typeof directorSizeOption === "object") {
+            directorSizeChart.setOption(directorSizeOption, true);
+        }
+        if (companySizeOption && typeof directorSizeOption === "object") {
+            companySizeChart.setOption(companySizeOption, true);
+        }
+        if (publisherSizeOption && typeof publisherSizeOption === "object") {
+            publisherSizeChart.setOption(publisherSizeOption, true);
+        }
+        if (prefixSizeOption && typeof prefixSizeOption === "object") {
+            prefixSizeChart.setOption(prefixSizeOption, true);
+        }
+        if (dateSizeOption && typeof dateSizeOption === "object") {
+            dateSizeChart.setOption(dateSizeOption, true);
+        }
+
+        $(".countChart").hide();
+        $(".c11").show();
+
+        $(".ratioChart").hide();
+        $(".r11").show();
+
+        $(".sizeChart").hide();
+        $(".s11").show();
+
+        $(".countChartItem").click(function () {
+            $("#countChartDrop").html($(this).html());
+            var selector = "." + $(this).data("id");
+            $(".countChart").hide();
+            $(selector).show();
+        });
+
+        $(".ratioChartItem").click(function () {
+            $("#ratioChartDrop").html($(this).html());
+            var selector = "." + $(this).data("id");
+            $(".ratioChart").hide();
+            $(selector).show();
+        });
+
+        $(".sizeChartItem").click(function () {
+            $("#sizeChartDrop").html($(this).html());
+            var selector = "." + $(this).data("id");
+            $(".sizeChart").hide();
+            $(selector).show();
+        });
+    </script>
+</body>
+</html>

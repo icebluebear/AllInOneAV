@@ -161,6 +161,7 @@
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Imgs\head.jpg" />
+    <Content Include="Scripts\echarts.min.js" />
     <Content Include="Scripts\waterfall.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -187,6 +188,7 @@
     <Content Include="Views\WebAv\ShareList.cshtml" />
     <Content Include="Views\WebAv\login.cshtml" />
     <Content Include="Views\WebAv\NoRights.cshtml" />
+    <Content Include="Views\WebAv\ShowChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

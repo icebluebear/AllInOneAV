@@ -53,8 +53,11 @@ namespace UnitTest
 
         static async Task Main(string[] args)
         {
-            
+            var d = 0.11m;
 
+            Console.WriteLine(Math.Round(d, 0));
+
+            Console.ReadKey();
         }
 
         private static void Test115Search()

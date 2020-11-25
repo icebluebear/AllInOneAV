@@ -34,7 +34,7 @@ namespace Model.ScanModels
         public int TotalCount { get; set; }
         public double TotalSize { get; set; }
         public int ReportId { get; set; }
-        public ReportType ReportType { get; set; }
+        public int ReportType { get; set; }
     }
 
     public enum ReportType
