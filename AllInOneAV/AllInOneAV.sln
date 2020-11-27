@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScanAllAndMatch", "ScanAllAndMatch\ScanAllAndMatch.csproj", "{6C4F002E-10BA-4E3F-850D-677455A0DB7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{936B306A-F276-42DA-8B76-3E8672D73D7D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateReport", "GenerateReport\GenerateReport.csproj", "{59D4210F-FC29-441A-9549-EE95D470FC04}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVWeb", "AVWeb\AVWeb.csproj", "{0CCBB97E-982C-40D2-A293-665555E800B9}"
@@ -31,11 +29,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvReName", "AvReName\AvReNa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScanJavMagUrl", "ScanJavMagUrl\ScanJavMagUrl.csproj", "{76E29BD5-4F92-4121-89F7-AFEBEB281393}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoScanMag", "AutoScanMag\AutoScanMag.csproj", "{FA0C45CA-98F8-494F-A05E-66F89FC0E111}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefreshOneOneFiveCookie", "RefreshOneOneFiveCookie\RefreshOneOneFiveCookie.csproj", "{A13A86DA-24EC-404E-A108-8BB204BCE7A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewUnitTest", "NewUnitTest\NewUnitTest.csproj", "{263B9B45-420E-4200-A44D-0E63E2D1CE20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "NewUnitTest\UnitTest.csproj", "{263B9B45-420E-4200-A44D-0E63E2D1CE20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +55,6 @@ Global
 		{6C4F002E-10BA-4E3F-850D-677455A0DB7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C4F002E-10BA-4E3F-850D-677455A0DB7E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C4F002E-10BA-4E3F-850D-677455A0DB7E}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{936B306A-F276-42DA-8B76-3E8672D73D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{936B306A-F276-42DA-8B76-3E8672D73D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{936B306A-F276-42DA-8B76-3E8672D73D7D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{936B306A-F276-42DA-8B76-3E8672D73D7D}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{59D4210F-FC29-441A-9549-EE95D470FC04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59D4210F-FC29-441A-9549-EE95D470FC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59D4210F-FC29-441A-9549-EE95D470FC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -99,10 +91,6 @@ Global
 		{76E29BD5-4F92-4121-89F7-AFEBEB281393}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76E29BD5-4F92-4121-89F7-AFEBEB281393}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76E29BD5-4F92-4121-89F7-AFEBEB281393}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA0C45CA-98F8-494F-A05E-66F89FC0E111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA0C45CA-98F8-494F-A05E-66F89FC0E111}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA0C45CA-98F8-494F-A05E-66F89FC0E111}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA0C45CA-98F8-494F-A05E-66F89FC0E111}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A13A86DA-24EC-404E-A108-8BB204BCE7A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A13A86DA-24EC-404E-A108-8BB204BCE7A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A13A86DA-24EC-404E-A108-8BB204BCE7A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
