@@ -468,5 +468,12 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
+
+        public static List<WishList> GetWishList(string where)
+        {
+            var sql = string.Format("SELECT * FROM WishList WHERE 1=1");
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<WishList>();
+        }
     }
 }
