@@ -1,4 +1,5 @@
-﻿using DataBaseManager.JavDataBaseHelper;
+﻿using AVWeb.Filter;
+using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
 using Model.JavModels;
 using Model.ScanModels;
@@ -29,6 +30,7 @@ namespace AVWeb.Controllers
     {
         private static log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AVApiController));
 
+        [Base]
         /// <summary>
         /// 获取与输入文件名最接近的AV匹配记录,不要输入文件后缀名
         /// </summary>
@@ -41,6 +43,7 @@ namespace AVWeb.Controllers
             return WebService.WebService.GetClosetMatch(inputName);
         }
 
+        [Base]
         /// <summary>
         /// 根据获取AV详细资料列表,参数都为非必须. 默认按照发行日期倒序,每页20
         /// </summary>
@@ -105,6 +108,7 @@ namespace AVWeb.Controllers
             return WebService.WebService.GetAv(orderBy, where, pageStr);
         }
 
+        [Base]
         /// <summary>
         /// 播放AV的流地址,目前测试阶段,传入从GetMatch接口获得的filePath
         /// </summary>
@@ -146,6 +150,7 @@ namespace AVWeb.Controllers
             }
         }
 
+        [Base]
         /// <summary>
         /// 获取分类信息
         /// </summary>
@@ -158,6 +163,7 @@ namespace AVWeb.Controllers
             return WebService.WebService.GetNames(type);
         }
 
+        [Base]
         /// <summary>
         /// 与GetAv相同,唯一区别在于这个接口返回的AV都可以用PlayAv接口播放,传入Id即可
         /// </summary>
@@ -224,6 +230,7 @@ namespace AVWeb.Controllers
             return WebService.WebService.GetMatch(orderStr, where, pageStr);
         }
 
+        [Base]
         /// <summary>
         /// 获取所有没有匹配的AV
         /// </summary>
@@ -240,7 +247,7 @@ namespace AVWeb.Controllers
             return ret;
         }
 
-
+        [Base]
         /// <summary>
         /// 上传需要自动化下载的种子文件
         /// </summary>
@@ -252,6 +259,7 @@ namespace AVWeb.Controllers
             return PostFiles(HttpContext.Current.Request.Files, "c:\\FileUpload\\Seeds\\", false, ".torrent");
         }
 
+        [Base]
         [HttpPost]
         [Route("PostComicFiles")]
         public string PostComicFiles()

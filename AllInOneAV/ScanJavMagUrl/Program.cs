@@ -28,7 +28,7 @@ namespace ScanJavMagUrl
 
             if (args.Length == 0)
             {
-                arg = " refresh " + 20;
+                arg = " refresh " + 15;
 
                 ScanDataBaseManager.DeleteRemoteScanMag();
             }
@@ -153,9 +153,24 @@ namespace ScanJavMagUrl
                         entity.MagUrl = seed.MagUrl;
                         //entity.SearchStatus = 1;
 
+                        //if (entity.MagSize <= 0)
+                        //{
+                        //    Console.WriteLine("找种子");
+
+                        //    var ret = MagService.GetTorrentInfo(entity.MagUrl, "http://itorrents.org/torrent/", "G:\\torrent", entity.MagTitle + ".torrent").Result;
+
+                        //    if (ret != null)
+                        //    {
+                        //        entity.MagSize = ret.Files.Max(x => x.Length);
+                        //    }
+                        //}
+
                         try
                         {
-                            ScanDataBaseManager.InsertRemoteScanMag(entity);
+                            if (entity.MagTitle.Contains(rm.Id) || entity.MagTitle.Contains(rm.Id.Replace("-", "")))
+                            {
+                                ScanDataBaseManager.InsertRemoteScanMag(entity);
+                            }
                         }
                         catch (Exception ee)
                         {

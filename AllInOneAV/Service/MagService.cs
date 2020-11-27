@@ -1,11 +1,14 @@
 ﻿using DataBaseManager.ScanDataBaseHelper;
 using HtmlAgilityPack;
 using Model.Common;
+using MonoTorrent;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Utils;
 
@@ -157,6 +160,67 @@ namespace Service
             }
 
             return ret.Where(x => x.Size >= 0).OrderByDescending(x => x.CompleteCount).ThenByDescending(x => x.Size).ToList();
+        }
+
+        public static async Task<Torrent> GetTorrentInfo(string magurl, string webUrl, string saveFolder, string fileName)
+        {
+            Torrent ret = null;
+            var torrent = SaveMagnetToTorrent(magurl, webUrl, saveFolder, fileName);
+
+            if (!string.IsNullOrEmpty(torrent) && File.Exists(torrent))
+            {
+                ret = await Torrent.LoadAsync(torrent);
+            }
+
+            return ret;
+        }
+
+        public static string SaveMagnetToTorrent(string magurl, string webUrl, string saveFolder, string fileName)
+        {
+            string ret = (saveFolder.EndsWith("\\") || saveFolder.EndsWith("/")) ? saveFolder + fileName : saveFolder + "\\" + fileName;
+
+            if (string.IsNullOrEmpty(magurl) || (!magurl.StartsWith("magnet:?xt=") && magurl.Length != 40))
+            {
+                return ret;
+            }
+
+            try
+            {
+                if (!Directory.Exists(saveFolder))
+                {
+                    Directory.CreateDirectory(saveFolder);
+                    Thread.Sleep(50);
+                }
+                else
+                {
+                    if (File.Exists(ret))
+                    {
+                        File.Delete(ret);
+                        Thread.Sleep(50);
+                    }
+                }
+
+                File.Create(ret).Close();
+
+
+                if (magurl.Length == 40)
+                {
+                    DownloadHelper.DownloadFile(webUrl + magurl + ".torrent", ret);
+                }
+                else
+                {
+                    var hash = magurl.Substring(magurl.IndexOf("btih:") + "btih:".Length);
+                    hash = hash.Substring(0, hash.IndexOf("&"));
+
+                    DownloadHelper.DownloadFile(webUrl + hash + ".torrent", ret);
+                }
+            }
+            catch (Exception ee)
+            {
+                ret = "";
+            }
+
+            return ret;
         }
     }
 }

@@ -1,0 +1,108 @@
+﻿@using Model.JavModels;
+@using Model.ScanModels
+@using Utils
+
+@{
+    var avs = (List<ScanResult>)ViewData["avs"];
+    string search = (string)ViewData["search"];
+    int count = int.Parse(ViewData["count"].ToString());
+    int size = int.Parse(ViewData["size"].ToString());
+    int current = int.Parse(ViewData["current"].ToString());
+    int total = int.Parse(ViewData["total"].ToString());
+    int limit = int.Parse(ViewData["limit"].ToString());
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebAV-目录</title>
+
+    @Html.Partial("Header")
+</head>
+
+<body>
+    @Html.Partial("Share")
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-4">全目录</h1>
+            <p class="lead">共有 @total</p>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">最小大小</span>
+        </div>
+        <input type="number" class="form-control" placeholder="0" aria-label="Recipient's username" id="limitValue" aria-describedby="button-addon2" value="@limit">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="gbBtn">GB</button>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="container-fluid" style="width:90%;margin-left:50px">
+            <div class="row row-cols-5">
+                @foreach (var av in avs)
+                {
+                    <div class="col">
+                        <div class='card'>
+                            <img src="@av.PicUrl" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <h6 class="card-title">@av.AvId</h6>
+                                <a class="card-text" style="font-size:12px" href="javascript:;">@av.AvName</a>
+                                @if (av.FileSize > 0)
+                                {
+                                    <p class="card-text" style="font-size:12px">@(FileSize.GetAutoSizeString(av.FileSize, 1))</p>
+                                    <a class="btn btn-info wish" data-id="@av.MatchAvId" data-avid="@av.AvId" data-file="@av.AvFilePath" href="javascript:;" target="" style="font-size:12px">添加</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <nav aria-label="...">
+        <ul class="pagination">
+            @for (int i = 1; i <= count; i++)
+            {
+                if (i != current)
+                {
+                    <li class="page-item"><a class="page-link" href="@("/webav/catelog?page=" + i + "&pagesize=" + size + "&limitGiga=" + limit)">@i</a></li>
+                }
+                else
+                {
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">
+                            @i
+                            <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+
+    <script>
+        $(".wish").click(function () {
+            $.ajax({
+                url: "/webav/SaveWish",
+                type: "get",
+                data: { 'id': $(this).data("id"), 'avid': $(this).data("avid"), 'file': $(this).data("file") },
+
+                success: function (result) {
+                    alert("添加成功");
+                }
+            });
+        });
+
+        $("#gbBtn").click(function () {
+            var limit = $("#limitValue").val();
+            window.location.href = "/webav/catelog?page=1&pagesize=" + @size + "&limitGiga=" + limit;
+        });
+    </script>
+</body>
+</html>

@@ -6,6 +6,8 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Utils;
 using System.Web.Mvc;
+using Model.WebModel;
+using DataBaseManager.ScanDataBaseHelper;
 
 namespace AVWeb.Filter
 {
@@ -13,6 +15,23 @@ namespace AVWeb.Filter
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            WebViewLog log = new WebViewLog();
+
+            log.IPAddress = filterContext.RequestContext.HttpContext.Request.UserHostAddress;
+            log.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+            log.UserAgent = filterContext.RequestContext.HttpContext.Request.UserAgent;
+            log.Action = filterContext.ActionDescriptor.ActionName;
+
+            var arrParameter = filterContext.ActionDescriptor.GetParameters();
+            string paramter = "?";
+            foreach (var pName in arrParameter)
+            {
+                var parameterValue = filterContext.ActionParameters[pName.ParameterName];
+
+                paramter += pName.ParameterName + "=" + parameterValue.ToString() + "&";
+            }
+            log.Parameter = paramter;
+
             var uNameStr = filterContext.RequestContext.HttpContext.Request.Cookies.AllKeys.FirstOrDefault(x => x == "uName");
             var tokenStr = filterContext.RequestContext.HttpContext.Request.Cookies.AllKeys.FirstOrDefault(x => x == "token");
 
@@ -25,17 +44,23 @@ namespace AVWeb.Filter
 
                 if (token.Value == guid)
                 {
-                    base.OnActionExecuting(filterContext);
+                    log.IsLogin = 1;
+                    ScanDataBaseManager.InserWebViewLog(log);
+                    base.OnActionExecuting(filterContext);                   
                 }
                 else
                 {
-                    filterContext.RequestContext.HttpContext.Response.Redirect("/webav/NoRights");
+                    ScanDataBaseManager.InserWebViewLog(log);
+                    filterContext.RequestContext.HttpContext.Response.Redirect("/webav/NoRights");                
                 }
             }
             else
             {
+                ScanDataBaseManager.InserWebViewLog(log);
                 filterContext.RequestContext.HttpContext.Response.Redirect("/webav/NoRights");
-            }         
+            }
+
+            ScanDataBaseManager.InserWebViewLog(log);
         }
     }
 }

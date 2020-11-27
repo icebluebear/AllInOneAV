@@ -2,6 +2,7 @@
 using Model.FindModels;
 using Model.JavModels;
 using Model.ScanModels;
+using Model.WebModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -451,6 +452,21 @@ namespace DataBaseManager.ScanDataBaseHelper
             var sql = "SELECT * FROM ReportItem WHERE ReportId=" + reportId;
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<ReportItem>();
+        }
+
+        public static int InsertWishList(WishList entity)
+        {
+            var sql = string.Format(@"IF NOT EXISTS (SELECT * FROM WishList WHERE IPAddress = '{0}' AND FilePath = '{3}')
+                                        INSERT INTO WishList (IPAddress, Id, AvId, FilePath) VALUES ('{0}', {1}, '{2}', '{3}')", entity.IPAddress, entity.Id, entity.AvId, entity.FilePath);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int InserWebViewLog(WebViewLog entity)
+        {
+            var sql = string.Format(@"INSERT INTO WebViewLog (IPAddress, Controller, [Action], Parameter, UserAgent, IsLogin, CreateTime) VALUES ('{0}', '{1}', '{5}', '{2}', '{3}', {4}, GETDATE())", entity.IPAddress, entity.Controller, entity.Parameter, entity.UserAgent, entity.IsLogin, entity.Action);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
     }
 }

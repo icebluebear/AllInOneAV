@@ -66,22 +66,22 @@ namespace Service
                     report.TotalSizeLong += file.Length;
                     report.TotalFiles++;
 
-                    if (file.Length >= (long)1 * 1024 * 1000 * 1000)
+                    if (file.Length >= (long)1 * 1024 * 1024 * 1024)
                     {
                         report.FileLargeThan1G++;
                     }
 
-                    if (file.Length >= (long)2 * 1024 * 1000 * 1000)
+                    if (file.Length >= (long)2 * 1024 * 1024 * 1024)
                     {
                         report.FileLargeThan2G++;
                     }
 
-                    if (file.Length >= (long)4 * 1024 * 1000 * 1000)
+                    if (file.Length >= (long)4 * 1024 * 1024 * 1024)
                     {
                         report.FileLargeThan4G++;
                     }
 
-                    if (file.Length >= (long)6 * 1024 * 1000 * 1000)
+                    if (file.Length >= (long)6 * 1024 * 1024 * 1024)
                     {
                         report.FileLargeThan6G++;
                     }
@@ -500,27 +500,27 @@ namespace Service
                         report.ExtensionModel.Add(extensionKey, 1);
                     }
 
-                    if (biggestFile.Length < (long)1 * 1024 * 1000 * 1000)
+                    if (biggestFile.Length < (long)1 * 1024 * 1024 * 1024)
                     {
                         report.LessThenOneGiga++;
                     }
 
-                    if (biggestFile.Length >= (long)1 * 1024 * 1000 * 1000 && biggestFile.Length < (long)2 * 1024 * 1000 * 1000)
+                    if (biggestFile.Length >= (long)1 * 1024 * 1024 * 1024 && biggestFile.Length < (long)2 * 1024 * 1024 * 1024)
                     {
                         report.OneGigaToTwo++;
                     }
 
-                    if (biggestFile.Length >= (long)2 * 1024 * 1000 * 1000 && biggestFile.Length < (long)4 * 1024 * 1000 * 1000)
+                    if (biggestFile.Length >= (long)2 * 1024 * 1024 * 1024 && biggestFile.Length < (long)4 * 1024 * 1024 * 1024)
                     {
                         report.TwoGigaToFour++;
                     }
 
-                    if (biggestFile.Length >= (long)4 * 1024 * 1000 * 1000 && biggestFile.Length < (long)6 * 1024 * 1000 * 1000)
+                    if (biggestFile.Length >= (long)4 * 1024 * 1024 * 1024 && biggestFile.Length < (long)6 * 1024 * 1024 * 1024)
                     {
                         report.FourGigaToSix++;
                     }
 
-                    if (biggestFile.Length >= (long)6 * 1024 * 1000 * 1000)
+                    if (biggestFile.Length >= (long)6 * 1024 * 1024 * 1024)
                     {
                         report.GreaterThenSixGiga++;
                     }

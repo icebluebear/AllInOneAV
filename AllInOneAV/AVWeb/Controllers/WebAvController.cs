@@ -23,6 +23,7 @@ namespace AVWeb.Controllers
 {
     public class WebAvController : Controller
     {
+        [Base]
         public ActionResult Index()
         {
             return View();
@@ -53,8 +54,17 @@ namespace AVWeb.Controllers
         public ActionResult GetAv(string search, bool onlyExist = false, string searchType = "all", int page = 1, int pageSize = 20)
         {
             var scanResult = new List<ScanResult>();
+            string scanCache = "scan";
 
-            scanResult = ScanDataBaseManager.GetMatchScanResult();
+            if (CacheTools.HasCache(scanCache))
+            {
+                scanResult = CacheTools.GetCache<List<ScanResult>>(scanCache);
+            }
+            else
+            {
+                scanResult = ScanDataBaseManager.GetMatchScanResult();
+                CacheTools.CacheInsert(scanCache, scanResult, DateTime.Now.AddHours(3));
+            }
 
             if (onlyExist)
             {
@@ -163,6 +173,7 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        [Base]
         public JsonResult GetComics(int page = 1, int pageSize = 50)
         {
             string message = "";
@@ -187,6 +198,7 @@ namespace AVWeb.Controllers
             return Json(new { success = success, message = message, data = files.Select(x=>x.Name).ToList(), totalCount = totalCount, currentCount = currentCount, page = page, pageSize = pageSize }, JsonRequestBehavior.AllowGet);
         }
 
+        [Base]
         public JsonResult GetComic(string name)
         {
             string message = "文件未找到";
@@ -211,6 +223,7 @@ namespace AVWeb.Controllers
             return Json(new { success = success, message = message, url = url, size = size, sizeStr = sizeStr }, JsonRequestBehavior.AllowGet);
         }
 
+        [Base]
         public String Comic()
         {
             var template = "<a href=\"{0}\" booksize=\"{1}\" bookdate=\"{2}\">{3}</a><br>";
@@ -297,6 +310,7 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        [Base]
         public ActionResult ShareFile(string name)
         {
             List<FileInfo> f = new List<FileInfo>();
@@ -425,6 +439,7 @@ namespace AVWeb.Controllers
             }
         }
 
+        [Base]
         public ActionResult GetValidateCode()
         {
             ValidateCode vCode = new ValidateCode();
@@ -434,11 +449,13 @@ namespace AVWeb.Controllers
             return File(bytes, @"image/jpeg");
         }
 
+        [Base]
         public ActionResult Login()
         {
             return View();
         }
 
+        [Base]
         public ActionResult Logout()
         {
             var uName = CookieTools.GetCookie("uName").Value;
@@ -454,11 +471,13 @@ namespace AVWeb.Controllers
             return View("Index");
         }
 
+        [Base]
         public ActionResult NoRights()
         {
             return View();
         }
 
+        [Base]
         public ActionResult ShowChart()
         {
             var report = ScanDataBaseManager.GetReport();
@@ -827,6 +846,58 @@ namespace AVWeb.Controllers
             return Json(new { success = "fail" }, JsonRequestBehavior.AllowGet);
         }
 
+        [Base]
+        public ActionResult Catelog(int limitGiga = 0, int page = 1, int pageSize = 200)
+        {
+            var scanResult = new List<ScanResult>();
+            var toBe = new List<ScanResult>();
+            string scanCache = "scan";
+
+            if (CacheTools.HasCache(scanCache))
+            {
+                scanResult = CacheTools.GetCache<List<ScanResult>>(scanCache);
+            }
+            else
+            {
+                scanResult = ScanDataBaseManager.GetMatchScanResult();
+                CacheTools.CacheInsert(scanCache, scanResult, DateTime.Now.AddHours(3));
+            }
+
+            scanResult = scanResult.Where(x => !string.IsNullOrEmpty(x.Location)).ToList();
+
+            if (limitGiga > 0)
+            {
+                double limit = (double)limitGiga * 1024 * 1024 * 1024;
+                ApplicationLog.Debug("catelog -> limitGiga: " + limitGiga + " limit: " + limit);
+                ApplicationLog.Debug("catelog -> beforeCount: " + scanResult.Count);
+
+                foreach (var s in scanResult)
+                {
+                    if (new FileInfo(s.AvFilePath).Length >= limit)
+                    {
+                        toBe.Add(s);
+                    }
+                }
+
+                ApplicationLog.Debug("catelog -> afterCount: " + toBe.Count);
+            }
+            else
+            {
+                toBe = scanResult;
+            }
+
+            var pageContent = toBe.OrderByDescending(x => x.ReleaseDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewData.Add("avs", pageContent);
+            ViewData.Add("count", (int)Math.Ceiling((decimal)toBe.Count / pageSize));
+            ViewData.Add("size", pageSize);
+            ViewData.Add("current", page);
+            ViewData.Add("total", toBe.Count);
+            ViewData.Add("limit", limitGiga);
+
+            return View();
+        }
+
         [Rights]
         public JsonResult SaveJavSetting(string category, string url, string name)
         {
@@ -855,6 +926,33 @@ namespace AVWeb.Controllers
             return Json(new { success = "fail" }, JsonRequestBehavior.AllowGet);
         }
 
+        [Base]
+        [HttpGet]
+        public JsonResult SaveWish(int id, string avId, string file)
+        {
+            int ret = 0;
+
+            var ip = Request.UserHostAddress;
+
+            WishList entity = new WishList()
+            {
+                AvId = avId,
+                IPAddress = ip,
+                FilePath = file,
+                Id = id
+            };
+
+            ret = ScanDataBaseManager.InsertWishList(entity);
+
+            if (ret > 0)
+            {
+                return Json(new { success = "success" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = "fail" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [Base]
         [HttpPost]
         public ActionResult Login(string token = "")
         {

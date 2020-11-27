@@ -1,4 +1,5 @@
-﻿using AVWeb.Models;
+﻿using AVWeb.Filter;
+using AVWeb.Models;
 using Model.MangaModel;
 using Model.WebModel;
 using System;
@@ -14,6 +15,7 @@ namespace AVWeb.Controllers
     [RoutePrefix("comic")]
     public class ComicController : ApiController
     {
+        [Base]
         [Route("getmangasource")]
         [HttpGet]
         public MangaSourceVM GetMangaSource()
@@ -35,6 +37,7 @@ namespace AVWeb.Controllers
             return ret;
         }
 
+        [Base]
         [Route("getmanagacategory")]
         [HttpGet]
         public MangaCategoryVM GetManagaCategory(MangaCategorySourceType sourceType)
@@ -44,6 +47,7 @@ namespace AVWeb.Controllers
             return ret;
         }
 
+        [Base]
         [Route("getmangacategorylist")]
         [HttpGet]
         public MangaCategoryListVM GetMangaCategoryList(MangaCategorySourceType sourceType, string category, int page)
@@ -58,6 +62,7 @@ namespace AVWeb.Controllers
             return model;
         }
 
+        [Base]
         [Route("getmangadetail")]
         [HttpGet]
         public MangaDetailVM GetMangaDetail(MangaCategorySourceType sourceType, string path)
@@ -66,6 +71,7 @@ namespace AVWeb.Controllers
             return model;
         }
 
+        [Base]
         [Route("getmangapic")]
         [HttpGet]
         public MangaPicturesVM GetMangaPic(MangaCategorySourceType sourceType, string path)
