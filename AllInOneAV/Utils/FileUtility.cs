@@ -13,6 +13,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static Utils.Win32;
 
 namespace Utils
 {
@@ -1055,6 +1056,44 @@ namespace Utils
             }
 
             infos.Add(i);
+        }
+
+        public static int TransferFileUsingSystem(List<string> from, List<string> to, bool isMove = false)
+        {
+            if (from == null || from.Count <= 0 || to == null || to.Count <= 0 || from.Count != to.Count)
+            {
+                return -1;
+            }
+
+            string fromStr = "";
+            string toStr = "";
+
+            foreach (var file in from)
+            {
+                fromStr += file + "\0";
+            }
+
+            foreach (var file in to)
+            {
+                toStr += file + "\0";
+            }
+
+            if (string.IsNullOrEmpty(fromStr) || string.IsNullOrEmpty(toStr))
+            {
+                return -2;
+            }
+
+            Win32.SHFILEOPSTRUCT op = new Win32.SHFILEOPSTRUCT();
+            op.hwnd = IntPtr.Zero;
+            op.wFunc = isMove ? FileFuncFlags.FO_MOVE : FileFuncFlags.FO_COPY;
+            op.pFrom = fromStr;
+            op.pTo = toStr;
+            op.hNameMappings = IntPtr.Zero;
+            op.fFlags = Win32.FILEOP_FLAGS.FOF_NOCONFIRMMKDIR;
+            op.fAnyOperationsAborted = false;
+            int ret = Win32.SHFileOperation(ref op);
+
+            return ret;
         }
     }
 

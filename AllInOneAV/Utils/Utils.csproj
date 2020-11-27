@@ -123,6 +123,7 @@
     <Compile Include="RestClient.cs" />
     <Compile Include="ValidateCode.cs" />
     <Compile Include="VideoStream.cs" />
+    <Compile Include="Win32.cs" />
     <Compile Include="WindowHelper.cs" />
     <Compile Include="ZipHelper.cs" />
   </ItemGroup>
