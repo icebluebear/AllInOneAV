@@ -44,6 +44,27 @@ namespace DataBaseManager.JavDataBaseHelper
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<Actress>();
         }
 
+        public static List<Company> GetCompany()
+        {
+            var sql = @"SELECT * FROM Company";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<Company>();
+        }
+
+        public static List<Publisher> GetPublisher()
+        {
+            var sql = @"SELECT * FROM Publisher";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<Publisher>();
+        }
+
+        public static List<Director> GetDirector()
+        {
+            var sql = @"SELECT * FROM Director";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<Director>();
+        }
+
         public static List<CommonModel> GetCommonMode(string table)
         {
             var sql = @"SELECT * FROM " + table;
