@@ -1,7 +1,0 @@
-1 not showing keyword
-
-2 confirm button not enable
-
-3 single match '<' and '>' not hiding
-
-4 shortkey not working

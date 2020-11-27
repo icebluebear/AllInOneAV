@@ -1,26 +1,10 @@
 # AllInOneAV
 One place to manage AVs
 
-Mulitple subtools to manage Janpanese AV(s).
+1 运行Script中的脚本在本地Sqlserver数据库中建立库及表
 
-All functions are base on configfile in setting folder, create a folder 'setting' under your c:\ drive, put all config files in it.
+2 导入Script的dataBak中的数据（JavLibrary中数据的快照，后续所有功能的依赖数据）
 
-All AV metadata come from Javlibray.com, use BatchJavScanerAndMacthMagUrl to download whole Javlibray.com first, commond line -full is fully update(single thread, mutilple threads mode has bugs), -update for daily update.
+3 Setting复制到C:\根目录下
 
-1 AvManager is a GUI project to play local av, provided serach function. Need download Javlibrary.com first and use CombineEpisode to rename your local av file and ScanAllAndMatch to map your file with database.
-
-2 AvPlay likes AvManager
-
-3 CombineEpisode is a GUI project to combine muti-episode AV to one, and do other funtions like rename, remove duplicate etc,.
-
-4 AvWeb ia a web base project can serach and play, more like a demo project.
-
-5 FindMovie is a GUI poeject to find all 'matched' local AV, i'm using Everything instead rightnow.
-
-6 ManagaDownloaderGUI can donwnload Comics from only 2 sources for now.
-
-7 PlayRecnet is a GUI project to play recent AV from certain folder, most use for just downloaded AVs.
-
-8 SisDownload can download .torrent from Sis.net
-
-9 BrowseAndDownload is a GUI project to view and download .torrent downloaded from No.8
+4 编译整个解决方案并按照ScheduleTask中的截图建立定时任务（具体路径按照自己环境更换）
