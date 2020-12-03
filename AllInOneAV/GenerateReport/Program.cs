@@ -3,10 +3,12 @@ using Model.Common;
 using Model.JavModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils;
 
 namespace GenerateReport
 {
@@ -22,6 +24,31 @@ namespace GenerateReport
             {
                 Service.ReportService.GenerateReportDataOnly();
             }
+        }
+
+        private static async void DoScanAsync()
+        {
+            await DoScanAndMatch();
+
+            Service.ReportService.GenerateReportDataOnly();
+        }
+
+
+        private static async Task DoScanAndMatch()
+        {
+            var p = new Process
+            {
+                StartInfo =
+                    {
+                        FileName = @"G:\Github\AllInOneAV\AllInOneAV\ScanAllAndMatch\bin\Debug\ScanAllAndMatch.exe",
+                        UseShellExecute = false,
+                        Arguments = "",
+                        CreateNoWindow = false,
+                    }
+            };
+            p.Start();
+
+            await p.WaitForExitAsync();
         }
     }
 }

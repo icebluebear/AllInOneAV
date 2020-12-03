@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "NewUnitTest\Uni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyFiles", "CopyFiles\CopyFiles.csproj", "{6A7C9260-08C0-4AAA-97B4-AA8B0479EE3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketConsole", "WebSocketConsole\WebSocketConsole.csproj", "{94A36D3E-9C2E-4478-B66E-E76EF55FCCFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{6A7C9260-08C0-4AAA-97B4-AA8B0479EE3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A7C9260-08C0-4AAA-97B4-AA8B0479EE3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A7C9260-08C0-4AAA-97B4-AA8B0479EE3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94A36D3E-9C2E-4478-B66E-E76EF55FCCFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94A36D3E-9C2E-4478-B66E-E76EF55FCCFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94A36D3E-9C2E-4478-B66E-E76EF55FCCFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94A36D3E-9C2E-4478-B66E-E76EF55FCCFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

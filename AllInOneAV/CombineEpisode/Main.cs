@@ -2116,6 +2116,12 @@ namespace CombineEpisode
 
                     richTextBox1.AppendText("\t文件名 >= " + n + " 扩展名 => " + e, Color.Black, font, true);
 
+                    if (fi.Name.Contains("-5" + fi.Extension) && fi.Length < 1 * 1024 * 1024 * 1024)
+                    {
+                        richTextBox1.AppendText("删除dummy文件");
+                        continue;
+                    }
+
                     if (moveRecord.ContainsKey(fi.Name))
                     {
                         moveRecord[fi.Name]++;

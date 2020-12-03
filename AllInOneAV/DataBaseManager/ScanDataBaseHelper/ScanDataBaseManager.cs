@@ -475,5 +475,12 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<WishList>();
         }
+
+        public static List<WebViewLog> GetWebViewLog(string where)
+        {
+            var sql = string.Format("SELECT * FROM WebViewLog WHERE 1=1");
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<WebViewLog>();
+        }
     }
 }

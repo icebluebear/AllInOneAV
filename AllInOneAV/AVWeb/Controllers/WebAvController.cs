@@ -928,6 +928,47 @@ namespace AVWeb.Controllers
 
         [Base]
         [HttpGet]
+        public string GetWebViewLog(string where)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            string table = (@"<table class='table table-striped'>
+                                    <thead>
+                                      <tr>
+                                        <th scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>控制器</th>
+                                        <th scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>方法</th>
+                                        <th scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>IP</th>
+                                        <th scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>客户端</th>
+                                        <th scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>登录</th>
+                                        <th scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>时间</th>
+                                        <th scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>参数</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {0}
+                                    </tbody>
+                                  </table>");
+
+            var logs = ScanDataBaseManager.GetWebViewLog(where);
+
+            foreach (var log in logs)
+            {
+                sb.Append(string.Format(@"<tr>
+                                            <td scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>{0}</td>
+                                            <td scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>{1}</td>
+                                            <td scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>{2}</td>
+                                            <td scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>{3}</td>
+                                            <td scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>{4}</td>
+                                            <td scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>{5}</td>
+                                            <td scope='col' style='word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;width:100px'>{6}</td>
+                                        </tr>", log.Controller, log.Action, log.IPAddress, log.UserAgent, log.IsLogin == 1 ? "True" : "False", log.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"), log.Parameter));
+            }
+
+            return string.Format(table, sb.ToString());
+        }
+
+        [Base]
+        [HttpGet]
         public JsonResult SaveWish(int id, string avId, string file)
         {
             int ret = 0;
@@ -1063,6 +1104,29 @@ namespace AVWeb.Controllers
             }
 
             return Json(new { status = ret, msg = msg}, JsonRequestBehavior.AllowGet);
+        }
+
+        [Rights]
+        public ActionResult RematchAndGenerateReport()
+        {
+            var p = new Process
+            {
+                StartInfo =
+                {
+                    FileName = @"G:\Github\AllInOneAV\AllInOneAV\GenerateReport\bin\Debug\GenerateReport.exe",
+                    UseShellExecute = false,
+                    Arguments = " new",
+                    CreateNoWindow = false,
+                }
+            };
+            p.Start();
+
+            return View();
+        }
+
+        public ActionResult TestSocket()
+        {
+            return View();
         }
     }
 }

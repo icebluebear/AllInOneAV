@@ -76,6 +76,23 @@
         <button type="button" class="btn btn-primary" id="faviBtn">保存</button>
     </div>
 
+    <div class="container-fluid">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">网站浏览日志</span>
+            </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Where条件</span>
+            </div>
+            <input type="text" aria-label="First name" class="form-control" id="logWhere">
+        </div>
+
+        <button type="button" class="btn btn-primary" id="logBtn">查询</button>
+    </div>
+
+    <div id="logDiv" style="width:100%">
+    </div>
+
     <script>
         $(".dropdown-item").click(function () {
             var selector = "#" + $(this).data("selector");
@@ -118,6 +135,19 @@
                     } else {
                         alert("更新失败");
                     }
+                }
+            });
+        });
+
+        $("#logBtn").click(function () {
+            $.ajax({
+                url: "/webav/getwebviewlog",
+                type: "get",
+                data: { 'where': $("#logWhere").val().trim() },
+
+                success: function (result) {
+                    $('#logDiv').empty();
+                    $('#logDiv').html(result);
                 }
             });
         });

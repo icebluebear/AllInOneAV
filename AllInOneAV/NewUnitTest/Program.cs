@@ -17,7 +17,7 @@ namespace NewUnitTest
     {
         static void Main(string[] args)
         {
-            BackUpJav();
+            var result = new EverythingHelper().SearchFile(@"vdd-123", Model.Common.EverythingSearchEnum.Video);
         }
 
         public static void BackUpJav()

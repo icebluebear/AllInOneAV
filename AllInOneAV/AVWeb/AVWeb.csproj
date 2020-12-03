@@ -192,6 +192,8 @@
     <Content Include="Views\WebAv\ShowChart.cshtml" />
     <Content Include="Views\WebAv\Setting.cshtml" />
     <Content Include="Views\WebAv\Catelog.cshtml" />
+    <Content Include="Views\WebAv\TestProcess.cshtml" />
+    <Content Include="Views\WebAv\TestSocket.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
