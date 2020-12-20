@@ -1,12 +1,16 @@
-﻿using Model.OneOneFive;
+﻿using DataBaseManager.ScanDataBaseHelper;
+using Model.OneOneFive;
+using Model.ScanModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Utils;
 
@@ -27,6 +31,28 @@ namespace Service
                     var data = Newtonsoft.Json.Linq.JObject.Parse(htmlRet.Content);
 
                     if (data.Property("count").HasValues && int.Parse(data.Property("count").Value.ToString()) > 0)
+                    {
+                        ret = true;
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+        public static bool Get115SearchResultInFinFolder(CookieContainer cc, string content, string host = "115.com", string reffer = "https://115.com/?cid=0&offset=0&mode=wangpan", string ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/12.0.0")
+        {
+            bool ret = false;
+
+            var url = string.Format(string.Format("https://webapi.115.com/files/search?search_value={0}&format=json", content));
+            var htmlRet = HtmlManager.GetHtmlWebClient("https://115.com", url, cc);
+            if (htmlRet.Success)
+            {
+                if (!string.IsNullOrEmpty(htmlRet.Content))
+                {
+                    var data = Newtonsoft.Json.Linq.JObject.Parse(htmlRet.Content);
+
+                    if (data.Property("count").HasValues && int.Parse(data.Property("count").Value.ToString()) > 0 && data.Property("data").FirstOrDefault().FirstOrDefault().Value<string>("dp").ToUpper() == "FIN")
                     {
                         ret = true;
                     }
@@ -247,6 +273,90 @@ namespace Service
             param.Add("files_new_name[" + fid + "]", newName);
 
             HtmlManager.Post(url, param, cc);
+        }
+
+        public static void Match115(List<string> drivers, bool overRide = false, bool writeJson = true)
+        {
+            Dictionary<string, bool> SearchResult = new Dictionary<string, bool>();
+
+            foreach (var d in drivers)
+            {
+                var cc = Get115Cookie();
+                string dd = d;
+
+                if (d.EndsWith("\\") || d.EndsWith("/"))
+                {
+                    dd = dd.Substring(0, dd.Length - 1);
+                }
+
+                var files = new DirectoryInfo(dd + @"\fin\").GetFiles();
+                int index = 1;
+
+                foreach (var file in files)
+                {
+                    var result = false;
+                    var possibleSha = ScanDataBaseManager.GetPossibleMaping(file.FullName, file.Length);
+
+                    if (possibleSha != null && overRide == false)
+                    {
+                        ScanDataBaseManager.DeleteShaMapping(possibleSha.Sha1);
+
+                        if (possibleSha.IsExist == 0)
+                        {
+                            result = OneOneFiveService.Get115SearchResultInFinFolder(cc, possibleSha.Sha1);
+                        }
+                        else
+                        {
+                            result = true;
+                            possibleSha.IsExist = 1;
+
+                            ScanDataBaseManager.InsertShaMapping(possibleSha);
+                        }
+
+                        Console.WriteLine("处理 " + index++ + " / " + files.Count());
+                    }
+
+                    if (possibleSha == null || overRide)
+                    {
+                        DateTime start = DateTime.Now;
+
+                        var sha1 = FileUtility.ComputeSHA1(file.FullName);
+
+                        DateTime finishSha1 = DateTime.Now;
+
+                        result = OneOneFiveService.Get115SearchResultInFinFolder(cc, sha1);
+
+                        Console.WriteLine("处理 " + index++ + " / " + files.Count() + " 结果 " + (result ? "存在" : "不存在") + " 计算用时 " + (finishSha1 - start).TotalSeconds + " 秒 搜索用时 " + (DateTime.Now - finishSha1).TotalSeconds + " 秒 总共用时 " + (DateTime.Now - start).TotalSeconds + " 秒");
+
+                        AvAndShaMapping aasm = new AvAndShaMapping();
+                        aasm.FilePath = file.FullName;
+                        aasm.FileSize = file.Length;
+                        aasm.IsExist = result ? 1 : 0;
+                        aasm.Sha1 = sha1;
+
+                        ScanDataBaseManager.DeleteShaMapping(aasm.Sha1);
+                        ScanDataBaseManager.InsertShaMapping(aasm);
+                    }
+
+                    SearchResult.Add(file.FullName, result);
+                }
+            }
+
+            if (writeJson)
+            {
+                var fileResult = @"c:\setting\filter115.json";
+
+                if (File.Exists(fileResult))
+                {
+                    File.Delete(fileResult);
+                    Thread.Sleep(50);
+                }
+
+                File.Create(fileResult).Close();
+                StreamWriter sw = new StreamWriter(fileResult);
+                sw.WriteLine(JsonConvert.SerializeObject(SearchResult));
+                sw.Close();
+            }
         }
     }
 }

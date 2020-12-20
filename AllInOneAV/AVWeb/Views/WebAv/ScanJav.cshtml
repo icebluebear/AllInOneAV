@@ -138,7 +138,7 @@
 
             input.forEach(x => urls.push(url + x));
 
-            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': urls };
+            var parameter = { 'IsAsc': $("#order").is(":checked"), 'PageSize': $("#pageSize").val(), 'StartingPage': urls };
 
             $.ajax({
                 url: "/webav/PostScanJob",
@@ -155,7 +155,7 @@
             var jobName = $(".filter-option-inner-inner:visible").html();
             var input = $("#pageSelect").val();
 
-            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
+            var parameter = { 'IsAsc': $("#order").is(":checked"), 'PageSize': $("#pageSize").val(), 'StartingPage': input };
 
             $.ajax({
                 url: "/webav/PostScanJob",
@@ -184,7 +184,7 @@
                 input.push.apply(input, $(this).val());
             });
 
-            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
+            var parameter = { 'IsAsc': $("#order").is(":checked"), 'PageSize': $("#pageSize").val(), 'StartingPage': input };
 
             $.ajax({
                 url: "/webav/PostScanJob",
@@ -201,7 +201,7 @@
             var jobName = $(".filter-option-inner-inner:visible").html();
             var input = $("#categorySelect").val();
 
-            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
+            var parameter = { 'IsAsc': $("#order").is(":checked"), 'PageSize': $("#pageSize").val(), 'StartingPage': input };
 
             $.ajax({
                 url: "/webav/PostScanJob",
@@ -218,7 +218,7 @@
             var jobName = $(".filter-option-inner-inner:visible").html();
             var input = $("#actressSelect").val();
 
-            var parameter = { 'IsAsc': $("#order").val() == 'on' ? 'true' : 'false', 'PageSize': $("#pageSize").val(), 'StartingPage': input };
+            var parameter = { 'IsAsc': $("#order").is(":checked"), 'PageSize': $("#pageSize").val(), 'StartingPage': input };
 
             $.ajax({
                 url: "/webav/PostScanJob",

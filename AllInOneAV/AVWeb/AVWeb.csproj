@@ -194,6 +194,7 @@
     <Content Include="Views\WebAv\Catelog.cshtml" />
     <Content Include="Views\WebAv\TestProcess.cshtml" />
     <Content Include="Views\WebAv\TestSocket.cshtml" />
+    <Content Include="Views\WebAv\RunJob.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

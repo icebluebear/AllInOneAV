@@ -1128,5 +1128,12 @@ namespace AVWeb.Controllers
         {
             return View();
         }
+
+        public ActionResult RunJob(string router)
+        {
+            ViewData.Add("router", router);
+
+            return View();
+        }
     }
 }

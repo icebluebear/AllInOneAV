@@ -1,7 +1,9 @@
 ﻿using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
+using Model.ScanModels;
 using MonoTorrent;
 using Newtonsoft.Json;
+using Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +19,82 @@ namespace NewUnitTest
     {
         static void Main(string[] args)
         {
-            var result = new EverythingHelper().SearchFile(@"vdd-123", Model.Common.EverythingSearchEnum.Video);
+            Match115(new List<string>() { "f:" });
+        }
+
+        public static void Match115(List<string> drivers, bool overRide = false, bool writeJson = true)
+        {
+            Dictionary<string, bool> SearchResult = new Dictionary<string, bool>();
+            var cc = OneOneFiveService.Get115Cookie();
+
+            foreach (var d in drivers)
+            {
+                var files = new DirectoryInfo(d + @"\fin\").GetFiles();
+                int index = 1;
+
+                foreach (var file in files)
+                {
+                    var result = false;
+                    var possibleSha = ScanDataBaseManager.GetPossibleMaping(file.FullName, file.Length);
+
+                    if (possibleSha != null && overRide == false)
+                    {
+                        ScanDataBaseManager.DeleteShaMapping(possibleSha.Sha1);
+
+                        if (possibleSha.IsExist == 0)
+                        {
+                            result = OneOneFiveService.Get115SearchResultInFinFolder(cc, possibleSha.Sha1);
+                        }
+                        else
+                        {
+                            result = true;
+                            possibleSha.IsExist = 1;
+
+                            ScanDataBaseManager.InsertShaMapping(possibleSha);
+                        }
+                    }
+
+                    if(possibleSha == null || overRide)
+                    {
+                        DateTime start = DateTime.Now;
+
+                        var sha1 = FileUtility.ComputeSHA1(file.FullName);
+
+                        DateTime finishSha1 = DateTime.Now;
+
+                        result = OneOneFiveService.Get115SearchResultInFinFolder(cc, sha1);
+
+                        Console.WriteLine("处理 " + index++ + " / " + files.Count() + " 结果 " + (result ? "存在" : "不存在") + " 计算用时 " + (finishSha1 - start).TotalSeconds + " 秒 搜索用时 " + (DateTime.Now - finishSha1).TotalSeconds + " 秒 总共用时 " + (DateTime.Now - start).TotalSeconds + " 秒");
+
+                        AvAndShaMapping aasm = new AvAndShaMapping();
+                        aasm.FilePath = file.FullName;
+                        aasm.FileSize = file.Length;
+                        aasm.IsExist = result ? 1 : 0;
+                        aasm.Sha1 = sha1;
+
+                        ScanDataBaseManager.DeleteShaMapping(aasm.Sha1);
+                        ScanDataBaseManager.InsertShaMapping(aasm);
+                    }
+                    
+                    SearchResult.Add(file.FullName, result);
+                }
+            }
+
+            if (writeJson)
+            {
+                var fileResult = @"c:\setting\filter115.json";
+
+                if (File.Exists(fileResult))
+                {
+                    File.Delete(fileResult);
+                    Thread.Sleep(50);
+                }
+
+                File.Create(fileResult).Close();
+                StreamWriter sw = new StreamWriter(fileResult);
+                sw.WriteLine(JsonConvert.SerializeObject(SearchResult));
+                sw.Close();
+            }
         }
 
         public static void BackUpJav()

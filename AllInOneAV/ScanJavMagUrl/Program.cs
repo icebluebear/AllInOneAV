@@ -123,7 +123,7 @@ namespace ScanJavMagUrl
                 RemoteScanMag entity = new RemoteScanMag();
                 entity.JobId = jobId;
 
-                Console.WriteLine("处理 --> " + count++ + "/" + models.Count);
+                Console.Write("处理 --> " + rm.Name + " " + count++ + "/" + models.Count);
 
                 var matchFiles = new EverythingHelper().SearchFile("!c:\\ " + rm.Id + " | " + rm.Id.Replace("-", ""), EverythingSearchEnum.Video);
 
@@ -182,7 +182,7 @@ namespace ScanJavMagUrl
                 }
                 else
                 {
-                    Console.WriteLine("没搜到");
+                    Console.WriteLine(" 没搜到");
                     entity.SearchStatus = 0;
                 }
             });

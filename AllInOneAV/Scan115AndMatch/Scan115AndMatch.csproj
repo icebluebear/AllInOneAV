@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{263B9B45-420E-4200-A44D-0E63E2D1CE20}</ProjectGuid>
+    <ProjectGuid>{E401438D-2655-4A19-822D-25B8AE0B53F0}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>NewUnitTest</RootNamespace>
-    <AssemblyName>NewUnitTest</AssemblyName>
+    <RootNamespace>Scan115AndMatch</RootNamespace>
+    <AssemblyName>Scan115AndMatch</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,16 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Nat, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6c9468a3c21bc6d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Nat.3.0.1\lib\netstandard2.0\Mono.Nat.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoTorrent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoTorrent.1.0.28\lib\netstandard2.0\MonoTorrent.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
-    <Reference Include="ReusableTasks, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ReusableTasks.2.0.0\lib\netstandard2.0\ReusableTasks.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,24 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataBaseManager\DataBaseManager.csproj">
-      <Project>{4C6184D9-D4AE-42EE-8270-3401ADB22FE0}</Project>
-      <Name>DataBaseManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{144C6554-CF3B-49AF-9A8C-926A99E633BE}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Service\Service.csproj">
       <Project>{53BD1489-F098-4796-9EC6-8D8C1A623FC7}</Project>
       <Name>Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Utils\Utils.csproj">
-      <Project>{85E3D89D-603E-4992-B266-E2CD3C8B4209}</Project>
-      <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

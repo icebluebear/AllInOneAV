@@ -482,5 +482,40 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToList<WebViewLog>();
         }
+
+        public static AvAndShaMapping GetPossibleMaping(string filePath, double fileSize)
+        {
+            var sql = string.Format(@"SELECT TOP 1 * FROM AvAndShaMapping WHERE FilePath = N'{0}' AND FileSize = {1}", filePath, fileSize);
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<AvAndShaMapping>();
+        }
+
+        public static bool IsExistShaMapping(string filePath, double fileSize, string sha1)
+        {
+            var sql = string.Format(@"SELECT TOP 1 * FROM AvAndShaMapping WHERE FilePath = N'{0}' AND FileSize = {1} AND Sha1 = N'{2}'", filePath, fileSize, sha1);
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<AvAndShaMapping>() == null ? false : true;
+        }
+
+        public static int InsertShaMapping(AvAndShaMapping entity)
+        {
+            var sql = string.Format("INSERT INTO AvAndShaMapping (FilePath, FileSize, IsExist, Sha1, UpdateTime) VALUES (N'{0}', {1}, {2}, N'{3}', GETDATE())", entity.FilePath, entity.FileSize, entity.IsExist, entity.Sha1);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int DeleteShaMapping(string sha1)
+        {
+            var sql = string.Format("DELETE FROM AvAndShaMapping WHERE Sha1 = N'{0}'", sha1);
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
+
+        public static int UpdateShaMapping(int id, int status)
+        {
+            var sql = "UPDATE AvAndShaMapping SET IsExist = " + status + " WHERE AvAndShaMappingId = " + id;
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
     }
 }

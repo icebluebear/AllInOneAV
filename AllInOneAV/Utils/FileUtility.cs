@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -888,6 +889,53 @@ namespace Utils
             }
 
             return strResult;
+        }
+
+        public static String ComputeSHA1(String fileName)
+        {
+            String hashSHA1 = String.Empty;
+            //检查文件是否存在，如果文件存在则进行计算，否则返回空值
+            if (System.IO.File.Exists(fileName))
+            {
+                using (System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                {
+                    //计算文件的SHA1值
+                    System.Security.Cryptography.SHA1 calculator = System.Security.Cryptography.SHA1.Create();
+                    Byte[] buffer = calculator.ComputeHash(fs);
+                    calculator.Clear();
+                    //将字节数组转换成十六进制的字符串形式
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < buffer.Length; i++)
+                    {
+                        stringBuilder.Append(buffer[i].ToString("x2"));
+                    }
+                    hashSHA1 = stringBuilder.ToString();
+                }//关闭文件流
+            }
+            return hashSHA1;
+        }
+
+        public static string SHA1(string content)
+        {
+            return SHA1(content, Encoding.UTF8);
+        }
+
+        public static string SHA1(string content, Encoding encode)
+        {
+            try
+            {
+                SHA1 sha1 = new SHA1CryptoServiceProvider();
+                byte[] bytes_in = encode.GetBytes(content);
+                byte[] bytes_out = sha1.ComputeHash(bytes_in);
+                sha1.Dispose();
+                string result = BitConverter.ToString(bytes_out);
+                result = result.Replace("-", "");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("SHA1加密出错：" + ex.Message);
+            }
         }
 
         public static ValueTuple<Dictionary<string, string>, Dictionary<string, List<string>>> GetMagUrlOfUnmatchedFile(string dri)
