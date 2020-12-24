@@ -1,5 +1,6 @@
 ﻿using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
+using Microsoft.Win32.TaskScheduler;
 using Model.ScanModels;
 using MonoTorrent;
 using Newtonsoft.Json;
@@ -19,7 +20,9 @@ namespace NewUnitTest
     {
         static void Main(string[] args)
         {
-            Match115(new List<string>() { "f:" });
+            var text = "终于等到你！\n在这里我们会给提供专属服务~\n伴学小能手就是我，哈嘿！";
+
+            string[] sArray = text.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public static void Match115(List<string> drivers, bool overRide = false, bool writeJson = true)
@@ -184,6 +187,22 @@ namespace NewUnitTest
                 sw.WriteLine(JsonConvert.SerializeObject(publisher));
                 sw.Close();
             }
+        }
+
+        public static void GetTaskNextRunTime(string taskName)
+        {
+            TaskService ts = new TaskService();
+            var task = ts.FindTask("ScanJavJob");
+
+            task.Run();
+
+        }
+
+        public static string GetNextRunTimeString(Microsoft.Win32.TaskScheduler.Task t)
+        {
+            if (t.State == TaskState.Disabled || t.NextRunTime < DateTime.Now)
+                return string.Empty;
+            return t.NextRunTime.ToString("G");
         }
     }
 }

@@ -2,6 +2,7 @@
 using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
 using Microsoft.Ajax.Utilities;
+using Microsoft.Win32.TaskScheduler;
 using Model.JavModels;
 using Model.ScanModels;
 using Model.WebModel;
@@ -41,7 +42,6 @@ namespace AVWeb.Controllers
             return View();
         }
 
-        [Rights]
         public ActionResult PlayAv(string filePath)
         {
             var host = "http://www.cainqs.com:8087/avapi/playav?filename=" + filePath;

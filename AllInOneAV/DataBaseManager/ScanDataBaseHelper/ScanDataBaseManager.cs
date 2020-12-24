@@ -517,5 +517,12 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
         }
+
+        public static TokenModel GetToken()
+        {
+            var sql = "SELECT * FROM Token";
+
+            return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<TokenModel>();
+        }
     }
 }

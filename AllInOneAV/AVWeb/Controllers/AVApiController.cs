@@ -1,8 +1,10 @@
 ﻿using AVWeb.Filter;
 using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
+using Microsoft.Win32.TaskScheduler;
 using Model.JavModels;
 using Model.ScanModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -61,7 +63,7 @@ namespace AVWeb.Controllers
         /// <returns>AV详细资料列表</returns>
         [Route("GetAv")]
         [HttpGet]
-        public List<AV> GetAv(int page = 1, int pageSize = 20, string id = "", string category = "", string actress ="", string director = "", string company = "", string publisher = "", string releaseDate = "", string orderBy = " ReleaseDate ", string orderType = " DESC ")
+        public List<AV> GetAv(int page = 1, int pageSize = 20, string id = "", string category = "", string actress = "", string director = "", string company = "", string publisher = "", string releaseDate = "", string orderBy = " ReleaseDate ", string orderType = " DESC ")
         {
             List<AV> ret = new List<AV>();
             string orderStr = orderBy + orderType;
@@ -265,6 +267,85 @@ namespace AVWeb.Controllers
         public string PostComicFiles()
         {
             return PostFiles(HttpContext.Current.Request.Files, "G:\\AVWeb\\ComicDownload\\", false, ".zip");
+        }
+
+        [HttpGet]
+        [Route("GetNextRunTime")]
+        public NextRunModel GetNextRunTime(string token, string name = "ScanJavJob")
+        {
+            NextRunModel ret = new NextRunModel();
+            var to = ScanDataBaseManager.GetToken().Token;
+
+            if (to == token)
+            {
+                TaskService ts = new TaskService();
+                var task = ts.FindTask("ScanJavJob");
+
+                if (task != null)
+                {
+                    ret.NextRunTime = task.NextRunTime;
+                    ret.NextRunCountMinutes = (int)Math.Ceiling((task.NextRunTime - DateTime.Now).TotalMinutes);
+                }
+            }
+
+            return ret;
+        }
+
+
+        [HttpGet]
+        [Route("SiriRunJob")]
+        public TaskCommonModel SiriRunJob(string token, string jobName = "SiriRun", int page = 15)
+        {
+            TaskCommonModel ret = new TaskCommonModel();
+            var to = ScanDataBaseManager.GetToken().Token;
+
+            if (to == token)
+            {
+                var parameter = new ScanParameter();
+                parameter.IsAsc = true;
+                parameter.PageSize = page;
+                parameter.StartingPage = new List<string>() { "http://www.javlibrary.com/cn/vl_update.php?mode=" };
+
+                var jobId = ScanDataBaseManager.InsertScanJob(jobName, JsonConvert.SerializeObject(parameter));
+
+                ret.Message = "建立成功";
+            }
+            else
+            {
+                ret.Message = "没有权限";
+            }
+
+            return ret;
+        }
+
+
+        [HttpGet]
+        [Route("RunTask")]
+        public TaskCommonModel RunTask(string token, string name = "ScanJavJob")
+        {
+            TaskCommonModel ret = new TaskCommonModel();
+            var to = ScanDataBaseManager.GetToken().Token;
+
+            if (to == token)
+            {
+                TaskService ts = new TaskService();
+                var task = ts.FindTask(name);
+
+                ret.Message = "程序没有执行";
+
+                if (task != null && task.State == TaskState.Ready)
+                {
+                    task.Run();
+
+                    ret.Message = "开始执行";
+                }
+            }
+            else
+            {
+                ret.Message = "没有权限";
+            }
+
+            return ret;
         }
 
         #region 工具
