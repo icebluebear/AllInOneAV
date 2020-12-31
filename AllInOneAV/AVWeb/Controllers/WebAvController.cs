@@ -269,7 +269,7 @@ namespace AVWeb.Controllers
                         key.Type |= ShowMagType.OnlyExist;
                     }
 
-                    if (d.Value.Exists(x => x.MagSize > 0))
+                    if (d.Value.Exists(x => x.MagSize > 0) || (d.Value.Exists(x => x.MagTitle.ToUpper().Contains("HD")) || d.Value.Exists(x => x.MagTitle.ToUpper().Contains("FHD"))))
                     {
                         key.Type |= ShowMagType.HasMagSize;
                     }

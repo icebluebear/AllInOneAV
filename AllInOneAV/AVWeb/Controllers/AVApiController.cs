@@ -348,6 +348,37 @@ namespace AVWeb.Controllers
             return ret;
         }
 
+        [HttpGet]
+        [Route("EverythingSearch")]
+        public Model.ScanModels.EverythingResult EverythingSearch(string token, string content)
+        {
+            var to = ScanDataBaseManager.GetToken().Token;
+
+            if (to == token)
+            {
+                var htmlModel = HtmlManager.GetHtmlContentViaUrl("http://localhost:8086/" + @"?s=&o=0&j=1&p=c&path_column=1&size_column=1&j=1&q=!c:\ " + EverythingHelper.Extensions + " " + content);
+
+                if (htmlModel.Success)
+                {
+                    var retModel = JsonConvert.DeserializeObject<Model.ScanModels.EverythingResult>(htmlModel.Content);
+
+                    if (retModel != null && retModel.results != null)
+                    {
+                        retModel.results = retModel.results.OrderByDescending(x => double.Parse(x.size)).ToList();
+
+                        foreach (var r in retModel.results)
+                        {
+                            r.sizeStr = FileSize.GetAutoSizeString(double.Parse(r.size), 1);
+                        }
+
+                        return retModel;
+                    }
+                }
+            }
+
+            return new Model.ScanModels.EverythingResult();
+        }
+
         #region 工具
         private string PostFiles(HttpFileCollection filelist, string folder, bool addDate, string ext)
         {

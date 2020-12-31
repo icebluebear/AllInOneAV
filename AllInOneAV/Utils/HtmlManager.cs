@@ -66,6 +66,8 @@ namespace Utils
                 Success = false
             };
 
+            HttpWebResponse response = null;
+
             try
             {
                 GC.Collect();
@@ -82,7 +84,7 @@ namespace Utils
                 }
 
                 request.KeepAlive = true;
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                response = (HttpWebResponse)request.GetResponse();
                 Stream dataStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(dataStream, Encoding.GetEncoding(end));
                 //while (!reader.EndOfStream)
@@ -94,13 +96,25 @@ namespace Utils
                 dataStream.Close();
                 response.Close();
             }
-            catch (Exception e)
+            catch (WebException ex)
             {
+                response = (HttpWebResponse)ex.Response;
                 res.Success = false;
+                res.Content = "";
 
-                if (e.Message == Error)
+                if (isJav)
                 {
-                    Console.WriteLine("123");
+                    Stream myResponseStream = response.GetResponseStream();
+                    using (StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8))
+                    {
+                        res.Content = myStreamReader.ReadToEnd();
+                    }
+                    myResponseStream.Close();
+
+                    foreach (Cookie cookie in response.Cookies)
+                    {
+                        cc.Add(cookie);
+                    }
                 }
 
                 return res;

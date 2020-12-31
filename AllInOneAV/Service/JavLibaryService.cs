@@ -49,9 +49,11 @@ namespace Service
         public static void GetJavCookieChromeProcess()
         {
             Broswer.OpenBrowserUrl("http://www.javlibrary.com/cn/");
-            Thread.Sleep(5 * 1000);
+            Thread.Sleep(8 * 1000);
             Broswer.Refresh_click();
-            Thread.Sleep(10 * 1000);
+            Thread.Sleep(15 * 1000);
+            Broswer.Refresh_click();
+            Thread.Sleep(5 * 1000);
 
             var cookies = new ChromeCookieReader().ReadChromeCookies(".javlibrary.com");
 

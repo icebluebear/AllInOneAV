@@ -1,17 +1,17 @@
 ﻿using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.V8;
 using Microsoft.Win32.TaskScheduler;
 using Model.ScanModels;
-using MonoTorrent;
 using Newtonsoft.Json;
 using Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 using Utils;
 
 namespace NewUnitTest
@@ -20,9 +20,16 @@ namespace NewUnitTest
     {
         static void Main(string[] args)
         {
-            var text = "终于等到你！\n在这里我们会给提供专属服务~\n伴学小能手就是我，哈嘿！";
+            CookieContainer cc = new CookieContainer();
 
-            string[] sArray = text.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            var ret = HtmlManager.GetHtmlContentViaUrl("http://www.javlibrary.com/cn/", "utf-8", true, cc);
+
+            if (!ret.Success && !string.IsNullOrEmpty(ret.Content))
+            {
+                var js = HtmlManager.GetHtmlContentViaUrl("http://www.javlibrary.com/cdn-cgi/challenge-platform/h/g/orchestrate/jsch/v1", "utf-8", false, cc);
+            }
+
+            Console.ReadKey();
         }
 
         public static void Match115(List<string> drivers, bool overRide = false, bool writeJson = true)

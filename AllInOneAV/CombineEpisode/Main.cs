@@ -589,13 +589,37 @@ namespace CombineEpisode
 
         private void lvwRecnet_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right && lvwRecnet.SelectedItems.Count == 1)
             {
                 var current = lvwRecnet.GetItemAt(e.X, e.Y);
 
                 Delete(current);
 
                 ListRecentItems();
+            }
+
+            if (e.Button == MouseButtons.Right && lvwRecnet.SelectedItems.Count > 1)
+            {
+                List<FileInfo> deleteFiles = new List<FileInfo>();
+
+                foreach (ListViewItem current in lvwRecnet.SelectedItems)
+                {
+                    deleteFiles.Add(new FileInfo((string)current.Tag));
+                }
+
+                var res = MessageBox.Show(string.Format("是否要删除 {0} 个文件，总大小 {1}", lvwRecnet.SelectedItems.Count, FileSize.GetAutoSizeString(deleteFiles.Sum(x => x.Length), 1)), "警告", MessageBoxButtons.YesNo);
+
+                if (res == DialogResult.Yes)
+                {
+                    foreach (ListViewItem current in lvwRecnet.SelectedItems)
+                    {
+                        File.Delete(current.Tag + "");
+
+                        listView1.Items.Remove(current);
+                    }
+
+                    ListRecentItems();
+                }
             }
         }
 
