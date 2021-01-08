@@ -34,3 +34,5 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "G:\\Github\\AllInOneAV\\AllInOneAV\\NewUnitTest\\config\\log4net.xml", Watch = true)]

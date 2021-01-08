@@ -1,7 +1,5 @@
 ﻿using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
-using JavaScriptEngineSwitcher.Core;
-using JavaScriptEngineSwitcher.V8;
 using Microsoft.Win32.TaskScheduler;
 using Model.ScanModels;
 using Newtonsoft.Json;
@@ -10,8 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using Utils;
 
 namespace NewUnitTest
@@ -20,16 +18,98 @@ namespace NewUnitTest
     {
         static void Main(string[] args)
         {
-            CookieContainer cc = new CookieContainer();
+            TestRename("P:\\pt", 200);
 
-            var ret = HtmlManager.GetHtmlContentViaUrl("http://www.javlibrary.com/cn/", "utf-8", true, cc);
+            Console.WriteLine("按任意键退出");
+            Console.ReadKey();
+        }
 
-            if (!ret.Success && !string.IsNullOrEmpty(ret.Content))
+        public static void TestRename(string sourceFolder, int fileSizeLimit)
+        {
+            var descFolder = (sourceFolder.EndsWith("\\") || sourceFolder.EndsWith("/")) ? sourceFolder + "tempFile\\" : sourceFolder + "\\tempFin\\";
+
+            var ret = RenameService.PrepareRename(sourceFolder, descFolder, fileSizeLimit);
+        }
+
+        public static void ReFormatName(string folder)
+        {
+            if (Directory.Exists(folder))
             {
-                var js = HtmlManager.GetHtmlContentViaUrl("http://www.javlibrary.com/cdn-cgi/challenge-platform/h/g/orchestrate/jsch/v1", "utf-8", false, cc);
+                foreach (var file in new DirectoryInfo(folder).GetFiles())
+                {
+                    if (AVFileHelper.IsReformated(file))
+                    {
+                        var ret = AVFileHelper.ParseAvFile(file.FullName);
+                        var has = JavDataBaseManager.HasAv(ret.AvId, ret.AvName);
+
+                        Console.WriteLine(file + (has ? " 数据库存在" : " 数据库不存在"));
+                    }
+                    else
+                    {
+                        var reName = AVFileHelper.GetAvName(file);
+                        file.MoveTo(reName);
+                        AVFileHelper.ParseAvFile(reName);
+                    }
+                }
+            }
+        }
+
+        public static void DeleteErrorFile(string log)
+        {
+            double deleteSize = 0;
+            int count = 0;
+
+            if (File.Exists(log))
+            {
+                StreamReader sr = new StreamReader(log);
+
+                while (!sr.EndOfStream)
+                {
+                    var text = sr.ReadLine();
+
+                    var deleteFile = text.Substring(text.IndexOf("文件 ") + "文件 ".Length);
+
+                    if (File.Exists(deleteFile))
+                    {
+                        deleteSize += new FileInfo(deleteFile).Length;
+                        count++;
+
+                        File.Delete(deleteFile);
+                    }
+                }
             }
 
-            Console.ReadKey();
+            Console.WriteLine("删除 " + count + " 个文件, 总大小 " + FileSize.GetAutoSizeString(deleteSize, 1));
+        }
+
+        public async static Task<int> IsH265(string folder)
+        {
+            var start = DateTime.Now;
+            var ffmpeg = @"c:\setting\ffmpeg.exe";
+            int h265Count = 0;
+
+            if (Directory.Exists(folder))
+            {
+                var files = new DirectoryInfo(folder).GetFiles();
+
+                foreach (var f in files)
+                {
+                    var temp = DateTime.Now;
+
+                    var check = await FileUtility.IsH265(f.FullName, ffmpeg);
+
+                    if (check)
+                    {
+                        h265Count++;
+                    }
+
+                    Console.WriteLine(f.Name + " -> " + (check ? "是H265" : "不是H265") + " 耗时 " + (DateTime.Now - temp).TotalSeconds + " 秒");
+                }
+            }
+
+            Console.WriteLine("总耗时 " + (DateTime.Now - start).TotalSeconds + " 秒, 共有" + h265Count + " 部H265");
+
+            return h265Count;
         }
 
         public static void Match115(List<string> drivers, bool overRide = false, bool writeJson = true)

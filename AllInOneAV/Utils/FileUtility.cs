@@ -391,15 +391,21 @@ namespace Utils
         public async static Task<bool> IsH265(string fName, string ffmpegLocation)
         {
             bool ret = false;
-
             var info = await GetFfmpegInfo(fName, ffmpegLocation);
 
-            info = info.Substring(info.IndexOf("Video: "));
-            info = info.Substring(0, info.IndexOf(","));
-
-            if (info.Contains("hevc"))
+            try
             {
-                ret = true;
+                info = info.Substring(info.IndexOf("Video: "));
+                info = info.Substring(0, info.IndexOf(","));
+
+                if (info.Contains("hevc"))
+                {
+                    ret = true;
+                }
+            }
+            catch (Exception ee)
+            {
+                ApplicationLog.Debug("FFMPEG使用错误，文件 " + fName);
             }
 
             return ret;

@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AvManager\MoveLog.cs" />
+    <Compile Include="Common\AvFile.cs" />
     <Compile Include="Common\BtsowSearchModel.cs" />
     <Compile Include="Common\CheckDuplcateModel.cs" />
     <Compile Include="Common\ConfigType.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="JavModels\JavBusSearchListModel.cs" />
     <Compile Include="JavModels\Publisher.cs" />
     <Compile Include="JavModels\RecurModel.cs" />
+    <Compile Include="JavModels\RenameModel.cs" />
     <Compile Include="JavModels\ReturnModel.cs" />
     <Compile Include="JavModels\RunType.cs" />
     <Compile Include="JavModels\ScanURL.cs" />
