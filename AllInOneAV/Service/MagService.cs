@@ -86,7 +86,7 @@ namespace Service
             return ret.OrderByDescending(x => x.Size).ToList();
         }
 
-        public static List<SeedMagnetSearchModel> SearchSukebei(string id, CookieContainer cc = null)
+        public static List<SeedMagnetSearchModel> SearchSukebei(string id, CookieContainer cc = null, string web = "")
         {
             //if (cc == null)
             //{
@@ -101,15 +101,31 @@ namespace Service
             {
                 HtmlResponse htmlRet = new HtmlResponse() { Success = false };
 
-                if (sukebei == "pro")
+                if (string.IsNullOrEmpty(web))
                 {
-                    var serachContent = "https://sukebei.nyaa.pro/search/c_0_0_k_" + id;
-                    htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.pro", serachContent, cc);
+                    if (sukebei == "pro")
+                    {
+                        var serachContent = "https://sukebei.nyaa.pro/search/c_0_0_k_" + id;
+                        htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.pro", serachContent, cc);
+                    }
+                    else if (sukebei == "si")
+                    {
+                        var serachContent = "https://sukebei.nyaa.si?f=0&c=0_0&q=" + id;
+                        htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.si", serachContent, cc);
+                    }
                 }
-                else if (sukebei == "si")
+                else
                 {
-                    var serachContent = "https://sukebei.nyaa.si?f=0&c=0_0&q=" + id;
-                    htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.si", serachContent, cc);
+                    if (web == "pro")
+                    {
+                        var serachContent = "https://sukebei.nyaa.pro/search/c_0_0_k_" + id;
+                        htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.pro", serachContent, cc);
+                    }
+                    else if (web == "si")
+                    {
+                        var serachContent = "https://sukebei.nyaa.si?f=0&c=0_0&q=" + id;
+                        htmlRet = HtmlManager.GetHtmlWebClient("https://sukebei.nyaa.si", serachContent, cc);
+                    }
                 }
 
                 if (htmlRet.Success)

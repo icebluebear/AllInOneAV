@@ -127,7 +127,8 @@ namespace ScanJavMagUrl
 
                 var matchFiles = new EverythingHelper().SearchFile("!c:\\ " + rm.Id + " | " + rm.Id.Replace("-", ""), EverythingSearchEnum.Video);
 
-                var list = MagService.SearchSukebei(rm.Id);
+                var list = MagService.SearchSukebei(id: rm.Id, web: "si");
+                list.AddRange(MagService.SearchSukebei(id: rm.Id, web: "pro"));
 
                 if (list != null && list.Count > 0)
                 {

@@ -388,10 +388,11 @@ namespace Utils
             return info;
         }
 
-        public async static Task<bool> IsH265(string fName, string ffmpegLocation)
+        public async static Task<ValueTuple<bool, string>> IsH265(string fName, string ffmpegLocation)
         {
             bool ret = false;
             var info = await GetFfmpegInfo(fName, ffmpegLocation);
+            string msg = "";
 
             try
             {
@@ -406,9 +407,10 @@ namespace Utils
             catch (Exception ee)
             {
                 ApplicationLog.Debug("FFMPEG使用错误，文件 " + fName);
+                msg = fName;
             }
 
-            return ret;
+            return new ValueTuple<bool, string>(ret, msg);
         }
 
         public static int GetThumbnails(string fName, string ffmpegLocation, string whereToSave, string subFolder, int howManyPictures, bool size, int width = 320, int height = 240)

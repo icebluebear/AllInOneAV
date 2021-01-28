@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebAV-批量重命名</title>
+
+    @Html.Partial("Header")
+</head>
+
+<body>
+    @Html.Partial("Share")
+
+    <div class="input-group mb-3 input-group-sm" style="width:40%">
+        <div class="input-group mb-3 input-group-sm">
+            原始
+            <input type="text" class="form-control" id="folder">
+            移动
+            <input type="text" class="form-control" id="toFolder">
+            <div class="input-group-append">
+                <button class="btn btn-outline-success" type="button" id="search">搜索</button>
+            </div>
+        </div>
+
+        <div class="input-group mb-3 input-group-sm">
+            <label for="formControlRange">文件大小下限</label>
+            <input type="range" class="form-control-range" id="fileSizeLimit" min="0" max="2000" step="100" value="200">
+            <input class="form-control form-control-sm" type="number" step="100" value="200" min="0" max="2000" id="limit">MB
+        </div>
+    </div>
+
+    <script>
+        $("#folder").change(function () {
+            $("#toFolder").val($(this).val() + "/tempFin/");
+        });
+
+        $("#fileSizeLimit").change(function () {
+            $("#limit").val($(this).val());
+        });
+
+        $("#limit").change(function () {
+            $("#fileSizeLimit").val($(this).val());
+        });
+
+        $("#search").click(function () {
+            window.location.href = '/webav/BatchRenameList?folder=' + $("#folder").val() + "&toFolder=" + $("#toFolder").val() + "&limit=" + $("#limit").val();
+        });
+    </script>
+</body>
+</html>

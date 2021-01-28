@@ -2292,7 +2292,7 @@ namespace CombineEpisode
                     {
                         richTextBox2.AppendText("\t找到匹配前缀 " + prefix, Color.Black, font, true);
 
-                        var pattern = prefix + "{1}-?\\d{1,5}";
+                        var pattern = prefix + "{1}-?\\d{1,7}";
                         var possibleId = Regex.Match(fileNameWithoutFormat, pattern).Value;
 
                         if (possibleId.Contains("-"))

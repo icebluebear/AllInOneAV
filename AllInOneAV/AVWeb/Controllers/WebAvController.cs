@@ -1124,6 +1124,73 @@ namespace AVWeb.Controllers
             return View();
         }
 
+        [Rights]
+        public ActionResult RemoveSubFolder()
+        {
+            return View();
+        }
+
+        [Rights]
+        public ActionResult RemoveSubFolderList(string folder, string toFolder, int limit)
+        {
+            var model = RenameService.RemoveSubFolder(sourceFolder: folder, descFolder: toFolder, fileSizeLimit: limit);
+
+            model = model.OrderBy(x => x.DescFile).ToList();
+
+            return View(model);
+        }
+
+        [Rights, HttpPost]
+        public JsonResult RemoveSubFolder(List<RemoveSubModel> data)
+        {
+            List<string> froms = new List<string>();
+            List<string> tos = new List<string>();
+            int count = 0;
+            double size = 0;
+
+            foreach (var d in data)
+            {
+                if (!string.IsNullOrEmpty(d.SrcFile) && !string.IsNullOrEmpty(d.DescFile) && System.IO.File.Exists(d.SrcFile))
+                {
+                    froms.Add(d.SrcFile);
+                    tos.Add(d.DescFile);
+                }
+            }
+
+            try
+            {
+                if (froms.Count == tos.Count)
+                {
+                    for (int i = 0; i < froms.Count; i++)
+                    {
+                        System.IO.File.Move(froms[i], tos[i]);
+                        count++;
+                        size += new FileInfo(tos[i]).Length;
+                    }
+                }
+            }
+            catch (Exception ee)
+            {
+                return Json(new { success = false, msg = "移动失败" });
+            }
+
+            return Json(new { success = true, msg = string.Format("移动成功, 共移动{0}个文件，总大小{1}", count, FileSize.GetAutoSizeString(size, 1)) });
+        }
+
+        [Rights]
+        public ActionResult BatchRename()
+        {
+            return View();
+        }
+
+        [Rights]
+        public ActionResult BatchRenameList(string folder, string toFolder, int limit)
+        {
+            var model = RenameService.PrepareRename(folder, toFolder, limit);
+
+            return View(model);
+        }
+
         public ActionResult TestSocket()
         {
             return View();

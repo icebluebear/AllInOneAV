@@ -2,6 +2,7 @@
 using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
 using Microsoft.Win32.TaskScheduler;
+using Model.Common;
 using Model.JavModels;
 using Model.ScanModels;
 using Newtonsoft.Json;
@@ -377,6 +378,141 @@ namespace AVWeb.Controllers
             }
 
             return new Model.ScanModels.EverythingResult();
+        }
+
+        [HttpGet]
+        [Route("GetReport")]
+        public ReportVM GetReport(string token, int top = 5)
+        {
+            ReportVM ret = new ReportVM();
+            var to = ScanDataBaseManager.GetToken().Token;
+
+            if (to == token)
+            {
+                StringBuilder sb = new StringBuilder();
+                var report = ScanDataBaseManager.GetReport();
+                var items = ScanDataBaseManager.ReportItem(report.ReportId);
+
+                ret.TotalCount = report.TotalExist;
+                sb.AppendLine($"总Av数量: [{ret.TotalCount}]");
+                ret.TotalSizeStr = FileSize.GetAutoSizeString((double)report.TotalExistSize, 1);
+                sb.AppendLine($"总Av大小: [{ret.TotalSizeStr}]");
+                ret.TotalSize = (double)report.TotalExistSize;
+                ret.ChineseCount = report.ChineseCount;
+                sb.AppendLine($"中文Av数量: [{ret.ChineseCount}]");
+                ret.FileLessThan1G = report.LessThenOneGiga;
+                sb.AppendLine($"文件小于1GB: [{ret.FileLessThan1G}]");
+                ret.FileLargeThan1G = report.OneGigaToTwo;
+                sb.AppendLine($"大于1GB小于2GB: [{ret.FileLargeThan1G}]");
+                ret.FileLargeThan2G = report.TwoGigaToFour;
+                sb.AppendLine($"大于2GB小于4GB: [{ret.FileLargeThan2G}]");
+                ret.FileLargeThan4G = report.FourGigaToSix;
+                sb.AppendLine($"大于4GB小于6GB: [{ret.FileLargeThan4G}]");
+                ret.FileLargeThan6G = report.GreaterThenSixGiga;
+                sb.AppendLine($"文件大于6GB: [{ret.FileLargeThan6G}]");
+
+                var extensionModel = JsonConvert.DeserializeObject<Dictionary<string, int>>(report.Extension);
+
+                ret.Formats = extensionModel;
+                sb.AppendLine("后缀分布:");
+                foreach (var ext in extensionModel)
+                {
+                    sb.AppendLine($"\t{ext.Key} : {ext.Value}");
+                }
+
+                foreach (ReportType type in Enum.GetValues(typeof(ReportType)))
+                {
+                    List<ReportItem> i = new List<ReportItem>();
+                    switch (type)
+                    {
+                        case ReportType.Actress:
+                            i = items.Where(x => (ReportType)x.ReportType == type).OrderByDescending(x => x.ExistCount).Take(top).ToList();
+
+                            sb.AppendLine("女优TOP" + top);
+
+                            foreach (var temp in i)
+                            {
+                                var name = temp.ItemName;
+                                var count = temp.ExistCount;
+                                var ratio = $"{temp.ExistCount} / {temp.TotalCount}";
+                                var size = FileSize.GetAutoSizeString(temp.TotalSize, 1);
+
+                                sb.AppendLine($"\t{name} -> 作品 {ratio}，总大小 {size}");
+                            }
+
+                            break;
+                        case ReportType.Category:
+                            i = items.Where(x => (ReportType)x.ReportType == type).OrderByDescending(x => x.ExistCount).Take(top).ToList();
+
+                            sb.AppendLine("分类TOP" + top);
+
+                            foreach (var temp in i)
+                            {
+                                var name = temp.ItemName;
+                                var count = temp.ExistCount;
+                                var ratio = $"{temp.ExistCount} / {temp.TotalCount}";
+                                var size = FileSize.GetAutoSizeString(temp.TotalSize, 1);
+
+                                sb.AppendLine($"\t{name} -> 作品 {ratio}，总大小 {size}");
+                            }
+
+                            break;                
+                        case ReportType.Prefix:
+                            i = items.Where(x => (ReportType)x.ReportType == type).OrderByDescending(x => x.ExistCount).Take(top).ToList();
+
+                            sb.AppendLine("番号TOP" + top);
+
+                            foreach (var temp in i)
+                            {
+                                var name = temp.ItemName;
+                                var count = temp.ExistCount;
+                                var ratio = $"{temp.ExistCount} / {temp.TotalCount}";
+                                var size = FileSize.GetAutoSizeString(temp.TotalSize, 1);
+
+                                sb.AppendLine($"\t{name} -> 作品 {ratio}，总大小 {size}");
+                            }
+
+                            break;
+                        case ReportType.Company:
+                            i = items.Where(x => (ReportType)x.ReportType == type).OrderByDescending(x => x.ExistCount).Take(top).ToList();
+
+                            sb.AppendLine("公司TOP" + top);
+
+                            foreach (var temp in i)
+                            {
+                                var name = temp.ItemName;
+                                var count = temp.ExistCount;
+                                var ratio = $"{temp.ExistCount} / {temp.TotalCount}";
+                                var size = FileSize.GetAutoSizeString(temp.TotalSize, 1);
+
+                                sb.AppendLine($"\t{name} -> 作品 {ratio}，总大小 {size}");
+                            }
+
+                            break;
+                        case ReportType.Date:
+                            i = items.Where(x => (ReportType)x.ReportType == type).OrderByDescending(x => x.ExistCount).Take(top).ToList();
+
+                            sb.AppendLine("日期TOP" + top);
+
+                            foreach (var temp in i)
+                            {
+                                var name = temp.ItemName;
+                                var count = temp.ExistCount;
+                                var ratio = $"{temp.ExistCount} / {temp.TotalCount}";
+                                var size = FileSize.GetAutoSizeString(temp.TotalSize, 1);
+
+                                sb.AppendLine($"\t{name} -> 作品 {ratio}，总大小 {size}");
+                            }
+
+                            break;
+                    }
+                }
+
+                ret.ShowContent = sb.ToString();
+
+            }
+
+            return ret;
         }
 
         #region 工具

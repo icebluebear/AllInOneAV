@@ -1,0 +1,77 @@
+﻿@using Model.WebModel
+@model List<RemoveSubModel>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>WebAV-去除子文件夹</title>
+
+        @Html.Partial("Header")
+    </head>
+
+    <body>
+        @Html.Partial("Share")
+
+        <button type="button" class="btn btn-success" id="move">确定移动</button>
+
+        <ul class="list-group">
+            @foreach (var m in Model)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center" data-src="@m.SrcFile">
+                    @(m.SrcFile + " 大小： " + m.ScrFileSizeStr)
+                    <input type="text" value="@m.DescFile" class="movefile" style="width:50%;@(m.IsDuplicate ? "color:red" : "")" />
+                </li>
+            }
+        </ul>
+
+        <script>
+            var checkList = [];
+
+            $("#move").click(function () {
+                var c = check();
+
+                if (c != "") {
+                    alert(c);
+                } else {
+
+                    var data = [];
+
+                    $(".list-group-item").each(function () {
+                        var src = $(this).data("src");
+                        var desc = $(this).find(".movefile").val();
+
+                        if (src != undefined && src != '' && desc != undefined && desc != '') {
+                            data.push({ 'SrcFile': src, 'DescFile': desc });
+                        }
+                    });
+
+                    $.ajax({
+                        url: "/webav/RemoveSubFolder",
+                        type: "post",
+                        data: { 'data': data},
+
+                        success: function (result) {
+                            alert(result.msg);
+                        }
+                    });
+                }
+            });
+
+            function check() {
+                ret = '';
+                checkList = [];
+
+                $(".movefile").each(function () {
+                    if (checkList.indexOf($(this).val()) == -1) {
+                        checkList.push($(this).val());
+                    }else {
+                        ret += "有重复名称 -> " + $(this).val() + "\r\n";
+                    }
+                });    
+
+                return ret;
+            }
+        </script>
+    </body>
+</html>

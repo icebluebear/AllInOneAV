@@ -57,6 +57,21 @@ namespace Model.Common
         public List<ReportRatioModel> CategoryRatio { get; set; }
     }
 
+    public class ReportVM
+    { 
+        public int TotalCount { get; set; }
+        public double TotalSize { get; set; }
+        public string TotalSizeStr { get; set; }
+        public int ChineseCount { get; set; }
+        public int FileLessThan1G { get; set; }
+        public int FileLargeThan1G { get; set; }
+        public int FileLargeThan2G { get; set; }
+        public int FileLargeThan4G { get; set; }
+        public int FileLargeThan6G { get; set; }
+        public Dictionary<string, int> Formats { get; set; }
+        public string ShowContent { get; set; }
+    }
+
     public class ReportRatioModel
     { 
         public string Name { get; set; }

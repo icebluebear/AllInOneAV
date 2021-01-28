@@ -18,10 +18,17 @@ namespace NewUnitTest
     {
         static void Main(string[] args)
         {
-            TestRename("P:\\pt", 200);
+            int number = -1;
+            Console.WriteLine(Convert.ToString(number, 2));
 
-            Console.WriteLine("按任意键退出");
             Console.ReadKey();
+        }
+
+        public static void TestRemoveFolder(string sourceFolder, string descFolder, int fileSizeLimit)
+        {
+            descFolder = (sourceFolder.EndsWith("\\") || sourceFolder.EndsWith("/")) ? sourceFolder + "movefiles\\" : sourceFolder + "\\movefiles\\";
+
+            var ret = RenameService.RemoveSubFolder(sourceFolder: sourceFolder, descFolder: descFolder, fileSizeLimit: fileSizeLimit);
         }
 
         public static void TestRename(string sourceFolder, int fileSizeLimit)
@@ -82,7 +89,7 @@ namespace NewUnitTest
             Console.WriteLine("删除 " + count + " 个文件, 总大小 " + FileSize.GetAutoSizeString(deleteSize, 1));
         }
 
-        public async static Task<int> IsH265(string folder)
+        public static int IsH265(string folder)
         {
             var start = DateTime.Now;
             var ffmpeg = @"c:\setting\ffmpeg.exe";
@@ -96,14 +103,14 @@ namespace NewUnitTest
                 {
                     var temp = DateTime.Now;
 
-                    var check = await FileUtility.IsH265(f.FullName, ffmpeg);
+                    var ret = FileUtility.IsH265(f.FullName, ffmpeg).Result;
 
-                    if (check)
+                    if (ret.Item1)
                     {
                         h265Count++;
                     }
 
-                    Console.WriteLine(f.Name + " -> " + (check ? "是H265" : "不是H265") + " 耗时 " + (DateTime.Now - temp).TotalSeconds + " 秒");
+                    Console.WriteLine(f.Name + " -> " + (ret.Item1 ? "是H265" : "不是H265") + " 耗时 " + (DateTime.Now - temp).TotalSeconds + " 秒");
                 }
             }
 

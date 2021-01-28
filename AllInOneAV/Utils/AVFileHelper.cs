@@ -118,7 +118,7 @@ namespace Utils
                     lowerName = lowerName.Replace("-c" + extesion, "");
                 }
 
-                isH265 = FileUtility.IsH265(file.FullName, @"c:\setting\ffmpeg.exe").Result;
+                isH265 = FileUtility.IsH265(file.FullName, @"c:\setting\ffmpeg.exe").Result.Item1;
 
                 avName = lowerName;
             }

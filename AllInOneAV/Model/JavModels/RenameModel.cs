@@ -10,7 +10,7 @@ namespace Model.JavModels
     {
         public string AvId { get; set; }
         public string AvName { get; set; }
-        public string AVImg { get; set; }
+        public string AvImg { get; set; }
         public string MoveFile { get; set; }
     }
 }

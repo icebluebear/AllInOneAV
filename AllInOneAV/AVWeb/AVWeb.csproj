@@ -199,6 +199,10 @@
     <Content Include="Views\WebAv\TestProcess.cshtml" />
     <Content Include="Views\WebAv\TestSocket.cshtml" />
     <Content Include="Views\WebAv\RunJob.cshtml" />
+    <Content Include="Views\WebAv\RemoveSubFolder.cshtml" />
+    <Content Include="Views\WebAv\RemoveSubFolderList.cshtml" />
+    <Content Include="Views\WebAv\BatchRename.cshtml" />
+    <Content Include="Views\WebAv\BatchRenameList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
