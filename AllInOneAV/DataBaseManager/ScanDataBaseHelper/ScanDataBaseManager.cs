@@ -524,5 +524,12 @@ namespace DataBaseManager.ScanDataBaseHelper
 
             return SqlHelper.ExecuteDataTable(con, CommandType.Text, sql).ToModel<TokenModel>();
         }
+
+        public static int UpdateFaviAvator(string name, string avator)
+        {
+            var sql = "UPDATE FaviScan SET Avator = '" + avator + "' WHERE category = 'actress' AND Name = '" + name + "'";
+
+            return SqlHelper.ExecuteNonQuery(con, CommandType.Text, sql);
+        }
     }
 }

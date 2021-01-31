@@ -1062,6 +1062,55 @@ namespace CombineEpisode
 
             BtnPlayClick(1, pageSize);
         }
+
+        private void lvPlay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_ContentsResized(object sender, ContentsResizedEventArgs e)
+        {
+            richTextBox1.SelectionStart = richTextBox1.Text.Length;
+            richTextBox1.ScrollToCaret();
+        }
+
+        private void richTextBox2_ContentsResized(object sender, ContentsResizedEventArgs e)
+        {
+            richTextBox2.SelectionStart = richTextBox2.Text.Length;
+            richTextBox2.ScrollToCaret();
+        }
+
+        private void rtbMatch_ContentsResized(object sender, ContentsResizedEventArgs e)
+        {
+            rtbMatch.SelectionStart = rtbMatch.Text.Length;
+            rtbMatch.ScrollToCaret();
+        }
+
+        private void contextMenuStrip3_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void 看截图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FileInfo fi = (FileInfo)treeView1.SelectedNode.Tag;
+
+            if (Directory.Exists(thumsFolder + fi.Name))
+            {
+                var pics = Directory.GetFiles(thumsFolder + fi.Name);
+
+                if (pics != null && pics.Length > 0)
+                {
+                    Thums th = new Thums(pics.ToList());
+                    th.ShowDialog();
+                }
+            }
+        }
+
+        private void btnRecentFIndMove_Click(object sender, EventArgs e)
+        {
+            FindMove();
+        }
         #endregion
 
         #region 方法
@@ -3381,51 +3430,41 @@ namespace CombineEpisode
                 }
             }
         }
-        #endregion
 
-        private void lvPlay_SelectedIndexChanged(object sender, EventArgs e)
+        private async void FindMove()
         {
-
-        }
-
-        private void richTextBox1_ContentsResized(object sender, ContentsResizedEventArgs e)
-        {
-            richTextBox1.SelectionStart = richTextBox1.Text.Length;
-            richTextBox1.ScrollToCaret();
-        }
-
-        private void richTextBox2_ContentsResized(object sender, ContentsResizedEventArgs e)
-        {
-            richTextBox2.SelectionStart = richTextBox2.Text.Length;
-            richTextBox2.ScrollToCaret();
-        }
-
-        private void rtbMatch_ContentsResized(object sender, ContentsResizedEventArgs e)
-        {
-            rtbMatch.SelectionStart = rtbMatch.Text.Length;
-            rtbMatch.ScrollToCaret();
-        }
-
-        private void contextMenuStrip3_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
-        private void 看截图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FileInfo fi = (FileInfo)treeView1.SelectedNode.Tag;
-
-            if (Directory.Exists(thumsFolder + fi.Name))
+            if (lvwRecnet.SelectedItems != null && lvwRecnet.SelectedItems.Count > 0)
             {
-                var pics = Directory.GetFiles(thumsFolder + fi.Name);
-
-                if (pics != null && pics.Length > 0)
+                double moveSize = 0;
+                List<string> froms = new List<string>();
+                foreach (ListViewItem lvi in lvwRecnet.SelectedItems)
                 {
-                    Thums th = new Thums(pics.ToList());
-                    th.ShowDialog();
+                    froms.Add((string)lvi.Tag);
+                    moveSize += new FileInfo((string)lvi.Tag).Length;
+                }
+
+                var ret = MessageBox.Show($"确定要移动 {froms.Count} 个文件，总大小 {FileSize.GetAutoSizeString(moveSize, 1)} ?", "警告", MessageBoxButtons.YesNo);
+
+                if (ret == DialogResult.Yes)
+                {
+                    var folder = folderBrowserDialog1.ShowDialog();
+
+                    if (folder == DialogResult.Yes || folder == DialogResult.OK)
+                    {
+                        var to = folderBrowserDialog1.SelectedPath;
+
+                        if (!string.IsNullOrEmpty(to))
+                        {
+                            await Task.Run(() =>
+                            {
+                                FileUtility.TransferFileUsingSystem(froms, to, true);
+                            });
+                        }
+                    }
                 }
             }
         }
+        #endregion
     }
 
     #region 扩展方法

@@ -107,8 +107,8 @@
                     <div class="input-group mb-3">
                         <select class="selectpicker form-control faviSelect" data-live-search="true" data-live-search-placeholder="搜索" multiple title="请选择@(fc.Key)" data-actions-box="true">
                             @foreach (var f in fc.Value)
-                            {
-                                <option value="@f.Url">@f.Name</option>
+                            {                               
+                                <option value="@f.Url" data-content='<span class="media"><span class="media-left"><img src="@f.Thubnail" style="width:45px;height:45px" class="avatar"></span><span class="media-body username">@f.Name</span></span>'>@f.Name</option>
                             }
                         </select>
                     </div>
@@ -128,6 +128,7 @@
             'noneSelectedText': '请选择',
             'deselectAllText': '全不选',
             'selectAllText': '全选',
+            'showIcon': true
         })
 
         $("#prefixBtn").click(function () {

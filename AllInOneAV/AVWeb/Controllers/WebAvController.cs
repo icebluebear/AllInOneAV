@@ -280,7 +280,27 @@ namespace AVWeb.Controllers
 
                     if (!string.IsNullOrEmpty(d.Value.FirstOrDefault().MatchFile))
                     {
-                        d.Value.ForEach(x => x.MatchFileSize = new FileInfo(x.MatchFile).Length);
+                        var count = d.Value.Count;
+
+                        //扫描的时候文件在浏览的时候删除或者移动了位置，重新定位
+                        if (d.Value.Exists(x => !System.IO.File.Exists(x.MatchFile)))
+                        {
+                            var newFiles = new EverythingHelper().SearchFile(d.Value.FirstOrDefault().AvId + "-" + d.Value.FirstOrDefault().AvName, Model.Common.EverythingSearchEnum.Video);
+
+                            int i = 0;
+
+                            foreach (var dTemp in d.Value)
+                            {
+                                if (i < newFiles.Count)
+                                {
+                                    dTemp.MatchFile = newFiles[i++].FullName;
+                                }
+                            }
+
+                            count = newFiles.Count;
+                        }
+
+                        d.Value.Take(count).ForEach(x => x.MatchFileSize = new FileInfo(x.MatchFile).Length);
 
                         if (d.Value.Max(x => x.MagSize >= x.MatchFileSize))
                         {
@@ -403,7 +423,7 @@ namespace AVWeb.Controllers
             #region 按收藏
             var faviModel = ScanDataBaseManager.GetFaviScan();
 
-            var favi = faviModel.GroupBy(x => x.Category).ToDictionary(x => x.Key, x => x.ToList());
+            var favi = faviModel.GroupBy(x => x.Category).ToDictionary(x => x.Key, x => x.OrderBy(y=>y.FaviScanId).ToList());
 
             ViewData.Add("favi", favi);
             #endregion

@@ -72,7 +72,7 @@ namespace CopyFiles
                 }
             }
 
-            FileUtility.TransferFileUsingSystem(froms, tos, false);
+            //FileUtility.TransferFileUsingSystem(froms, tos, false);
         }
     }
 }

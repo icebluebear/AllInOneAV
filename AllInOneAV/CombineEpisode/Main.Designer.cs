@@ -42,6 +42,7 @@
             this.pb2 = new System.Windows.Forms.ProgressBar();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.cbThums = new System.Windows.Forms.CheckBox();
             this.btnLook = new System.Windows.Forms.Button();
             this.txtLook = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -165,6 +166,7 @@
             this.columnHeader19 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel41 = new System.Windows.Forms.Panel();
+            this.btnRecentFIndMove = new System.Windows.Forms.Button();
             this.rbSizeA = new System.Windows.Forms.RadioButton();
             this.rbSizeD = new System.Windows.Forms.RadioButton();
             this.rbDateA = new System.Windows.Forms.RadioButton();
@@ -261,7 +263,6 @@
             this.contextMenuStrip4 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.cbThums = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -489,6 +490,17 @@
             this.panel7.Size = new System.Drawing.Size(1114, 41);
             this.panel7.TabIndex = 0;
             // 
+            // cbThums
+            // 
+            this.cbThums.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbThums.AutoSize = true;
+            this.cbThums.Location = new System.Drawing.Point(975, 16);
+            this.cbThums.Name = "cbThums";
+            this.cbThums.Size = new System.Drawing.Size(48, 16);
+            this.cbThums.TabIndex = 2;
+            this.cbThums.Text = "截图";
+            this.cbThums.UseVisualStyleBackColor = true;
+            // 
             // btnLook
             // 
             this.btnLook.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -508,7 +520,7 @@
             this.txtLook.Location = new System.Drawing.Point(9, 10);
             this.txtLook.Margin = new System.Windows.Forms.Padding(2);
             this.txtLook.Name = "txtLook";
-            this.txtLook.Size = new System.Drawing.Size(934, 31);
+            this.txtLook.Size = new System.Drawing.Size(934, 21);
             this.txtLook.TabIndex = 0;
             // 
             // tabPage3
@@ -577,7 +589,7 @@
             this.txtAutoSave.Margin = new System.Windows.Forms.Padding(2);
             this.txtAutoSave.Name = "txtAutoSave";
             this.txtAutoSave.ReadOnly = true;
-            this.txtAutoSave.Size = new System.Drawing.Size(1033, 31);
+            this.txtAutoSave.Size = new System.Drawing.Size(1033, 21);
             this.txtAutoSave.TabIndex = 4;
             // 
             // pbTotal
@@ -752,7 +764,7 @@
             this.txtConvertSave.Location = new System.Drawing.Point(4, 23);
             this.txtConvertSave.Margin = new System.Windows.Forms.Padding(2);
             this.txtConvertSave.Name = "txtConvertSave";
-            this.txtConvertSave.Size = new System.Drawing.Size(1026, 31);
+            this.txtConvertSave.Size = new System.Drawing.Size(1026, 21);
             this.txtConvertSave.TabIndex = 1;
             // 
             // cbDeleteConvert
@@ -761,7 +773,7 @@
             this.cbDeleteConvert.Location = new System.Drawing.Point(5, 5);
             this.cbDeleteConvert.Margin = new System.Windows.Forms.Padding(2);
             this.cbDeleteConvert.Name = "cbDeleteConvert";
-            this.cbDeleteConvert.Size = new System.Drawing.Size(134, 25);
+            this.cbDeleteConvert.Size = new System.Drawing.Size(84, 16);
             this.cbDeleteConvert.TabIndex = 0;
             this.cbDeleteConvert.Text = "删除原文件";
             this.cbDeleteConvert.UseVisualStyleBackColor = true;
@@ -796,7 +808,7 @@
             this.txtConvertImport.Location = new System.Drawing.Point(4, 13);
             this.txtConvertImport.Margin = new System.Windows.Forms.Padding(2);
             this.txtConvertImport.Name = "txtConvertImport";
-            this.txtConvertImport.Size = new System.Drawing.Size(1026, 31);
+            this.txtConvertImport.Size = new System.Drawing.Size(1026, 21);
             this.txtConvertImport.TabIndex = 0;
             // 
             // tabPage6
@@ -961,7 +973,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUnmatched.Location = new System.Drawing.Point(8, 13);
             this.txtUnmatched.Name = "txtUnmatched";
-            this.txtUnmatched.Size = new System.Drawing.Size(930, 31);
+            this.txtUnmatched.Size = new System.Drawing.Size(930, 21);
             this.txtUnmatched.TabIndex = 0;
             // 
             // tabPage5
@@ -1033,7 +1045,7 @@
             this.txtRemoveFolderTxt.Location = new System.Drawing.Point(8, 15);
             this.txtRemoveFolderTxt.Name = "txtRemoveFolderTxt";
             this.txtRemoveFolderTxt.ReadOnly = true;
-            this.txtRemoveFolderTxt.Size = new System.Drawing.Size(847, 31);
+            this.txtRemoveFolderTxt.Size = new System.Drawing.Size(847, 21);
             this.txtRemoveFolderTxt.TabIndex = 2;
             // 
             // btnRemoveFolderStart
@@ -1127,7 +1139,7 @@
             this.txtRenameTxt.Location = new System.Drawing.Point(5, 17);
             this.txtRenameTxt.Name = "txtRenameTxt";
             this.txtRenameTxt.ReadOnly = true;
-            this.txtRenameTxt.Size = new System.Drawing.Size(846, 31);
+            this.txtRenameTxt.Size = new System.Drawing.Size(846, 21);
             this.txtRenameTxt.TabIndex = 5;
             // 
             // btnRenameStart
@@ -1250,7 +1262,7 @@
             this.cbSukebei.Location = new System.Drawing.Point(82, 31);
             this.cbSukebei.Margin = new System.Windows.Forms.Padding(2);
             this.cbSukebei.Name = "cbSukebei";
-            this.cbSukebei.Size = new System.Drawing.Size(106, 25);
+            this.cbSukebei.Size = new System.Drawing.Size(66, 16);
             this.cbSukebei.TabIndex = 3;
             this.cbSukebei.Text = "Sukebei";
             this.cbSukebei.UseVisualStyleBackColor = true;
@@ -1261,7 +1273,7 @@
             this.cbBtsow.Location = new System.Drawing.Point(5, 31);
             this.cbBtsow.Margin = new System.Windows.Forms.Padding(2);
             this.cbBtsow.Name = "cbBtsow";
-            this.cbBtsow.Size = new System.Drawing.Size(84, 25);
+            this.cbBtsow.Size = new System.Drawing.Size(54, 16);
             this.cbBtsow.TabIndex = 2;
             this.cbBtsow.Text = "Btsow";
             this.cbBtsow.UseVisualStyleBackColor = true;
@@ -1285,7 +1297,7 @@
             this.txtSeedSearchContent.Location = new System.Drawing.Point(4, 7);
             this.txtSeedSearchContent.Margin = new System.Windows.Forms.Padding(2);
             this.txtSeedSearchContent.Name = "txtSeedSearchContent";
-            this.txtSeedSearchContent.Size = new System.Drawing.Size(1002, 31);
+            this.txtSeedSearchContent.Size = new System.Drawing.Size(1002, 21);
             this.txtSeedSearchContent.TabIndex = 0;
             // 
             // tabPage10
@@ -1397,7 +1409,7 @@
             this.txtPrefix.Location = new System.Drawing.Point(291, 49);
             this.txtPrefix.Margin = new System.Windows.Forms.Padding(2);
             this.txtPrefix.Name = "txtPrefix";
-            this.txtPrefix.Size = new System.Drawing.Size(80, 31);
+            this.txtPrefix.Size = new System.Drawing.Size(80, 21);
             this.txtPrefix.TabIndex = 11;
             // 
             // rbPrefix
@@ -1406,7 +1418,7 @@
             this.rbPrefix.Location = new System.Drawing.Point(233, 50);
             this.rbPrefix.Margin = new System.Windows.Forms.Padding(2);
             this.rbPrefix.Name = "rbPrefix";
-            this.rbPrefix.Size = new System.Drawing.Size(91, 25);
+            this.rbPrefix.Size = new System.Drawing.Size(59, 16);
             this.rbPrefix.TabIndex = 10;
             this.rbPrefix.Text = "按前缀";
             this.rbPrefix.UseVisualStyleBackColor = true;
@@ -1429,7 +1441,7 @@
             this.label2.Location = new System.Drawing.Point(333, 31);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 21);
+            this.label2.Size = new System.Drawing.Size(23, 12);
             this.label2.TabIndex = 8;
             this.label2.Text = "url";
             // 
@@ -1439,7 +1451,7 @@
             this.label1.Location = new System.Drawing.Point(333, 12);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 21);
+            this.label1.Size = new System.Drawing.Size(29, 12);
             this.label1.TabIndex = 7;
             this.label1.Text = "标题";
             // 
@@ -1461,7 +1473,7 @@
             this.rbDir.Location = new System.Drawing.Point(175, 50);
             this.rbDir.Margin = new System.Windows.Forms.Padding(2);
             this.rbDir.Name = "rbDir";
-            this.rbDir.Size = new System.Drawing.Size(91, 25);
+            this.rbDir.Size = new System.Drawing.Size(59, 16);
             this.rbDir.TabIndex = 5;
             this.rbDir.Text = "按导演";
             this.rbDir.UseVisualStyleBackColor = true;
@@ -1473,7 +1485,7 @@
             this.rbCom.Location = new System.Drawing.Point(118, 49);
             this.rbCom.Margin = new System.Windows.Forms.Padding(2);
             this.rbCom.Name = "rbCom";
-            this.rbCom.Size = new System.Drawing.Size(91, 25);
+            this.rbCom.Size = new System.Drawing.Size(59, 16);
             this.rbCom.TabIndex = 4;
             this.rbCom.Text = "按公司";
             this.rbCom.UseVisualStyleBackColor = true;
@@ -1485,7 +1497,7 @@
             this.rbActress.Location = new System.Drawing.Point(62, 49);
             this.rbActress.Margin = new System.Windows.Forms.Padding(2);
             this.rbActress.Name = "rbActress";
-            this.rbActress.Size = new System.Drawing.Size(91, 25);
+            this.rbActress.Size = new System.Drawing.Size(59, 16);
             this.rbActress.TabIndex = 3;
             this.rbActress.Text = "按演员";
             this.rbActress.UseVisualStyleBackColor = true;
@@ -1498,7 +1510,7 @@
             this.rbCate.Location = new System.Drawing.Point(5, 50);
             this.rbCate.Margin = new System.Windows.Forms.Padding(2);
             this.rbCate.Name = "rbCate";
-            this.rbCate.Size = new System.Drawing.Size(91, 25);
+            this.rbCate.Size = new System.Drawing.Size(59, 16);
             this.rbCate.TabIndex = 2;
             this.rbCate.TabStop = true;
             this.rbCate.Text = "按类型";
@@ -1510,7 +1522,7 @@
             this.txtJavScanUrl.Location = new System.Drawing.Point(4, 28);
             this.txtJavScanUrl.Margin = new System.Windows.Forms.Padding(2);
             this.txtJavScanUrl.Name = "txtJavScanUrl";
-            this.txtJavScanUrl.Size = new System.Drawing.Size(321, 31);
+            this.txtJavScanUrl.Size = new System.Drawing.Size(321, 21);
             this.txtJavScanUrl.TabIndex = 1;
             // 
             // txtJavScanTitle
@@ -1518,7 +1530,7 @@
             this.txtJavScanTitle.Location = new System.Drawing.Point(4, 7);
             this.txtJavScanTitle.Margin = new System.Windows.Forms.Padding(2);
             this.txtJavScanTitle.Name = "txtJavScanTitle";
-            this.txtJavScanTitle.Size = new System.Drawing.Size(321, 31);
+            this.txtJavScanTitle.Size = new System.Drawing.Size(321, 21);
             this.txtJavScanTitle.TabIndex = 0;
             // 
             // tabPage11
@@ -1677,9 +1689,9 @@
             this.cbFindOnly.AutoSize = true;
             this.cbFindOnly.Checked = true;
             this.cbFindOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFindOnly.Location = new System.Drawing.Point(328, 17);
+            this.cbFindOnly.Location = new System.Drawing.Point(369, 17);
             this.cbFindOnly.Name = "cbFindOnly";
-            this.cbFindOnly.Size = new System.Drawing.Size(113, 25);
+            this.cbFindOnly.Size = new System.Drawing.Size(72, 16);
             this.cbFindOnly.TabIndex = 2;
             this.cbFindOnly.Text = "只找匹配";
             this.cbFindOnly.UseVisualStyleBackColor = true;
@@ -1701,7 +1713,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFind.Location = new System.Drawing.Point(4, 14);
             this.txtFind.Name = "txtFind";
-            this.txtFind.Size = new System.Drawing.Size(359, 31);
+            this.txtFind.Size = new System.Drawing.Size(359, 21);
             this.txtFind.TabIndex = 0;
             this.txtFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFind_KeyDown);
             // 
@@ -1759,6 +1771,7 @@
             // panel41
             // 
             this.panel41.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel41.Controls.Add(this.btnRecentFIndMove);
             this.panel41.Controls.Add(this.rbSizeA);
             this.panel41.Controls.Add(this.rbSizeD);
             this.panel41.Controls.Add(this.rbDateA);
@@ -1771,14 +1784,26 @@
             this.panel41.Size = new System.Drawing.Size(588, 48);
             this.panel41.TabIndex = 1;
             // 
+            // btnRecentFIndMove
+            // 
+            this.btnRecentFIndMove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRecentFIndMove.Location = new System.Drawing.Point(343, 11);
+            this.btnRecentFIndMove.Margin = new System.Windows.Forms.Padding(2);
+            this.btnRecentFIndMove.Name = "btnRecentFIndMove";
+            this.btnRecentFIndMove.Size = new System.Drawing.Size(43, 25);
+            this.btnRecentFIndMove.TabIndex = 13;
+            this.btnRecentFIndMove.Text = "移动";
+            this.btnRecentFIndMove.UseVisualStyleBackColor = true;
+            this.btnRecentFIndMove.Click += new System.EventHandler(this.btnRecentFIndMove_Click);
+            // 
             // rbSizeA
             // 
             this.rbSizeA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeA.AutoSize = true;
-            this.rbSizeA.Location = new System.Drawing.Point(465, 5);
+            this.rbSizeA.Location = new System.Drawing.Point(510, 5);
             this.rbSizeA.Margin = new System.Windows.Forms.Padding(2);
             this.rbSizeA.Name = "rbSizeA";
-            this.rbSizeA.Size = new System.Drawing.Size(116, 25);
+            this.rbSizeA.Size = new System.Drawing.Size(71, 16);
             this.rbSizeA.TabIndex = 12;
             this.rbSizeA.Text = "Size Asc";
             this.rbSizeA.UseVisualStyleBackColor = true;
@@ -1788,10 +1813,10 @@
             // 
             this.rbSizeD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSizeD.AutoSize = true;
-            this.rbSizeD.Location = new System.Drawing.Point(459, 26);
+            this.rbSizeD.Location = new System.Drawing.Point(509, 26);
             this.rbSizeD.Margin = new System.Windows.Forms.Padding(2);
             this.rbSizeD.Name = "rbSizeD";
-            this.rbSizeD.Size = new System.Drawing.Size(127, 25);
+            this.rbSizeD.Size = new System.Drawing.Size(77, 16);
             this.rbSizeD.TabIndex = 11;
             this.rbSizeD.Text = "Size Desc";
             this.rbSizeD.UseVisualStyleBackColor = true;
@@ -1801,10 +1826,10 @@
             // 
             this.rbDateA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateA.AutoSize = true;
-            this.rbDateA.Location = new System.Drawing.Point(391, 5);
+            this.rbDateA.Location = new System.Drawing.Point(436, 5);
             this.rbDateA.Margin = new System.Windows.Forms.Padding(2);
             this.rbDateA.Name = "rbDateA";
-            this.rbDateA.Size = new System.Drawing.Size(116, 25);
+            this.rbDateA.Size = new System.Drawing.Size(71, 16);
             this.rbDateA.TabIndex = 10;
             this.rbDateA.Text = "Date Asc";
             this.rbDateA.UseVisualStyleBackColor = true;
@@ -1815,10 +1840,10 @@
             this.rbDateD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDateD.AutoSize = true;
             this.rbDateD.Checked = true;
-            this.rbDateD.Location = new System.Drawing.Point(384, 26);
+            this.rbDateD.Location = new System.Drawing.Point(434, 26);
             this.rbDateD.Margin = new System.Windows.Forms.Padding(2);
             this.rbDateD.Name = "rbDateD";
-            this.rbDateD.Size = new System.Drawing.Size(127, 25);
+            this.rbDateD.Size = new System.Drawing.Size(77, 16);
             this.rbDateD.TabIndex = 9;
             this.rbDateD.TabStop = true;
             this.rbDateD.Text = "Date Desc";
@@ -1844,7 +1869,7 @@
             this.txtRecent.Location = new System.Drawing.Point(2, 14);
             this.txtRecent.Margin = new System.Windows.Forms.Padding(2);
             this.txtRecent.Name = "txtRecent";
-            this.txtRecent.Size = new System.Drawing.Size(376, 31);
+            this.txtRecent.Size = new System.Drawing.Size(337, 21);
             this.txtRecent.TabIndex = 7;
             this.txtRecent.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtRecent_MouseClick);
             // 
@@ -1925,7 +1950,7 @@
             this.cbMove.AutoSize = true;
             this.cbMove.Location = new System.Drawing.Point(3, 34);
             this.cbMove.Name = "cbMove";
-            this.cbMove.Size = new System.Drawing.Size(197, 25);
+            this.cbMove.Size = new System.Drawing.Size(120, 16);
             this.cbMove.TabIndex = 1;
             this.cbMove.Text = "移动新文件到原位";
             this.cbMove.UseVisualStyleBackColor = true;
@@ -1946,7 +1971,7 @@
             this.cbDelete.AutoSize = true;
             this.cbDelete.Location = new System.Drawing.Point(4, 11);
             this.cbDelete.Name = "cbDelete";
-            this.cbDelete.Size = new System.Drawing.Size(134, 25);
+            this.cbDelete.Size = new System.Drawing.Size(84, 16);
             this.cbDelete.TabIndex = 0;
             this.cbDelete.Text = "删除原文件";
             this.cbDelete.UseVisualStyleBackColor = true;
@@ -1968,7 +1993,7 @@
             this.txtSave.Location = new System.Drawing.Point(137, 30);
             this.txtSave.Name = "txtSave";
             this.txtSave.ReadOnly = true;
-            this.txtSave.Size = new System.Drawing.Size(890, 31);
+            this.txtSave.Size = new System.Drawing.Size(890, 21);
             this.txtSave.TabIndex = 3;
             // 
             // pb
@@ -1998,7 +2023,7 @@
             this.txtHopeName.Location = new System.Drawing.Point(10, 11);
             this.txtHopeName.Margin = new System.Windows.Forms.Padding(2);
             this.txtHopeName.Name = "txtHopeName";
-            this.txtHopeName.Size = new System.Drawing.Size(1013, 31);
+            this.txtHopeName.Size = new System.Drawing.Size(1013, 21);
             this.txtHopeName.TabIndex = 9;
             // 
             // btnImport
@@ -2331,7 +2356,7 @@
             this.cbDailyOnly.Enabled = false;
             this.cbDailyOnly.Location = new System.Drawing.Point(143, 17);
             this.cbDailyOnly.Name = "cbDailyOnly";
-            this.cbDailyOnly.Size = new System.Drawing.Size(113, 25);
+            this.cbDailyOnly.Size = new System.Drawing.Size(72, 16);
             this.cbDailyOnly.TabIndex = 2;
             this.cbDailyOnly.Text = "包含匹配";
             this.cbDailyOnly.UseVisualStyleBackColor = true;
@@ -2340,7 +2365,7 @@
             // 
             this.txtDailyPage.Location = new System.Drawing.Point(38, 16);
             this.txtDailyPage.Name = "txtDailyPage";
-            this.txtDailyPage.Size = new System.Drawing.Size(100, 31);
+            this.txtDailyPage.Size = new System.Drawing.Size(100, 21);
             this.txtDailyPage.TabIndex = 1;
             this.txtDailyPage.Text = "20";
             // 
@@ -2349,7 +2374,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(9, 19);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(52, 21);
+            this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 0;
             this.label3.Text = "页数";
             // 
@@ -2499,7 +2524,7 @@
             this.txtPlaySkip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPlaySkip.Location = new System.Drawing.Point(164, 528);
             this.txtPlaySkip.Name = "txtPlaySkip";
-            this.txtPlaySkip.Size = new System.Drawing.Size(43, 31);
+            this.txtPlaySkip.Size = new System.Drawing.Size(43, 21);
             this.txtPlaySkip.TabIndex = 13;
             this.txtPlaySkip.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             // 
@@ -2534,7 +2559,7 @@
             this.lbPlayPage.Location = new System.Drawing.Point(171, 485);
             this.lbPlayPage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbPlayPage.Name = "lbPlayPage";
-            this.lbPlayPage.Size = new System.Drawing.Size(65, 21);
+            this.lbPlayPage.Size = new System.Drawing.Size(35, 12);
             this.lbPlayPage.TabIndex = 10;
             this.lbPlayPage.Text = "0 / 0";
             this.lbPlayPage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2547,7 +2572,7 @@
             this.txtPlayPageSize.Margin = new System.Windows.Forms.Padding(2);
             this.txtPlayPageSize.Name = "txtPlayPageSize";
             this.txtPlayPageSize.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtPlayPageSize.Size = new System.Drawing.Size(71, 31);
+            this.txtPlayPageSize.Size = new System.Drawing.Size(71, 21);
             this.txtPlayPageSize.TabIndex = 9;
             this.txtPlayPageSize.Text = "200";
             // 
@@ -2568,7 +2593,7 @@
             this.lbPlayStatus.AutoSize = true;
             this.lbPlayStatus.Location = new System.Drawing.Point(127, 560);
             this.lbPlayStatus.Name = "lbPlayStatus";
-            this.lbPlayStatus.Size = new System.Drawing.Size(53, 21);
+            this.lbPlayStatus.Size = new System.Drawing.Size(29, 12);
             this.lbPlayStatus.TabIndex = 7;
             this.lbPlayStatus.Text = "0 条";
             this.lbPlayStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2589,7 +2614,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(9, 77);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(52, 21);
+            this.label6.Size = new System.Drawing.Size(29, 12);
             this.label6.TabIndex = 5;
             this.label6.Text = "前缀";
             // 
@@ -2608,7 +2633,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(9, 51);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 21);
+            this.label5.Size = new System.Drawing.Size(29, 12);
             this.label5.TabIndex = 3;
             this.label5.Text = "类别";
             // 
@@ -2627,7 +2652,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(9, 25);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 21);
+            this.label4.Size = new System.Drawing.Size(29, 12);
             this.label4.TabIndex = 1;
             this.label4.Text = "演员";
             // 
@@ -2768,17 +2793,6 @@
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(100, 22);
             this.toolStripMenuItem3.Text = "播放";
-            // 
-            // cbThums
-            // 
-            this.cbThums.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbThums.AutoSize = true;
-            this.cbThums.Location = new System.Drawing.Point(952, 7);
-            this.cbThums.Name = "cbThums";
-            this.cbThums.Size = new System.Drawing.Size(71, 25);
-            this.cbThums.TabIndex = 2;
-            this.cbThums.Text = "截图";
-            this.cbThums.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -3129,6 +3143,7 @@
         private System.Windows.Forms.TabPage tabPage17;
         private System.Windows.Forms.ToolStripMenuItem 看截图ToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbThums;
+        private System.Windows.Forms.Button btnRecentFIndMove;
     }
 }
 

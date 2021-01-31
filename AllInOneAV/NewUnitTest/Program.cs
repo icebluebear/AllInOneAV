@@ -1,6 +1,8 @@
 ﻿using DataBaseManager.JavDataBaseHelper;
 using DataBaseManager.ScanDataBaseHelper;
+using HtmlAgilityPack;
 using Microsoft.Win32.TaskScheduler;
+using Model.JavModels;
 using Model.ScanModels;
 using Newtonsoft.Json;
 using Service;
@@ -18,10 +20,24 @@ namespace NewUnitTest
     {
         static void Main(string[] args)
         {
-            int number = -1;
-            Console.WriteLine(Convert.ToString(number, 2));
+            CheckAvatorMatch();
 
             Console.ReadKey();
+        }
+
+        public static List<string> CheckH265()
+        {
+            List<string> badFiles = new List<string>();
+
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                Parallel.ForEach(Environment.GetLogicalDrives(), dir =>
+                {
+                    badFiles.AddRange(IsH265($"{dir}fin\\").Result.Item2);
+                });
+            }).Wait();
+
+            return badFiles;
         }
 
         public static void TestRemoveFolder(string sourceFolder, string descFolder, int fileSizeLimit)
@@ -89,34 +105,51 @@ namespace NewUnitTest
             Console.WriteLine("删除 " + count + " 个文件, 总大小 " + FileSize.GetAutoSizeString(deleteSize, 1));
         }
 
-        public static int IsH265(string folder)
+        public async static Task<ValueTuple<int, List<string>>> IsH265(string folder)
         {
             var start = DateTime.Now;
             var ffmpeg = @"c:\setting\ffmpeg.exe";
             int h265Count = 0;
+            ValueTuple<int, List<string>> ret = new ValueTuple<int, List<string>>();
+            List<string> badFiles = new List<string>();
 
             if (Directory.Exists(folder))
             {
                 var files = new DirectoryInfo(folder).GetFiles();
 
-                foreach (var f in files)
+                System.Threading.Tasks.Task.Run(() =>
                 {
-                    var temp = DateTime.Now;
-
-                    var ret = FileUtility.IsH265(f.FullName, ffmpeg).Result;
-
-                    if (ret.Item1)
+                    Parallel.ForEach(files, f =>
                     {
-                        h265Count++;
-                    }
+                        var temp = DateTime.Now;
 
-                    Console.WriteLine(f.Name + " -> " + (ret.Item1 ? "是H265" : "不是H265") + " 耗时 " + (DateTime.Now - temp).TotalSeconds + " 秒");
-                }
+                        var result = FileUtility.IsH265(f.FullName, ffmpeg).Result;
+
+                        if (result.Item1)
+                        {
+                            h265Count++;
+                        }
+
+                        if (!string.IsNullOrEmpty(result.Item2))
+                        {
+                            badFiles.Add(f.FullName);
+                        }
+
+                        Console.WriteLine(f.FullName + " -> " + (result.Item1 ? "是H265" : "不是H265") + " 耗时 " + (DateTime.Now - temp).TotalSeconds + " 秒");
+                    });
+                }).Wait();
+
+                //foreach (var f in files)
+                //{
+                    
+                //}
             }
 
+            ret.Item1 = h265Count;
+            ret.Item2 = badFiles;
             Console.WriteLine("总耗时 " + (DateTime.Now - start).TotalSeconds + " 秒, 共有" + h265Count + " 部H265");
 
-            return h265Count;
+            return ret;
         }
 
         public static void Match115(List<string> drivers, bool overRide = false, bool writeJson = true)
@@ -297,6 +330,158 @@ namespace NewUnitTest
             if (t.State == TaskState.Disabled || t.NextRunTime < DateTime.Now)
                 return string.Empty;
             return t.NextRunTime.ToString("G");
+        }
+
+        public static void TestMove()
+        {
+            var folder = "c:\\setting\\testmove";
+
+            List<string> tos = new List<string>();
+            var files = Directory.GetFiles(folder).ToList();
+
+            FileUtility.TransferFileUsingSystem(files, "c:\\setting\\testmove\\move2\\", false);
+        }
+
+        public static void TestRename()
+        {
+            var folder = "c:\\setting\\testmove";
+
+            List<string> tos = new List<string>();
+            var files = Directory.GetFiles(folder).ToList();
+
+            foreach (var f in files)
+            {
+                var newFileName = Path.GetDirectoryName(f) + Path.DirectorySeparatorChar + "123" + Path.GetExtension(f);
+                FileUtility.FileRenameUsingSystem(f, newFileName);
+            }
+        }
+
+        public static void MatchAvator()
+        {
+            var avatorFolderPrefix = @"C:\Setting\演员头像\";
+            var actress = JavDataBaseManager.GetActress();
+
+            int found = 0;
+            int notFound = 0;
+
+            foreach (var act in actress)
+            {
+                bool has = false;
+                var realFolder = avatorFolderPrefix + act.Name[0] + @"\";
+
+                if (Directory.Exists(realFolder))
+                {
+                    var avators = Directory.GetFiles(realFolder);
+
+                    foreach (var avator in avators)
+                    {
+                        if (avator.Contains(act.Name))
+                        {
+                            Console.WriteLine(act.Name + avator);
+                            found++;
+                            has = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!has)
+                {
+                    notFound++;
+                }
+            }
+
+            Console.WriteLine("找到 " + found + " 未找到 " + notFound);
+        }
+
+        public static void CheckAvatorMatch()
+        {
+            Dictionary<string, List<string>> matchRecord = new Dictionary<string, List<string>>();
+            List<string> avators = new List<string>();
+            var folder = @"G:\Github\AllInOneAV\Setting\avator";
+            var avs = JavDataBaseManager.GetActress();
+
+            foreach (var f in Directory.GetDirectories(folder))
+            {
+                foreach (var a in Directory.GetFiles(f))
+                {
+                    if (!avators.Contains(a))
+                    {
+                        avators.Add(a);
+                    }
+                }
+            }
+
+            foreach (var a in avs)
+            {
+                foreach (var m in avators.OrderByDescending(x => x.Length))
+                {
+                    if (m.Contains(a.Name))
+                    {
+                        if (!matchRecord.ContainsKey(a.Name))
+                        {
+                            matchRecord.Add(a.Name, new List<string>() { m.Replace(@"G:\Github\AllInOneAV\Setting\", @"\Imgs\").Replace(@"\", "/") });
+                            break;
+                        }
+                    }
+                }
+            }
+
+            foreach (var m in matchRecord)
+            {
+                ScanDataBaseManager.UpdateFaviAvator(m.Key, m.Value.FirstOrDefault());
+            }
+
+            Console.ReadKey();
+        }
+
+        public static void DownloadActreeAvator()
+        {
+            int index = 1;
+            bool contiune = true;
+            var folderPrefix = @"G:\Github\AllInOneAV\Setting\avator\";
+            var url = "https://www.javbus.com/actresses/";
+            var cc = JavBusDownloadHelper.GetJavBusCookie();
+
+            while (contiune)
+            {
+                var content = HtmlManager.GetHtmlContentViaUrl(url + index++, "utf-8", false, cc);
+
+                if (content.Success)
+                {
+                    HtmlDocument htmlDocument = new HtmlDocument();
+                    htmlDocument.LoadHtml(content.Content);
+
+                    string xpath = "//a[@class='avatar-box text-center']";
+                    string imgPath = "/img";
+
+                    HtmlNodeCollection nodes = htmlDocument.DocumentNode.SelectNodes(xpath);
+
+                    foreach (var node in nodes)
+                    {
+                        var img = node.ChildNodes[1].ChildNodes[1];
+
+                        var src = img.Attributes["src"].Value;
+                        var title = img.Attributes["title"].Value;
+
+                        if (!string.IsNullOrEmpty(src) && !string.IsNullOrEmpty(title))
+                        {
+                            var tempFolder = folderPrefix + title[0] + "\\";
+                            if (!Directory.Exists(tempFolder))
+                            {
+                                Directory.CreateDirectory(tempFolder);
+                            }
+
+                            DownloadHelper.DownloadFile(src, tempFolder + title + ".jpg");
+                            Console.WriteLine($"下载第 {index - 1} 页，{title} 的头像");
+                        }
+                    }
+                }
+                else
+                {
+                    contiune = false;
+                }
+            }
         }
     }
 }

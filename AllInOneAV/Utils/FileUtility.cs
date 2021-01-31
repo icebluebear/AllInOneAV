@@ -1114,9 +1114,9 @@ namespace Utils
             infos.Add(i);
         }
 
-        public static int TransferFileUsingSystem(List<string> from, List<string> to, bool isMove = false)
+        public static int TransferFileUsingSystem(List<string> from, string to, bool isMove = false)
         {
-            if (from == null || from.Count <= 0 || to == null || to.Count <= 0 || from.Count != to.Count)
+            if (from == null || from.Count <= 0 || to == null || string.IsNullOrEmpty(to))
             {
                 return -1;
             }
@@ -1129,10 +1129,7 @@ namespace Utils
                 fromStr += file + "\0";
             }
 
-            foreach (var file in to)
-            {
-                toStr += file + "\0";
-            }
+            toStr = to + "\0";
 
             if (string.IsNullOrEmpty(fromStr) || string.IsNullOrEmpty(toStr))
             {
@@ -1145,7 +1142,39 @@ namespace Utils
             op.pFrom = fromStr;
             op.pTo = toStr;
             op.hNameMappings = IntPtr.Zero;
-            op.fFlags = Win32.FILEOP_FLAGS.FOF_NOCONFIRMMKDIR;
+            op.fFlags = Win32.FILEOP_FLAGS.FOF_FILESONLY | Win32.FILEOP_FLAGS.FOF_ALLOWUNDO;
+            op.fAnyOperationsAborted = false;
+            int ret = Win32.SHFileOperation(ref op);
+
+            return ret;
+        }
+
+        public static int FileRenameUsingSystem(string from, string to)
+        {
+            if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(to))
+            {
+                return -1;
+            }
+
+            string fromStr = "";
+            string toStr = "";
+
+            fromStr = from + "\0";
+
+            toStr = to + "\0";
+
+            if (string.IsNullOrEmpty(fromStr) || string.IsNullOrEmpty(toStr))
+            {
+                return -2;
+            }
+
+            Win32.SHFILEOPSTRUCT op = new Win32.SHFILEOPSTRUCT();
+            op.hwnd = IntPtr.Zero;
+            op.wFunc = FileFuncFlags.FO_RENAME;
+            op.pFrom = fromStr;
+            op.pTo = toStr;
+            op.hNameMappings = IntPtr.Zero;
+            op.fFlags = Win32.FILEOP_FLAGS.FOF_RENAMEONCOLLISION | Win32.FILEOP_FLAGS.FOF_FILESONLY | Win32.FILEOP_FLAGS.FOF_ALLOWUNDO | Win32.FILEOP_FLAGS.FOF_NOCONFIRMATION;
             op.fAnyOperationsAborted = false;
             int ret = Win32.SHFileOperation(ref op);
 

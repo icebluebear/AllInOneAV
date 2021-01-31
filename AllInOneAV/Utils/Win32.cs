@@ -16,6 +16,7 @@ namespace Utils
             FO_DELETE = 0x3,
             FO_RENAME = 0x4
         }
+
         [Flags]
         public enum FILEOP_FLAGS : ushort
         {
